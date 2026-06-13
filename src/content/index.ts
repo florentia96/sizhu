@@ -2,7 +2,7 @@
 // ถ้าถ้อยคำขาด → โยน error ตั้งแต่ build/โหลด (ไม่ปล่อยให้ undefined โผล่หน้าจอ)
 import raw from "./th.json";
 import { contentSchema, type Content } from "./schema";
-import { GAN, ZHI, TG_TH, GROUP } from "../engine/constants";
+import { GAN, ZHI, TG_TH, GROUP, SHENSHA_TH } from "../engine/constants";
 import { ELEMENTS } from "../types";
 
 const content: Content = contentSchema.parse(raw);
@@ -31,6 +31,9 @@ function assertComplete(c: Content): void {
   });
   [...new Set(Object.values(GROUP))].forEach((g) => {
     if (!c.careerByGroup[g]) miss.push(`careerByGroup.${g}`);
+  });
+  Object.keys(SHENSHA_TH).forEach((s) => {
+    if (!c.shenSha[s]) miss.push(`shenSha.${s}`);
   });
   if (miss.length) {
     throw new Error("content/th.json ขาดถ้อยคำ: " + miss.join(", "));

@@ -1,7 +1,8 @@
 // ส่วนขยายปฏิทิน: 納音 / 十二長生 / 空亡 — ฟังก์ชันบริสุทธิ์ ไม่แตะ DOM/เครือข่าย (ตรวจใน masterdata.test)
-import type { ElementTH, Gan, Zhi } from "../types";
+import type { ElementTH, Gan, Pillars, Zhi } from "../types";
 import {
-  CHANGSHENG_NAMES, CHANGSHENG_START, GAN, GAN_E, NAYIN, VOID_BY_XUN, ZHI,
+  CHANGSHENG_NAMES, CHANGSHENG_START, GAN, GAN_E, HUAGAI, JIANGXING, LUSHEN,
+  NAYIN, TAOHUA, TIANYI, VOID_BY_XUN, WENCHANG, YANGREN, YIMA, ZHI,
 } from "./constants";
 
 const gi = (g: Gan): number => GAN.indexOf(g);
@@ -34,4 +35,31 @@ export function changSheng(stem: Gan, branch: Zhi): string {
 // 空亡 (旬空): ก้านดินที่ว่างของรอบวัน — อิงเสาวันตามมาตรฐาน
 export function voidBranches(dayGan: Gan, dayZhi: Zhi): readonly [Zhi, Zhi] {
   return VOID_BY_XUN[Math.floor(sixtyIndex(dayGan, dayZhi) / 10)];
+}
+
+export interface ShenShaHit {
+  star: string;
+  where: string[];
+}
+
+// 神煞 ที่ตรวจพบในผัง — key ตามก้านวัน (貴人/祿/文昌/羊刃) และก้านดินวัน (將星/桃花/驛馬/華蓋) สแกนทั้งสี่เสา
+export function shenSha(pillars: Pillars): ShenShaHit[] {
+  const dayGan = pillars.day.gan;
+  const dayZhi = pillars.day.zhi;
+  const all = [pillars.year, pillars.month, pillars.day, pillars.hour];
+  const hits: ShenShaHit[] = [];
+  const add = (star: string, targets: readonly Zhi[]): void => {
+    const where = all.filter((p) => targets.includes(p.zhi)).map((p) => p.label);
+    if (where.length) hits.push({ star, where });
+  };
+  add("天乙貴人", TIANYI[dayGan]);
+  add("祿神", [LUSHEN[dayGan]]);
+  add("文昌", [WENCHANG[dayGan]]);
+  add("將星", [JIANGXING[dayZhi]]);
+  add("桃花", [TAOHUA[dayZhi]]);
+  add("驛馬", [YIMA[dayZhi]]);
+  add("華蓋", [HUAGAI[dayZhi]]);
+  const yr = YANGREN[dayGan];
+  if (yr) add("羊刃", [yr]);
+  return hits;
 }

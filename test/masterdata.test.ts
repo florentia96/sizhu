@@ -1,7 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { HIDDEN, XING } from "../src/engine/constants";
-import { relation } from "../src/engine/bazi";
-import { changSheng, naYin, voidBranches } from "../src/engine/almanac";
+import {
+  HIDDEN, HUAGAI, JIANGXING, LUSHEN, TAOHUA, TIANYI, WENCHANG, XING, YANGREN, YIMA,
+} from "../src/engine/constants";
+import { compute, relation } from "../src/engine/bazi";
+import { changSheng, naYin, shenSha, voidBranches } from "../src/engine/almanac";
 import type { Zhi } from "../src/types";
 
 // ล็อก master data ให้ตรงตำรา (子平 / 三命通會) — กันการแก้พลาดเงียบ ๆ
@@ -74,5 +76,30 @@ describe("master data — 空亡 (旬空 อิงเสาวัน)", () => {
   });
   it("庚午日 (อยู่ 甲子旬) → ว่าง 戌亥", () => {
     expect(voidBranches("庚", "午")).toEqual(["戌", "亥"]);
+  });
+});
+
+describe("master data — 神煞 (key + ค่าเทียบตำรา)", () => {
+  it("天乙貴人 (มาตรฐาน ไม่ใช่สูตร变体)", () => {
+    expect(TIANYI["甲"]).toEqual(["丑", "未"]);
+    expect(TIANYI["辛"]).toEqual(["寅", "午"]);
+  });
+  it("祿神 / 文昌 / 羊刃 (key ก้านวัน)", () => {
+    expect(LUSHEN["甲"]).toBe("寅");
+    expect(WENCHANG["甲"]).toBe("巳");
+    expect(YANGREN["甲"]).toBe("卯");
+  });
+  it("驛馬 ≠ 將星 (จุดสับสนที่พบบ่อย) + 桃花/華蓋", () => {
+    expect(YIMA["申"]).toBe("寅");
+    expect(JIANGXING["申"]).toBe("子");
+    expect(TAOHUA["申"]).toBe("酉");
+    expect(HUAGAI["申"]).toBe("辰");
+  });
+  it("detection จริง: 2000-01-01 (日 戊午) พบ 羊刃/桃花/將星", () => {
+    const r = compute({ year: 2000, month: 1, day: 1, hour: 12, minute: 0, sex: "F", useSolar: false });
+    const stars = shenSha(r.pillars).map((h) => h.star);
+    expect(stars).toContain("羊刃"); // 戊刃ที่午 (วัน+เวลา)
+    expect(stars).toContain("桃花"); // 午→卯 (ปี 卯)
+    expect(stars).toContain("將星"); // 午→午
   });
 });

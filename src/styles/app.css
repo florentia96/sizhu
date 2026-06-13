@@ -975,6 +975,47 @@ input[type="number"] {
   text-align: center;
 }
 
+/* ===== 神煞 ===== */
+.ss-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.ss-item {
+  padding: 9px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+  border-left: 2px solid var(--gold-line);
+}
+.ss-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 3px 8px;
+}
+.ss-cn {
+  font-family: "Noto Serif SC", serif;
+  font-size: 1rem;
+  color: var(--gold);
+}
+.ss-name {
+  font-size: 0.92rem;
+}
+.ss-where {
+  font-size: 0.72rem;
+  color: var(--dark-faint);
+}
+.ss-desc {
+  font-size: 0.84rem;
+  color: var(--dark-soft);
+  line-height: 1.55;
+  margin-top: 2px;
+}
+.ss-empty {
+  color: var(--dark-faint);
+  font-size: 0.9rem;
+}
+
 /* ===== ต้าอวิ้น ===== */
 .luck-meta {
   color: var(--dark-faint);

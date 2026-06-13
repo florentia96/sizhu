@@ -7,6 +7,7 @@ import { ChartGrid } from "../components/ChartGrid";
 import { DayMasterCard } from "../components/DayMasterCard";
 import { ElementsPanel } from "../components/ElementsPanel";
 import { TenGodsPanel } from "../components/TenGodsPanel";
+import { ShenShaPanel } from "../components/ShenShaPanel";
 import { TipsPanel } from "../components/TipsPanel";
 import { LuckPanel } from "../components/LuckPanel";
 
@@ -68,15 +69,19 @@ export function ResultScreen({
           <TenGodsPanel reading={reading} />
         </Panel>
 
-        <Panel mark="用" title="แนวทาง & ของมงคล" delay={d(5)}>
+        <Panel mark="煞" title="神煞 (ดาวสัญลักษณ์)" delay={d(5)}>
+          <ShenShaPanel reading={reading} />
+        </Panel>
+
+        <Panel mark="用" title="แนวทาง & ของมงคล" delay={d(6)}>
           <TipsPanel reading={reading} />
         </Panel>
 
-        <Panel mark="運" title="ต้าอวิ้น (大運 · ดวงรอบ 10 ปี)" delay={d(6)}>
+        <Panel mark="運" title="ต้าอวิ้น (大運 · ดวงรอบ 10 ปี)" delay={d(7)}>
           <LuckPanel reading={reading} />
         </Panel>
 
-        <div className="reveal" style={{ animationDelay: `${d(7)}s` }}>
+        <div className="reveal" style={{ animationDelay: `${d(8)}s` }}>
           <footer className="result-footer">
             <div className="off">คำนวณทั้งหมดในเครื่องของคุณ · ไม่ส่งข้อมูลออก</div>
             ใช้สูตรตำแหน่งดวงอาทิตย์ (Meeus) หาจุดสารท 24 จุด — ผลตรงกับปฏิทินดาราศาสตร์ sxtwl
