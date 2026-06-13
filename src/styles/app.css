@@ -1,0 +1,1011 @@
+/* ===== โครงรวม ===== */
+.app {
+  min-height: 100vh;
+}
+
+/* ============================================================
+   โลกกระดาษ — ฟอร์มกรอกวันเกิด
+   ============================================================ */
+.paper-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(22px, 5vw, 52px) 16px;
+  background: var(--paper);
+  background-image: radial-gradient(
+      circle at 22% 12%,
+      rgba(255, 250, 235, 0.55) 0 38%,
+      transparent 40%
+    ),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.018) 0 2px, transparent 2px 4px);
+  color: var(--ink);
+}
+.paper-wrap {
+  width: 100%;
+  max-width: var(--maxw-form);
+}
+.brand {
+  text-align: center;
+  margin-bottom: clamp(20px, 4vw, 34px);
+}
+.brand-eyebrow {
+  font-size: 0.74rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--cinnabar);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.brand-cn {
+  font-family: "Noto Serif SC", serif;
+  font-size: clamp(3.4rem, 13vw, 5.4rem);
+  font-weight: 700;
+  line-height: 0.9;
+  color: var(--ink);
+  letter-spacing: 0.05em;
+}
+.brand-cn span {
+  color: var(--cinnabar);
+}
+.brand-sub {
+  font-family: "Noto Serif Thai", serif;
+  font-size: clamp(1.15rem, 4vw, 1.4rem);
+  font-weight: 600;
+  margin-top: 10px;
+  color: var(--ink-soft);
+}
+.brand-row {
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  margin-top: 6px;
+  letter-spacing: 0.04em;
+}
+
+.form-card {
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.4) inset,
+    0 12px 34px rgba(38, 34, 24, 0.14);
+  padding: clamp(18px, 4vw, 28px);
+}
+.form-head {
+  font-family: "Noto Serif Thai", serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--ink);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.form-head .mk {
+  font-family: "Noto Serif SC", serif;
+  color: var(--cinnabar);
+  font-size: 1.2rem;
+}
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.field label {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+.field .hint {
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+input[type="date"],
+input[type="time"],
+input[type="number"] {
+  font-family: inherit;
+  font-size: 16px; /* กัน iOS ซูมตอนแตะ */
+  color: var(--ink);
+  background: var(--field-bg);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  width: 100%;
+  min-width: 0;
+  display: block;
+}
+.field-sex {
+  margin-top: 14px;
+}
+.seg {
+  display: flex;
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--field-bg);
+}
+.seg button {
+  flex: 1;
+  font-family: inherit;
+  font-size: 0.98rem;
+  padding: 11px 4px;
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: 0.15s;
+}
+.seg button[aria-pressed="true"] {
+  background: var(--cinnabar);
+  color: #fff;
+  font-weight: 600;
+}
+.adv-toggle {
+  margin-top: 16px;
+  font-size: 0.82rem;
+  color: var(--cinnabar);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: underline dotted;
+  padding: 0;
+}
+.adv {
+  margin-top: 14px;
+  padding-top: 15px;
+  border-top: 1px dashed var(--edge);
+}
+.check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 13px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  padding: 0;
+}
+.check-box {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--cinnabar);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #fff;
+  font-size: 0.7rem;
+  flex: 0 0 auto;
+}
+.check[aria-checked="true"] .check-box {
+  background: var(--cinnabar);
+}
+.form-note {
+  font-size: 0.76rem;
+  color: var(--ink-faint);
+  margin-top: 9px;
+}
+.go {
+  width: 100%;
+  margin-top: 18px;
+  font-family: "Noto Serif Thai", serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #fff;
+  background: var(--cinnabar);
+  border: 0;
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 0 var(--cinnabar-deep);
+  transition:
+    background 0.2s ease,
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+.go:hover {
+  background: var(--cinnabar-bright);
+  box-shadow:
+    0 4px 14px rgba(177, 53, 42, 0.5),
+    0 2px 0 var(--cinnabar-deep);
+}
+.go:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 var(--cinnabar-deep);
+}
+.form-err {
+  color: var(--cinnabar);
+  font-size: 0.85rem;
+  margin-top: 10px;
+  min-height: 1em;
+  text-align: center;
+}
+.paper-foot {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  margin-top: 18px;
+  line-height: 1.7;
+}
+
+/* ============================================================
+   พิธีเปิดดวง (casting)
+   ============================================================ */
+.casting {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: radial-gradient(circle at 50% 45%, #1c2433, #0a0d12 70%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  border: 0;
+  cursor: pointer;
+  color: var(--dark-text);
+}
+.orb {
+  position: relative;
+  width: 170px;
+  height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.orb-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(216, 166, 74, 0.55);
+  animation: bloom 2.6s ease-out infinite;
+}
+.orb-ring:nth-child(2) {
+  border-color: rgba(224, 88, 75, 0.55);
+  animation-delay: 0.9s;
+}
+.orb-ring:nth-child(3) {
+  border-color: rgba(216, 166, 74, 0.35);
+  animation-delay: 1.8s;
+}
+.orb-glyph {
+  font-family: "Noto Serif SC", serif;
+  font-size: 3.4rem;
+  color: var(--dark-text);
+  animation: spin360 11s linear infinite;
+  text-shadow: 0 0 18px rgba(216, 166, 74, 0.6);
+}
+.casting-text {
+  font-family: "Noto Serif Thai", serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.14em;
+}
+.casting-sub {
+  color: var(--dark-faint);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+/* ============================================================
+   โลกราตรี — หน้าผล
+   ============================================================ */
+.result-screen {
+  position: relative;
+  min-height: 100vh;
+  background: var(--dark-bg);
+  color: var(--dark-text);
+  padding-bottom: 54px;
+  overflow: hidden;
+}
+.result-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(circle at 50% 0%, #1a2230 0, #0e1116 45%);
+}
+.stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: radial-gradient(1px 1px at 18% 12%, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 72% 8%, rgba(255, 255, 255, 0.45), transparent),
+    radial-gradient(1px 1px at 38% 26%, rgba(255, 255, 255, 0.38), transparent),
+    radial-gradient(1.4px 1.4px at 86% 18%, rgba(255, 236, 200, 0.5), transparent),
+    radial-gradient(1px 1px at 58% 34%, rgba(255, 255, 255, 0.32), transparent),
+    radial-gradient(1px 1px at 8% 22%, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 28% 52%, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(1.3px 1.3px at 90% 62%, rgba(255, 236, 200, 0.4), transparent),
+    radial-gradient(1px 1px at 48% 78%, rgba(255, 255, 255, 0.28), transparent),
+    radial-gradient(1px 1px at 14% 88%, rgba(255, 255, 255, 0.26), transparent);
+  animation: twinkle 5s ease-in-out infinite;
+}
+.petals {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+.result-header {
+  position: relative;
+  z-index: 2;
+  max-width: var(--maxw-result);
+  margin: 0 auto;
+  padding: clamp(18px, 4vw, 30px) clamp(14px, 4vw, 22px) 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.result-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  min-width: 0;
+}
+.result-brand .cn {
+  font-size: 1.8rem;
+  color: var(--paper);
+  text-shadow: 0 0 14px rgba(216, 166, 74, 0.35);
+}
+.recap {
+  font-family: "Noto Serif Thai", serif;
+  color: var(--dark-soft);
+  font-size: 0.92rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.btn-back {
+  font-family: "Noto Sans Thai", sans-serif;
+  font-size: 0.85rem;
+  color: var(--paper);
+  background: var(--ember-soft);
+  border: 1px solid rgba(224, 88, 75, 0.4);
+  border-radius: 20px;
+  padding: 7px 15px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+.btn-back:hover {
+  background: rgba(224, 88, 75, 0.34);
+  box-shadow: 0 0 16px rgba(224, 88, 75, 0.4);
+}
+.result-body {
+  position: relative;
+  z-index: 2;
+  max-width: var(--maxw-result);
+  margin: 0 auto;
+  padding: 0 clamp(14px, 4vw, 22px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 3vw, 22px);
+}
+
+/* ===== panel ทั่วไป ===== */
+.reveal {
+  animation: fadeUp 0.85s cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+.panel {
+  background: var(--dark-panel);
+  border: 1px solid var(--gold-line);
+  border-radius: var(--radius);
+  padding: clamp(18px, 4vw, 26px);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.4);
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.panel:hover {
+  border-color: rgba(228, 180, 98, 0.42);
+  box-shadow: 0 16px 46px rgba(0, 0, 0, 0.55), 0 0 24px rgba(216, 166, 74, 0.13);
+}
+.panel-head {
+  font-family: "Noto Serif Thai", serif;
+  font-weight: 600;
+  font-size: clamp(1.02rem, 3.4vw, 1.18rem);
+  color: var(--dark-text);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.panel-head .mk {
+  font-family: "Noto Serif SC", serif;
+  color: var(--ember);
+  font-size: 1.3rem;
+  text-shadow: 0 0 10px rgba(224, 88, 75, 0.5);
+}
+
+/* ===== TL;DR ===== */
+.tldr {
+  background: linear-gradient(165deg, rgba(40, 30, 28, 0.85), rgba(22, 26, 34, 0.8));
+  border: 1px solid rgba(224, 88, 75, 0.3);
+  border-left: 4px solid var(--ember);
+  border-radius: var(--radius);
+  padding: clamp(18px, 4vw, 26px);
+  box-shadow: 0 12px 38px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.35s ease;
+}
+.tldr:hover {
+  box-shadow: 0 16px 46px rgba(0, 0, 0, 0.6), 0 0 26px rgba(224, 88, 75, 0.2);
+}
+.tldr-eyebrow {
+  font-size: 0.74rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ember);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.tldr-headline {
+  font-family: "Noto Serif Thai", serif;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 5.4vw, 2rem);
+  color: #f4ecd9;
+  line-height: 1.25;
+}
+.tldr-sub {
+  color: var(--dark-soft);
+  font-size: 0.95rem;
+  margin-top: 6px;
+}
+.tldr-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin-top: 16px;
+}
+.tldr-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin: 0 -8px;
+  padding: 3px 8px;
+  border-radius: 7px;
+  transition: background 0.25s ease;
+}
+.tldr-row:hover {
+  background: rgba(228, 180, 98, 0.07);
+}
+.tldr-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-top: 7px;
+  flex: 0 0 auto;
+}
+.tldr-label {
+  color: var(--dark-faint);
+  font-size: 0.78rem;
+  display: block;
+}
+.tldr-value {
+  color: var(--dark-text);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+.tldr-foot {
+  color: var(--dark-faint);
+  font-size: 0.82rem;
+  margin-top: 16px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  padding-top: 12px;
+}
+
+/* ===== ผังสี่เสา ===== */
+.fp-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--gold-line);
+  border: 1px solid var(--gold-line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.fp {
+  background: rgba(255, 255, 255, 0.022);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.fp.day {
+  background: rgba(224, 88, 75, 0.1);
+}
+.fp-head {
+  padding: 9px 2px;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.045);
+}
+.fp-head.day {
+  background: rgba(224, 88, 75, 0.18);
+}
+.fp-head .head-cn {
+  font-family: "Noto Serif SC", serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1;
+  color: #cfc7b2;
+}
+.fp-head.day .head-cn {
+  color: var(--ember);
+}
+.fp-head .head-th {
+  font-size: 0.7rem;
+  color: var(--dark-faint);
+}
+.dm-tag {
+  font-size: 0.55rem;
+  background: var(--ember);
+  color: #160d0c;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.fp-cell {
+  padding: 11px 3px 9px;
+  gap: 6px;
+}
+.fp-glyph {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+  line-height: 1;
+  font-size: clamp(1.9rem, 7vw, 2.5rem);
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), text-shadow 0.25s ease;
+}
+.fp-glyph:hover {
+  transform: scale(1.25) translateY(-2px);
+  text-shadow: 0 0 22px currentColor;
+}
+.fp-eltag {
+  font-size: 0.58rem;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 8px;
+  color: #10130f;
+  white-space: nowrap;
+}
+.fp-tg {
+  font-size: 0.66rem;
+  color: var(--dark-soft);
+  line-height: 1.2;
+}
+.fp-zhi-th {
+  font-size: 0.6rem;
+  color: var(--dark-faint);
+  line-height: 1.25;
+}
+.fp-hidden {
+  padding: 8px 4px 10px;
+  gap: 3px;
+}
+.fp-hidden .hlabel {
+  font-size: 0.55rem;
+  color: var(--dark-faint);
+}
+.fp-hidden .hrow {
+  font-size: 0.64rem;
+  color: var(--dark-soft);
+}
+.fp-hidden .hrow b {
+  font-family: "Noto Serif SC", serif;
+}
+.solar-note {
+  text-align: center;
+  color: var(--dark-faint);
+  font-size: 0.76rem;
+  margin-top: 10px;
+}
+
+/* domains */
+.domains {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.domains .dhead {
+  font-family: "Noto Serif Thai", serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--dark-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.domains .dhead .mk {
+  font-family: "Noto Serif SC", serif;
+  color: var(--gold);
+}
+.domain {
+  color: var(--dark-soft);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+.domain b {
+  color: var(--dark-text);
+}
+
+/* ===== ธาตุประจำตัว ===== */
+.dm-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.dm-circle {
+  flex: 0 0 auto;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Noto Serif SC", serif;
+  font-size: 2.7rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.3);
+}
+.dm-meta {
+  flex: 1;
+  min-width: 180px;
+}
+.dm-name {
+  font-family: "Noto Serif Thai", serif;
+  font-weight: 600;
+  font-size: 1.18rem;
+  color: #f4ecd9;
+}
+.dm-pol {
+  color: var(--dark-faint);
+  font-size: 0.86rem;
+  margin-top: 2px;
+}
+.dm-para {
+  color: var(--dark-soft);
+  font-size: 0.96rem;
+  line-height: 1.85;
+  margin: 0 0 10px;
+}
+.dm-para:last-child {
+  margin-bottom: 0;
+}
+
+/* ===== ห้าธาตุ ===== */
+.wux-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  align-items: center;
+  justify-content: center;
+}
+.wux-svg-box {
+  flex: 0 0 auto;
+  width: 230px;
+  max-width: 70vw;
+}
+.bars {
+  flex: 1;
+  min-width: 210px;
+}
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px -8px;
+  padding: 2px 8px;
+  border-radius: 7px;
+  font-size: 0.92rem;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.bar:hover {
+  background: rgba(228, 180, 98, 0.06);
+  transform: translateX(3px);
+}
+.bar-nm {
+  width: 80px;
+  display: flex;
+  gap: 6px;
+  color: var(--dark-soft);
+  flex: 0 0 auto;
+}
+.bar-nm .c {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 600;
+}
+.bar-track {
+  flex: 1;
+  height: 11px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 6px;
+}
+.bar-ct {
+  width: 18px;
+  text-align: right;
+  color: var(--dark-soft);
+}
+
+/* chips */
+.chip-group {
+  margin-top: 18px;
+}
+.chip-group + .chip-group {
+  margin-top: 13px;
+}
+.chip-label {
+  color: var(--dark-faint);
+  font-size: 0.82rem;
+  margin-bottom: 7px;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip {
+  font-size: 0.85rem;
+  padding: 5px 13px;
+  border-radius: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.chip.use {
+  font-weight: 600;
+  color: #10130f;
+}
+.chip.use:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+.chip.avoid {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #9a9484;
+}
+.chip.avoid:hover {
+  border-color: rgba(228, 180, 98, 0.6);
+  color: #e6ddca;
+  transform: translateY(-2px);
+}
+
+/* ===== สิบเทพ ===== */
+.tg-intro {
+  color: var(--dark-soft);
+  font-size: 0.92rem;
+  line-height: 1.75;
+  margin: 0 0 6px;
+}
+.tg-list {
+  display: flex;
+  flex-direction: column;
+}
+.tg-item {
+  display: flex;
+  gap: 13px;
+  padding: 11px 9px;
+  margin: 0 -9px;
+  border-radius: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  align-items: flex-start;
+  transition: background 0.25s ease;
+}
+.tg-item:hover {
+  background: rgba(228, 180, 98, 0.07);
+}
+.tg-cn {
+  font-family: "Noto Serif SC", serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  width: 32px;
+  text-align: center;
+  color: var(--ember);
+  flex: 0 0 auto;
+}
+.tg-name {
+  color: var(--dark-text);
+  font-weight: 600;
+  font-size: 0.94rem;
+}
+.tg-meta {
+  color: var(--dark-faint);
+  font-size: 0.74rem;
+  font-weight: 400;
+}
+.tg-desc {
+  color: var(--dark-soft);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+.rel-block {
+  margin-top: 16px;
+}
+.rel-head {
+  font-family: "Noto Serif Thai", serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--dark-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rel-head .mk {
+  font-family: "Noto Serif SC", serif;
+  color: var(--gold);
+}
+.rel-item {
+  color: var(--dark-soft);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  margin: 8px 0 0;
+}
+.rel-item b {
+  font-family: "Noto Serif Thai", serif;
+  color: var(--ember);
+}
+.rel-item .pairs {
+  color: var(--dark-faint);
+}
+
+/* ===== มงคล ===== */
+.tip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+.tip {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(216, 166, 74, 0.12);
+  border-radius: var(--radius-sm);
+  padding: 13px;
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+}
+.tip:hover {
+  border-color: rgba(228, 180, 98, 0.45);
+  background: rgba(228, 180, 98, 0.06);
+  transform: translateY(-2px);
+}
+.tip-label {
+  color: var(--dark-faint);
+  font-size: 0.78rem;
+  margin-bottom: 7px;
+}
+.tip-val {
+  color: #e6ddca;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+.tip-colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.tip-color {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.tip-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.disclaimer {
+  font-style: italic;
+  color: var(--dark-faint);
+  font-size: 0.78rem;
+  margin-top: 14px;
+  text-align: center;
+}
+
+/* ===== ต้าอวิ้น ===== */
+.luck-meta {
+  color: var(--dark-faint);
+  font-size: 0.85rem;
+  margin-bottom: 14px;
+}
+.luck-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+  gap: 9px;
+}
+.luck-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 10px 5px;
+  text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+.luck-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.07);
+}
+.luck-age {
+  font-size: 0.71rem;
+  color: var(--dark-faint);
+}
+.luck-gz {
+  font-family: "Noto Serif SC", serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 5px 0 3px;
+  line-height: 1;
+}
+.luck-tg {
+  font-size: 0.62rem;
+  color: var(--dark-soft);
+}
+.luck-kind {
+  font-size: 0.58rem;
+  font-weight: 600;
+}
+.luck-para {
+  color: var(--dark-soft);
+  font-size: 0.92rem;
+  line-height: 1.78;
+  margin: 15px 0 0;
+  padding-top: 13px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+/* ===== footer ===== */
+.result-footer {
+  text-align: center;
+  color: var(--dark-faint);
+  font-size: 0.8rem;
+  line-height: 1.8;
+  padding: 10px 6px;
+}
+.result-footer .off {
+  color: #6cc18a;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.result-footer .disc {
+  font-style: italic;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  padding-top: 12px;
+  margin: 12px auto 0;
+  max-width: 560px;
+}
+.btn-restart {
+  margin-top: 18px;
+  font-family: "Noto Serif Thai", serif;
+  font-size: 1rem;
+  color: var(--paper);
+  background: var(--ember-soft);
+  border: 1px solid rgba(224, 88, 75, 0.4);
+  border-radius: 24px;
+  padding: 11px 26px;
+  cursor: pointer;
+  transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+}
+.btn-restart:hover {
+  background: rgba(224, 88, 75, 0.34);
+  box-shadow: 0 0 20px rgba(224, 88, 75, 0.4);
+  transform: translateY(-2px);
+}

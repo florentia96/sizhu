@@ -1,0 +1,71 @@
+import { ELEMENTS, type ElementTH } from "../types";
+import { EL_CN } from "../engine/constants";
+import { EL_DARK } from "../tokens/elements";
+
+// ไดอะแกรมห้าเหลี่ยม: ขอบนอก = วงจรเกิด (生) เส้นทอง · เส้นดาวใน = วงจรข่ม (克) เส้นแดง
+// ขนาดโหนด = จำนวนธาตุในดวง
+const KE: [number, number][] = [
+  [0, 2], [1, 3], [2, 4], [3, 0], [4, 1],
+];
+
+export function WuXingDiagram({ elements }: { elements: Record<ElementTH, number> }) {
+  const cx = 120;
+  const cy = 120;
+  const R = 82;
+  const ang = [-90, -18, 54, 126, 198].map((a) => (a * Math.PI) / 180);
+  const pos = ELEMENTS.map((e, i) => ({
+    x: cx + R * Math.cos(ang[i]),
+    y: cy + R * Math.sin(ang[i]),
+    e,
+    n: elements[e],
+  }));
+
+  return (
+    <svg
+      viewBox="0 0 240 244"
+      width="100%"
+      role="img"
+      aria-label="วงจรห้าธาตุ เส้นทองคือวงจรเกิด เส้นแดงคือวงจรข่ม ขนาดวงกลมคือจำนวนธาตุในดวง"
+      style={{ maxWidth: 230, height: "auto", display: "block", margin: "0 auto" }}
+    >
+      {KE.map(([a, b], k) => (
+        <line
+          key={`k${k}`}
+          x1={pos[a].x} y1={pos[a].y} x2={pos[b].x} y2={pos[b].y}
+          stroke="#e0584b" strokeWidth={1} strokeDasharray="3 4" opacity={0.32}
+        />
+      ))}
+      {pos.map((_, i) => {
+        const a = pos[i];
+        const b = pos[(i + 1) % 5];
+        return (
+          <line
+            key={`g${i}`}
+            x1={a.x} y1={a.y} x2={b.x} y2={b.y}
+            stroke="#d8a64a" strokeWidth={1.3} opacity={0.45}
+          />
+        );
+      })}
+      {pos.map((p, i) => {
+        const r = 14 + p.n * 3.4;
+        return (
+          <g key={`n${i}`}>
+            <circle cx={p.x} cy={p.y} r={r} fill={EL_DARK[p.e]} opacity={p.n ? 0.92 : 0.25} />
+            <text
+              x={p.x} y={p.y + 1} textAnchor="middle" dominantBaseline="central"
+              fontFamily="Noto Serif SC, serif" fontWeight={700} fontSize={p.n ? 15 : 13} fill="#10130f"
+            >
+              {EL_CN[p.e]}
+            </text>
+            <text x={p.x} y={p.y + r + 12} textAnchor="middle" fontSize={10} fill="#b9b2a0">
+              {p.n}
+            </text>
+          </g>
+        );
+      })}
+      <text x={120} y={233} textAnchor="middle" fontSize={9.5} fill="#9a937f">
+        เส้นทอง = เกิด(生) · เส้นแดง = ข่ม(克)
+      </text>
+    </svg>
+  );
+}
