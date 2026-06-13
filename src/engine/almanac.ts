@@ -101,3 +101,21 @@ export function taiYuan(monthGan: Gan, monthZhi: Zhi): { gan: Gan; zhi: Zhi; gz:
   const zhi = ZHI[(zi(monthZhi) + 3) % 12];
   return { gan, zhi, gz: gan + zhi };
 }
+
+// 命宮 (วังชะตา) — 子平 มาตรฐาน: เดือน/ยามนับ寅=1, เดือนปรับเลย中氣ขึ้นเดือนถัดไป, ก้านบนจาก五虎遁(ปีเกิด)
+// monthOrder: 0=寅..11=丑 (จาก節) · pastZhongQi: เลยจุด中氣ของเดือนนั้นแล้วหรือยัง
+export function mingGong(
+  monthOrder: number,
+  pastZhongQi: boolean,
+  hourZhi: Zhi,
+  yearGan: Gan,
+): { gan: Gan; zhi: Zhi; gz: string } {
+  const monthNum = ((monthOrder + (pastZhongQi ? 1 : 0)) % 12) + 1; // 寅=1
+  const hourNum = ((zi(hourZhi) - 2 + 12) % 12) + 1; // ยามก็นับ寅=1
+  let L = (14 - (monthNum + hourNum)) % 12;
+  if (L <= 0) L += 12; // L = เลขก้านดิน命宮 (寅=1) ช่วง 1..12
+  const zhi = ZHI[(L + 1) % 12]; // L=1 → 寅 (index 2)
+  const base = [2, 4, 6, 8, 0][gi(yearGan) % 5]; // 五虎遁: ก้านบนที่ตก寅 ของปีนั้น
+  const gan = GAN[(base + (L - 1)) % 10];
+  return { gan, zhi, gz: gan + zhi };
+}

@@ -8,7 +8,9 @@ import {
   BRANCH_EL, CTRL, EL_CN, GAN, GAN_E, GEN, GROUP, HEAD_CN, HIDDEN, SHENSHA_TH, TG_TH, ZHI, ZHI_TH, ZODIAC,
 } from "../engine/constants";
 import { relation, tenGod } from "../engine/bazi";
-import { changSheng, combinations, naYin, shenSha, taiYuan, voidBranches } from "../engine/almanac";
+import {
+  changSheng, combinations, mingGong, naYin, shenSha, taiYuan, voidBranches,
+} from "../engine/almanac";
 import { EL_DARK } from "../tokens/elements";
 import { content, type SeasonStateId } from "../content";
 
@@ -272,7 +274,11 @@ export function buildReading(r: BaziResult): Reading {
     meaning: content.combine[c.kind],
   }));
   const ty = taiYuan(r.pillars.month.gan, r.pillars.month.zhi);
+  const moOrder = (ZHI.indexOf(r.pillars.month.zhi) - 2 + 12) % 12; // 0=寅 (จาก節)
+  const within = (((r.lambda - 315) % 360) + 360) % 360 - 30 * moOrder; // องศาในช่วงเดือน
+  const mg = mingGong(moOrder, within >= 15, r.pillars.hour.zhi, r.pillars.year.gan);
   const auxPillars: AuxPillar[] = [
+    { cn: "命宮", label: "วังชะตา", gz: mg.gz, note: "ตัวตนภายในและแกนชะตาแฝง อ่านเสริมกับเสาวัน" },
     { cn: "胎元", label: "เสาเกิดในครรภ์", gz: ty.gz, note: "อิทธิพลช่วงตั้งครรภ์ก่อนเกิด" },
   ];
 

@@ -4,7 +4,9 @@ import {
   WENCHANG, XING, YANGREN, YIMA,
 } from "../src/engine/constants";
 import { compute, relation } from "../src/engine/bazi";
-import { changSheng, combinations, naYin, shenSha, taiYuan, voidBranches } from "../src/engine/almanac";
+import {
+  changSheng, combinations, mingGong, naYin, shenSha, taiYuan, voidBranches,
+} from "../src/engine/almanac";
 import { annualForecast } from "../src/lib/reading";
 import type { Gan, Pillar, PillarLabel, Pillars, Zhi } from "../src/types";
 
@@ -140,6 +142,18 @@ describe("胎元 — 月干+1, 月支+3", () => {
   it("丙寅 → 丁巳 · 癸亥 → 甲寅 (wraparound)", () => {
     expect(taiYuan("丙", "寅").gz).toBe("丁巳");
     expect(taiYuan("癸", "亥").gz).toBe("甲寅");
+  });
+});
+
+describe("命宮 — 子平 มาตรฐาน (เทียบ worked example จากตำรา)", () => {
+  it("寅月子時甲年 → 丁卯", () => {
+    expect(mingGong(0, false, "子", "甲").gz).toBe("丁卯");
+  });
+  it("午月午時庚年 → 辛巳", () => {
+    expect(mingGong(4, false, "午", "庚").gz).toBe("辛巳");
+  });
+  it("申月(เลย中氣→酉)辰時戊年 → 丙辰 (masterso)", () => {
+    expect(mingGong(6, true, "辰", "戊").gz).toBe("丙辰");
   });
 });
 
