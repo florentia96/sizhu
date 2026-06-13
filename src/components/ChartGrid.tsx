@@ -48,6 +48,18 @@ export function ChartGrid({
             ))}
           </div>
         ))}
+        {pillars.map((p) => (
+          <div className={`fp fp-extra${p.isDay ? " day" : ""}`} key={`x-${p.label}`}>
+            <span className="fp-ny" style={{ color: p.naYinColor }}>{p.naYinTh}</span>
+            <span className="fp-cs">{p.changSheng}</span>
+            {p.isVoid && <span className="fp-void">空亡 ว่าง</span>}
+          </div>
+        ))}
+      </div>
+      <div className="fp-legend">
+        <div>納音 — ธาตุเสียงประจำเสา</div>
+        <div>長生 — ช่วงพลังของวันเกิดเมื่ออยู่บนเสานั้น</div>
+        <div>空亡 — เสาที่พลังพร่อง ของมงคลในเสานั้นลดทอนลง</div>
       </div>
       {solarShift !== 0 && (
         <div className="solar-note">

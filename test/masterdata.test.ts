@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { HIDDEN, XING } from "../src/engine/constants";
 import { relation } from "../src/engine/bazi";
+import { changSheng, naYin, voidBranches } from "../src/engine/almanac";
 import type { Zhi } from "../src/types";
 
 // ล็อก master data ให้ตรงตำรา (子平 / 三命通會) — กันการแก้พลาดเงียบ ๆ
@@ -42,5 +43,36 @@ describe("master data — 刑 ครบชุดตามตำรา", () => {
   });
   it("XING รวม 11 คู่", () => {
     expect(XING).toHaveLength(11);
+  });
+});
+
+describe("master data — 納音 (เทียบตาราง 60 甲子)", () => {
+  it("คู่หัว/ท้าย/กลางตรงตำรา", () => {
+    expect(naYin("甲", "子").cn).toBe("海中金");
+    expect(naYin("甲", "子").el).toBe("ทอง");
+    expect(naYin("乙", "丑").cn).toBe("海中金"); // คู่เดียวกับ 甲子
+    expect(naYin("甲", "寅").cn).toBe("大溪水");
+    expect(naYin("癸", "亥").cn).toBe("大海水");
+  });
+});
+
+describe("master data — 十二長生 (หยาง順 / ยิน逆)", () => {
+  it("甲 (หยาง): 長生 ที่ 亥, 帝旺 ที่ 卯", () => {
+    expect(changSheng("甲", "亥")).toContain("長生");
+    expect(changSheng("甲", "卯")).toContain("帝旺");
+  });
+  it("乙 (ยิน): 長生 ที่ 午, 帝旺 ที่ 寅", () => {
+    expect(changSheng("乙", "午")).toContain("長生");
+    expect(changSheng("乙", "寅")).toContain("帝旺");
+  });
+});
+
+describe("master data — 空亡 (旬空 อิงเสาวัน)", () => {
+  it("甲子日 → ว่าง 戌亥 · 甲戌日 → ว่าง 申酉", () => {
+    expect(voidBranches("甲", "子")).toEqual(["戌", "亥"]);
+    expect(voidBranches("甲", "戌")).toEqual(["申", "酉"]);
+  });
+  it("庚午日 (อยู่ 甲子旬) → ว่าง 戌亥", () => {
+    expect(voidBranches("庚", "午")).toEqual(["戌", "亥"]);
   });
 });

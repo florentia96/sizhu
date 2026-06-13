@@ -8,6 +8,7 @@ import {
   BRANCH_EL, CTRL, EL_CN, GAN_E, GEN, GROUP, HEAD_CN, HIDDEN, TG_TH, ZHI_TH, ZODIAC,
 } from "../engine/constants";
 import { relation, tenGod } from "../engine/bazi";
+import { changSheng, naYin, voidBranches } from "../engine/almanac";
 import { EL_DARK } from "../tokens/elements";
 import { content, type SeasonStateId } from "../content";
 
@@ -18,6 +19,8 @@ export interface ReadingPillar {
   gan: Gan; ganEl: ElementTH; ganElCn: string; ganColor: string; ganTg: string;
   zhi: Zhi; zhiEl: ElementTH; zhiElCn: string; zhiColor: string; zhiTh: string; zodiac: string;
   hidden: HiddenStem[];
+  naYinCn: string; naYinTh: string; naYinColor: string;
+  changSheng: string; isVoid: boolean;
 }
 export interface ReadingDomain { title: string; desc: string }
 export interface ElementBar { el: ElementTH; cn: string; count: number; pct: number; color: string }
@@ -111,11 +114,13 @@ export function buildReading(r: BaziResult): Reading {
     `ส่วนธาตุ ${avoidText} ไม่ใช่สิ่งไม่ดี เพียงแต่มีอยู่มากพออยู่แล้ว จึงใช้แต่พอดี อย่าเพิ่มจนล้น`;
 
   // สี่เสา
+  const voids = voidBranches(r.pillars.day.gan, r.pillars.day.zhi);
   const order = [r.pillars.year, r.pillars.month, r.pillars.day, r.pillars.hour];
   const pillars: ReadingPillar[] = order.map((p) => {
     const ganEl = GAN_E[p.gan][0];
     const zhiEl = BRANCH_EL[p.zhi];
     const isDay = p.label === "วัน";
+    const ny = naYin(p.gan, p.zhi);
     return {
       label: p.label, head: HEAD_CN[p.label], isDay,
       gan: p.gan, ganEl, ganElCn: EL_CN[ganEl], ganColor: col[ganEl],
@@ -125,6 +130,9 @@ export function buildReading(r: BaziResult): Reading {
       hidden: HIDDEN[p.zhi].map((h) => ({
         gan: h, tg: shortTg(tenGod(dm, h)), color: col[GAN_E[h][0]],
       })),
+      naYinCn: ny.cn, naYinTh: ny.th, naYinColor: col[ny.el],
+      changSheng: changSheng(dm, p.zhi),
+      isVoid: voids.includes(p.zhi),
     };
   });
   const domains: ReadingDomain[] = (["ปี", "เดือน", "วัน", "เวลา"] as const).map((k) => ({

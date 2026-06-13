@@ -638,6 +638,31 @@ input[type="number"] {
 .fp-hidden .hrow b {
   font-family: "Noto Serif SC", serif;
 }
+.fp-extra {
+  padding: 7px 4px 9px;
+  gap: 2px;
+  border-top: 1px solid var(--gold-line);
+}
+.fp-extra .fp-ny {
+  font-size: 0.6rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.fp-extra .fp-cs {
+  font-size: 0.58rem;
+  color: var(--dark-faint);
+}
+.fp-extra .fp-void {
+  font-size: 0.56rem;
+  color: var(--ember);
+  font-weight: 600;
+}
+.fp-legend {
+  color: var(--dark-faint);
+  font-size: 0.72rem;
+  line-height: 1.65;
+  margin-top: 10px;
+}
 .solar-note {
   text-align: center;
   color: var(--dark-faint);
