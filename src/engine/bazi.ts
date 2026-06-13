@@ -9,7 +9,8 @@ import {
 } from "./constants";
 import { julianDay, jdnNoon, sunLongitude, solarTermJD, equationOfTime } from "./astro";
 import {
-  USE_SOLAR_DEFAULT, WEIGHTS, classifyStrength, STRENGTH_LABEL, usefulAvoid,
+  USE_SOLAR_DEFAULT, WEIGHTS, ZI_SCHOOL, LUCK_DAYS_PER_YEAR,
+  classifyStrength, STRENGTH_LABEL, usefulAvoid,
 } from "./policy";
 
 // สิบเทพ: ความสัมพันธ์ของก้านอื่นเทียบก้านวัน (ครอบทั้ง 5 ความสัมพันธ์ของห้าธาตุ จึงคืนค่าเสมอ)
@@ -42,6 +43,7 @@ export function compute(opts: ComputeInput): BaziResult {
   const tz = opts.tz ?? 7;
   const lon = opts.lon ?? 100.5;
   const useSolar = opts.useSolar ?? USE_SOLAR_DEFAULT;
+  const zi = opts.zi ?? ZI_SCHOOL;
 
   // เวลาจริงทางฟิสิกส์ (UT) ของวินาทีเกิด
   const hourLocal = hour + minute / 60;
@@ -60,16 +62,18 @@ export function compute(opts: ComputeInput): BaziResult {
   const yZhi = ((((byear - 4) % 12) + 12) % 12);
   const mStem = ((((yStem % 5) * 2 + 2 + monthOrder) % 10) + 10) % 10;
 
-  // เสาวัน (JDN เที่ยงวัน, late-zi คงวันเดิม)
-  const idx60 = (((jdnNoon(year, month, day) + DAY_PILLAR_OFFSET) % 60) + 60) % 60;
-  const dStem = idx60 % 10;
-  const dZhi = idx60 % 12;
-
-  // ยาม (時辰) จากเวลาสุริยคติจริง
+  // ยาม (時辰) จากเวลาสุริยคติจริง — คำนวณก่อนเสาวัน เพราะ early-zi ใช้ชั่วโมงตัดสินวัน
   let solarShift = 0;
   if (useSolar) solarShift = (lon - tz * 15) * 4 + equationOfTime(year, month, day);
   const hs = ((((hourLocal + solarShift / 60) % 24) + 24) % 24);
   const ziIdx = hs >= 23 || hs < 1 ? 0 : Math.floor((hs + 1) / 2);
+
+  // เสาวัน (JDN เที่ยงวัน) — late-zi คงวันเดิม · early-zi (早子時) ช่วง 23:00–24:00 นับเป็นวันถัดไป
+  let dayJdn = jdnNoon(year, month, day);
+  if (zi === "early" && hs >= 23) dayJdn += 1;
+  const idx60 = (((dayJdn + DAY_PILLAR_OFFSET) % 60) + 60) % 60;
+  const dStem = idx60 % 10;
+  const dZhi = idx60 % 12;
   const hStem = ((dStem % 5) * 2 + ziIdx) % 10;
 
   const mk = (g: number, z: number, label: PillarLabel): Pillar => ({
@@ -143,7 +147,8 @@ export function compute(opts: ComputeInput): BaziResult {
     : (((lambda - target) % 360) + 360) % 360;
   const guess = jdBirthUT + (forward ? 1 : -1) * degDiff * 1.0146;
   const termJD = solarTermJD(target, guess);
-  const startAge = Math.round((Math.abs(termJD - jdBirthUT) / 3) * 100) / 100;
+  const startAge =
+    Math.round((Math.abs(termJD - jdBirthUT) / LUCK_DAYS_PER_YEAR) * 100) / 100;
 
   const luckPillars: LuckPillar[] = [];
   for (let k = 1; k <= 8; k++) {

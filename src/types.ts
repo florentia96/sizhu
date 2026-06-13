@@ -69,6 +69,8 @@ export interface ComputeInput {
   lon?: number;
   /** ปรับเป็นเวลาสุริยคติจริงเพื่อเลือกยาม — ดีฟอลต์ตาม policy */
   useSolar?: boolean;
+  /** สำนักเวลาจื่อ — ดีฟอลต์ตาม policy (late = 晚子時, early = 早子時 เลื่อนเสาวันตั้งแต่ 23:00) */
+  zi?: "late" | "early";
 }
 
 export interface BaziResult {

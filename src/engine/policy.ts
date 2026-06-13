@@ -9,6 +9,9 @@ export const ZI_SCHOOL: "late" | "early" = "late";
 // ปรับเป็นเวลาสุริยคติจริงเพื่อเลือกยามเป็นค่ามาตรฐาน (ถูกตามตำรามากกว่า)
 export const USE_SOLAR_DEFAULT = true;
 
+// อายุเริ่มต้าอวิ้น: ระยะวันจากเกิดถึงจุดสารทที่ใช้ ÷ ค่านี้ = จำนวนปี (สูตร 3 วัน = 1 ปี)
+export const LUCK_DAYS_PER_YEAR = 3;
+
 // เกณฑ์แบ่งกำลังดวงจากสัดส่วน support/(support+drain)
 export const STRENGTH_THRESHOLDS = { strong: 0.46, balanced: 0.36 } as const;
 

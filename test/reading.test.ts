@@ -18,16 +18,25 @@ describe("buildReading", () => {
     expect(JSON.stringify(R)).not.toMatch(NOISE);
   });
 
-  it("ครอบ output space — 2000 ดวงสุ่ม ทุก field ครบ", () => {
+  it("ครอบ output space — 2000 ดวง (เมล็ดคงที่ reproduce ได้) ทุก field ครบ", () => {
+    // PRNG (mulberry32) เมล็ดคงที่ → ถ้า fail สามารถรันซ้ำได้ผลเดิม ดีบักได้
+    let s = 0x9e3779b9;
+    const rnd = (): number => {
+      s = (s + 0x6d2b79f5) | 0;
+      let t = Math.imul(s ^ (s >>> 15), 1 | s);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
     for (let i = 0; i < 2000; i++) {
       const r = compute({
-        year: 1900 + Math.floor(Math.random() * 201),
-        month: 1 + Math.floor(Math.random() * 12),
-        day: 1 + Math.floor(Math.random() * 28),
-        hour: Math.floor(Math.random() * 24),
-        minute: Math.floor(Math.random() * 60),
-        sex: (Math.random() < 0.5 ? "M" : "F") as Sex,
-        useSolar: Math.random() < 0.5,
+        year: 1900 + Math.floor(rnd() * 201),
+        month: 1 + Math.floor(rnd() * 12),
+        day: 1 + Math.floor(rnd() * 31), // ครอบวันปลายเดือน 29–31 ด้วย
+        hour: Math.floor(rnd() * 24),
+        minute: Math.floor(rnd() * 60),
+        sex: (rnd() < 0.5 ? "M" : "F") as Sex,
+        useSolar: rnd() < 0.5,
+        zi: rnd() < 0.5 ? "early" : "late",
       });
       expect(JSON.stringify(buildReading(r))).not.toMatch(NOISE);
     }

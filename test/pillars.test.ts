@@ -21,3 +21,30 @@ describe("engine: สี่เสาตรงกับ sxtwl (useSolar:false)", 
     });
   }
 });
+
+// สำนักเวลาจื่อ — early-zi ต้องเลื่อนเสาวันช่วง 23:00–24:00 เป็นวันถัดไป
+// ตรวจไขว้กับเสาวันของ "วันถัดไป" ที่ผ่าน sxtwl แล้ว (ไม่ circular)
+describe("engine: สำนักเวลาจื่อ late ↔ early", () => {
+  const base = {
+    year: 1996, month: 4, day: 3, hour: 23, minute: 58,
+    sex: "M" as Sex, tz: 7, lon: 100.5, useSolar: false,
+  };
+  it("late (ดีฟอลต์): 23:58 → เสาวัน 庚午 ยาม 丙子 (ตรง sxtwl)", () => {
+    const r = compute(base);
+    expect(r.pillars.day.gz).toBe("庚午");
+    expect(r.pillars.hour.gz).toBe("丙子");
+  });
+  it("early: 23:58 → เสาวันเลื่อนเป็น 辛未 (= วันถัดไป) ยาม 戊子", () => {
+    const r = compute({ ...base, zi: "early" });
+    expect(r.pillars.day.gz).toBe("辛未"); // 1996-04-04 (late) = 辛未 ผ่าน sxtwl แล้ว
+    expect(r.pillars.hour.gz).toBe("戊子");
+  });
+  it("ช่วง 00:00–01:00 ไม่ขึ้นกับสำนักจื่อ (เป็นวันใหม่อยู่แล้ว)", () => {
+    const mid = {
+      year: 2024, month: 1, day: 1, hour: 0, minute: 30,
+      sex: "F" as Sex, tz: 7, lon: 100.5, useSolar: false,
+    };
+    expect(compute({ ...mid, zi: "early" }).pillars.day.gz).toBe(compute(mid).pillars.day.gz);
+    expect(compute(mid).pillars.day.gz).toBe("甲子");
+  });
+});

@@ -4,9 +4,14 @@ import { compute } from "../src/engine/bazi";
 
 // ส่วน shift ตรวจแยกอิสระจาก sxtwl (sxtwl ไม่ปรับ longitude/EoT ให้เอง — เทียบตรงจะวงกลม)
 describe("solar shift — ตรวจแยกเป็น 2 ส่วนอิสระ", () => {
-  // ส่วน 1: LMT ถูกต้องโดยนิยามเชิงเรขาคณิต (4 นาที/องศา เทียบเส้นแวงเขตเวลา)
-  it("LMT: Bangkok (lon 100.5, tz +7) = -18 นาที (นิยาม)", () => {
-    expect((100.5 - 7 * 15) * 4).toBe(-18);
+  // ส่วน 1: LMT ผ่าน compute() จริง — เลือก 15 เม.ย. (EoT≈0) เพื่อแยกดูเฉพาะส่วนลองจิจูด
+  it("LMT ผ่าน compute(): Bangkok (lon 100.5, tz +7) ≈ -18 นาที", () => {
+    const r = compute({
+      year: 2001, month: 4, day: 15, hour: 12, minute: 0,
+      sex: "M", tz: 7, lon: 100.5, useSolar: true,
+    });
+    // (100.5 - 7*15)*4 = -18 · วันที่ EoT≈0 จึงเหลือเฉพาะส่วนลองจิจูดให้ตรวจว่า engine แปลงถูก
+    expect(Math.abs(r.solarShift - (100.5 - 105) * 4)).toBeLessThan(1.0);
   });
 
   // ส่วน 2: EoT เทียบค่า NOAA ที่จุดสุดขั้ว analemma (สูตรประมาณ คลาดเคลื่อน < 1 นาที)
