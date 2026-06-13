@@ -1005,6 +1005,26 @@ input[type="number"] {
   text-align: center;
 }
 
+.tiaohou-note {
+  margin-top: 14px;
+  padding: 10px 12px;
+  background: var(--gold-soft);
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: var(--dark-soft);
+}
+.luck-minor {
+  font-size: 0.8rem;
+  color: var(--dark-soft);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.luck-minor b {
+  font-family: "Noto Serif SC", serif;
+  color: var(--gold);
+}
+
 /* ===== 神煞 ===== */
 .ss-list {
   display: flex;

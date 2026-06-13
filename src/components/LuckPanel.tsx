@@ -14,6 +14,11 @@ export function LuckPanel({ reading }: { reading: Reading }) {
         ทิศเดิน: {luck.forward ? "เดินหน้า (順)" : "ถอยหลัง (逆)"} · เริ่มประมาณอายุ{" "}
         {luck.startAge.toFixed(1)} ปี
       </div>
+      {luck.minor.length > 0 && (
+        <div className="luck-minor">
+          <b>小運</b> (ก่อนเข้าต้าอวิ้น): {luck.minor.map((m) => `อายุ${m.age} ${m.gz}`).join(", ")}
+        </div>
+      )}
       <div className="luck-grid">
         {luck.pillars.map((l, i) => (
           <div className="luck-card" key={i} style={{ borderTop: `3px solid ${l.color}` }}>

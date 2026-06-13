@@ -5,7 +5,7 @@ import {
 } from "../src/engine/constants";
 import { compute, relation } from "../src/engine/bazi";
 import {
-  changSheng, combinations, mingGong, naYin, shenSha, taiYuan, voidBranches,
+  changSheng, combinations, mingGong, minorLuck, naYin, shenSha, taiYuan, voidBranches,
 } from "../src/engine/almanac";
 import { annualForecast } from "../src/lib/reading";
 import type { Gan, Pillar, PillarLabel, Pillars, Zhi } from "../src/types";
@@ -154,6 +154,13 @@ describe("命宮 — 子平 มาตรฐาน (เทียบ worked exampl
   });
   it("申月(เลย中氣→酉)辰時戊年 → 丙辰 (masterso)", () => {
     expect(mingGong(6, true, "辰", "戊").gz).toBe("丙辰");
+  });
+});
+
+describe("小運 — 時柱±1 ต่อปี (ทิศตาม大運)", () => {
+  it("壬子時 順 → 癸丑/甲寅/乙卯 · 逆 → 辛亥/庚戌", () => {
+    expect(minorLuck("壬", "子", true, 3).map((x) => x.gz)).toEqual(["癸丑", "甲寅", "乙卯"]);
+    expect(minorLuck("壬", "子", false, 2).map((x) => x.gz)).toEqual(["辛亥", "庚戌"]);
   });
 });
 

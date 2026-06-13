@@ -37,6 +37,12 @@ export const contentSchema = z.object({
   }),
   shenSha: z.record(z.string(), z.string()),
   combine: z.record(z.string(), z.string()),
+  tiaohou: z.object({
+    spring: z.string(),
+    summer: z.string(),
+    autumn: z.string(),
+    winter: z.string(),
+  }),
 });
 
 export type Content = z.infer<typeof contentSchema>;

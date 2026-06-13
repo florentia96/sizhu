@@ -42,6 +42,7 @@ export function ElementsPanel({ reading }: { reading: Reading }) {
           ))}
         </div>
       </div>
+      <p className="tiaohou-note">{reading.tiaohou}</p>
     </>
   );
 }

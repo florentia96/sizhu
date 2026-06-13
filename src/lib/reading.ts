@@ -9,7 +9,7 @@ import {
 } from "../engine/constants";
 import { relation, tenGod } from "../engine/bazi";
 import {
-  changSheng, combinations, mingGong, naYin, shenSha, taiYuan, voidBranches,
+  changSheng, combinations, mingGong, minorLuck, naYin, shenSha, taiYuan, voidBranches,
 } from "../engine/almanac";
 import { EL_DARK } from "../tokens/elements";
 import { content, type SeasonStateId } from "../content";
@@ -48,6 +48,7 @@ export interface Tips {
 export interface ReadingLuck {
   forward: boolean; startAge: number; pillars: LuckCard[];
   intro: string; sections: LuckSection[]; footnote: string;
+  minor: { age: number; gz: string }[];
 }
 export interface Reading {
   dayMaster: Gan; dayMasterElement: ElementTH; dmColor: string;
@@ -55,7 +56,7 @@ export interface Reading {
   natureName: string; natureDesc: string;
   strength: string; seasonName: string; seasonStateLabel: string;
   seasonPara: string; strengthPara: string; usefulPara: string;
-  usefulText: string; avoidText: string; solarShift: number;
+  usefulText: string; avoidText: string; tiaohou: string; solarShift: number;
   pillars: ReadingPillar[]; domains: ReadingDomain[];
   elementBars: ElementBar[]; usefulChips: ElementChip[]; avoidChips: ElementChip[];
   elements: Record<ElementTH, number>;
@@ -67,6 +68,8 @@ export interface Reading {
 
 const col = EL_DARK;
 const shortTg = (g: TenGod): string => TG_TH[g].split(" ")[0];
+const seasonOf = (z: Zhi): "spring" | "summer" | "autumn" | "winter" =>
+  "寅卯辰".includes(z) ? "spring" : "巳午未".includes(z) ? "summer" : "申酉戌".includes(z) ? "autumn" : "winter";
 
 function seasonStateId(dmE: ElementTH, sE: ElementTH): SeasonStateId {
   if (sE === dmE) return "ruling";
@@ -281,20 +284,22 @@ export function buildReading(r: BaziResult): Reading {
     { cn: "命宮", label: "วังชะตา", gz: mg.gz, note: "ตัวตนภายในและแกนชะตาแฝง อ่านเสริมกับเสาวัน" },
     { cn: "胎元", label: "เสาเกิดในครรภ์", gz: ty.gz, note: "อิทธิพลช่วงตั้งครรภ์ก่อนเกิด" },
   ];
+  const minorList = minorLuck(r.pillars.hour.gan, r.pillars.hour.zhi, r.luck.forward, r.luck.startAge);
+  const tiaohouText = content.tiaohou[seasonOf(mb)];
 
   return {
     dayMaster: dm, dayMasterElement: dmE, dmColor: col[dmE],
     polarity, polarityNote: content.polarityNote[polarity],
     natureName: nat.name, natureDesc: nat.desc,
     strength: r.strength, seasonName: content.seasonName[mb], seasonStateLabel: st.label,
-    seasonPara, strengthPara, usefulPara, usefulText, avoidText,
+    seasonPara, strengthPara, usefulPara, usefulText, avoidText, tiaohou: tiaohouText,
     solarShift: r.solarShift,
     pillars, domains,
     elementBars, usefulChips, avoidChips, elements: r.elements,
     tenGods, relations, shenSha: shenShaList, combines: combineList, auxPillars, tips,
     luck: {
       forward: r.luck.forward, startAge: r.luck.startAge, pillars: luckPillars,
-      intro: luckIntro, sections: luckSections, footnote: luckFootnote,
+      intro: luckIntro, sections: luckSections, footnote: luckFootnote, minor: minorList,
     },
     tldr,
     headline: `คุณคือ “${nat.name}”`,

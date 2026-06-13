@@ -119,3 +119,21 @@ export function mingGong(
   const gan = GAN[(base + (L - 1)) % 10];
   return { gan, zhi, gz: gan + zhi };
 }
+
+// 小運 (ก่อนเข้าต้าอวิ้น): นับจากเสาเวลา ±1 ต่อปีนักษัตร · ทิศเดียวกับ大運 (順 阳男阴女 / 逆 อื่น)
+export function minorLuck(
+  hourGan: Gan,
+  hourZhi: Zhi,
+  forward: boolean,
+  untilAge: number,
+): { age: number; gz: string }[] {
+  const start = sixtyIndex(hourGan, hourZhi);
+  const dir = forward ? 1 : -1;
+  const n = Math.min(Math.max(0, Math.floor(untilAge)), 10);
+  const out: { age: number; gz: string }[] = [];
+  for (let k = 1; k <= n; k++) {
+    const idx = (((start + dir * k) % 60) + 60) % 60;
+    out.push({ age: k, gz: GAN[idx % 10] + ZHI[idx % 12] });
+  }
+  return out;
+}
