@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import type { RawForm } from "../lib/validate";
 import type { Sex } from "../types";
 
@@ -16,6 +16,12 @@ export function FormScreen({
   const [tz, setTz] = useState("7");
   const [lon, setLon] = useState("100.5");
   const [useSolar, setUseSolar] = useState(true);
+
+  // คลิก/แตะได้ทั้งกล่อง → เปิด picker (showPicker รองรับเบราว์เซอร์ยุคปัจจุบัน; มือถือเปิด picker เองอยู่แล้ว)
+  const openPicker = (e: MouseEvent<HTMLInputElement>): void => {
+    const el = e.currentTarget;
+    if (typeof el.showPicker === "function") el.showPicker();
+  };
 
   const submit = (): void => onSubmit({ date, time, sex, tz, lon, useSolar });
 
@@ -38,15 +44,34 @@ export function FormScreen({
           <div className="grid2">
             <div className="field">
               <label htmlFor="f-date">วันเกิด (สากล)</label>
-              <input
-                id="f-date" type="date" value={date}
-                min="1900-01-01" max="2100-12-31"
-                onChange={(e) => setDate(e.target.value)}
-              />
+              <div className="input-wrap">
+                <input
+                  id="f-date" type="date" value={date}
+                  min="1900-01-01" max="2100-12-31"
+                  onClick={openPicker}
+                  onChange={(e) => setDate(e.target.value)}
+                />
+                <svg className="input-ic" viewBox="0 0 24 24" width="18" height="18"
+                  fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true">
+                  <rect x="3" y="4.5" width="18" height="16" rx="2" />
+                  <path d="M3 9.5h18M8 2.5v4M16 2.5v4" />
+                </svg>
+              </div>
             </div>
             <div className="field">
               <label htmlFor="f-time">เวลาเกิด</label>
-              <input id="f-time" type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+              <div className="input-wrap">
+                <input
+                  id="f-time" type="time" value={time}
+                  onClick={openPicker}
+                  onChange={(e) => setTime(e.target.value)}
+                />
+                <svg className="input-ic" viewBox="0 0 24 24" width="18" height="18"
+                  fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="8.5" />
+                  <path d="M12 7.5V12l3 2" />
+                </svg>
+              </div>
             </div>
           </div>
 

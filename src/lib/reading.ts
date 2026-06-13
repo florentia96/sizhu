@@ -205,6 +205,9 @@ export function buildReading(r: BaziResult): Reading {
   });
   const inUseful = r.luck.pillars.filter((l) => usefulSet.has(GAN_E[l.gan][0]));
   const inAvoid = r.luck.pillars.filter((l) => avoidSet.has(GAN_E[l.gan][0]));
+  const inNeutral = r.luck.pillars.filter(
+    (l) => !usefulSet.has(GAN_E[l.gan][0]) && !avoidSet.has(GAN_E[l.gan][0]),
+  );
   const luckSections: LuckSection[] = [];
   if (inUseful.length)
     luckSections.push({
@@ -212,6 +215,13 @@ export function buildReading(r: BaziResult): Reading {
       title: "ช่วงส่งเสริม — เดินหน้าได้",
       hint: "ธาตุประจำช่วงหนุนดวงคุณ เหมาะรุก ลงทุนกับตัวเอง คว้าโอกาส",
       items: inUseful.map(toHighlight),
+    });
+  if (inNeutral.length)
+    luckSections.push({
+      kind: "ทั่วไป",
+      title: "ช่วงทั่วไป — รักษาจังหวะ",
+      hint: "ธาตุประจำช่วงไม่หนุนไม่ขัดเป็นพิเศษ เดินตามแผนปกติ และใช้จุดเด่นของสิบเทพประจำช่วงให้เป็นประโยชน์",
+      items: inNeutral.map(toHighlight),
     });
   if (inAvoid.length)
     luckSections.push({

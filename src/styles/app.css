@@ -120,6 +120,36 @@ input[type="number"] {
   min-width: 0;
   display: block;
 }
+.input-wrap {
+  position: relative;
+  display: block;
+}
+/* date/time: ปิด native appearance ให้เคารพ width (กัน layout เพี้ยน/ยาวเกินบน iOS) + เว้นที่ไอคอน */
+.input-wrap input[type="date"],
+.input-wrap input[type="time"] {
+  -webkit-appearance: none;
+  appearance: none;
+  padding-right: 38px;
+  cursor: pointer;
+}
+/* ขยายปุ่ม picker ของ webkit ให้คลุมทั้ง input (โปร่งใส) → คลิก/แตะตรงไหนก็เปิด */
+.input-wrap input::-webkit-calendar-picker-indicator {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+  margin: 0;
+  cursor: pointer;
+  opacity: 0;
+}
+.input-ic {
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-faint);
+  pointer-events: none;
+}
 .field-sex {
   margin-top: 14px;
 }
