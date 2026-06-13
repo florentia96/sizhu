@@ -9,8 +9,8 @@ export function FormScreen({
   onSubmit: (f: RawForm) => void;
   error: string;
 }) {
-  const [date, setDate] = useState("1996-04-03");
-  const [time, setTime] = useState("23:58");
+  const [date, setDate] = useState("2000-01-01");
+  const [time, setTime] = useState("00:00");
   const [sex, setSex] = useState<Sex>("M");
   const [advOpen, setAdvOpen] = useState(false);
   const [tz, setTz] = useState("7");
