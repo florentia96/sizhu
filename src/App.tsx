@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import "./tokens/tokens.css";
 import "./styles/app.css";
 import { compute } from "./engine/bazi";
-import { buildReading, type Reading } from "./lib/reading";
+import { annualForecast, buildReading, type AnnualItem, type Reading } from "./lib/reading";
 import { validateForm, type RawForm } from "./lib/validate";
 import { usePrefersReducedMotion } from "./hooks/usePrefersReducedMotion";
 import { FormScreen } from "./screens/FormScreen";
@@ -17,6 +17,7 @@ export default function App() {
   const reduced = usePrefersReducedMotion();
   const [mode, setMode] = useState<Mode>("paper");
   const [reading, setReading] = useState<Reading | null>(null);
+  const [annual, setAnnual] = useState<AnnualItem[]>([]);
   const [recap, setRecap] = useState("");
   const [error, setError] = useState("");
   const castT = useRef<number | undefined>(undefined);
@@ -28,14 +29,18 @@ export default function App() {
       return;
     }
     let R: Reading;
+    let ann: AnnualItem[];
     try {
-      R = buildReading(compute(v.input));
+      const bz = compute(v.input);
+      R = buildReading(bz);
+      ann = annualForecast(bz, new Date().getFullYear(), 10, v.input.year);
     } catch (e) {
       setError("คำนวณไม่สำเร็จ: " + (e instanceof Error ? e.message : String(e)));
       return;
     }
     setError("");
     setReading(R);
+    setAnnual(ann);
     const sexTh = v.input.sex === "M" ? "ชาย" : "หญิง";
     setRecap(`${pad(v.input.day)}/${pad(v.input.month)}/${v.input.year} · ${f.time || "12:00"} น. · ${sexTh}`);
     if (reduced) {
@@ -68,7 +73,7 @@ export default function App() {
       {mode === "paper" && <FormScreen onSubmit={handleSubmit} error={error} />}
       {mode === "casting" && <CastingScreen onSkip={toResult} />}
       {mode === "result" && reading && (
-        <ResultScreen reading={reading} recap={recap} onBack={back} />
+        <ResultScreen reading={reading} annual={annual} recap={recap} onBack={back} />
       )}
     </div>
   );

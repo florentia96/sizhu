@@ -1,4 +1,4 @@
-import type { Reading } from "../lib/reading";
+import type { AnnualItem, Reading } from "../lib/reading";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import { PetalCanvas } from "../components/PetalCanvas";
 import { SummaryCard } from "../components/SummaryCard";
@@ -10,13 +10,16 @@ import { TenGodsPanel } from "../components/TenGodsPanel";
 import { ShenShaPanel } from "../components/ShenShaPanel";
 import { TipsPanel } from "../components/TipsPanel";
 import { LuckPanel } from "../components/LuckPanel";
+import { LiuNianPanel } from "../components/LiuNianPanel";
 
 export function ResultScreen({
   reading,
+  annual,
   recap,
   onBack,
 }: {
   reading: Reading;
+  annual: AnnualItem[];
   recap: string;
   onBack: () => void;
 }) {
@@ -81,7 +84,11 @@ export function ResultScreen({
           <LuckPanel reading={reading} />
         </Panel>
 
-        <div className="reveal" style={{ animationDelay: `${d(8)}s` }}>
+        <Panel mark="年" title="流年 (ดวงรายปี · 10 ปีข้างหน้า)" delay={d(8)}>
+          <LiuNianPanel annual={annual} />
+        </Panel>
+
+        <div className="reveal" style={{ animationDelay: `${d(9)}s` }}>
           <footer className="result-footer">
             <div className="off">คำนวณทั้งหมดในเครื่องของคุณ · ไม่ส่งข้อมูลออก</div>
             ใช้สูตรตำแหน่งดวงอาทิตย์ (Meeus) หาจุดสารท 24 จุด — ผลตรงกับปฏิทินดาราศาสตร์ sxtwl

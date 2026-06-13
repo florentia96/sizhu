@@ -5,6 +5,7 @@ import {
 } from "../src/engine/constants";
 import { compute, relation } from "../src/engine/bazi";
 import { changSheng, combinations, naYin, shenSha, voidBranches } from "../src/engine/almanac";
+import { annualForecast } from "../src/lib/reading";
 import type { Gan, Pillar, PillarLabel, Pillars, Zhi } from "../src/types";
 
 const mk = (gan: Gan, zhi: Zhi, label: PillarLabel): Pillar => ({ gan, zhi, label, gz: gan + zhi });
@@ -132,5 +133,14 @@ describe("master data — 三合 / 三會 / 五合", () => {
     const c = combinations(p);
     expect(c.some((x) => x.kind === "三會" && x.chars === "寅卯辰" && x.el === "ไม้")).toBe(true);
     expect(c.some((x) => x.kind === "三合" && !x.full && x.el === "น้ำ")).toBe(true);
+  });
+});
+
+describe("流年 — annualForecast (deterministic)", () => {
+  it("ก้านปี + อายุ ถูกต้อง (2024=甲辰, 2025=乙巳, 2026=丙午)", () => {
+    const r = compute({ year: 2000, month: 1, day: 1, hour: 12, minute: 0, sex: "F", useSolar: false });
+    const a = annualForecast(r, 2024, 3, 2000);
+    expect(a.map((x) => x.gz)).toEqual(["甲辰", "乙巳", "丙午"]);
+    expect(a.map((x) => x.age)).toEqual([24, 25, 26]);
   });
 });

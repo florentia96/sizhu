@@ -5,7 +5,7 @@ import type {
 } from "../types";
 import { ELEMENTS } from "../types";
 import {
-  BRANCH_EL, CTRL, EL_CN, GAN_E, GEN, GROUP, HEAD_CN, HIDDEN, SHENSHA_TH, TG_TH, ZHI_TH, ZODIAC,
+  BRANCH_EL, CTRL, EL_CN, GAN, GAN_E, GEN, GROUP, HEAD_CN, HIDDEN, SHENSHA_TH, TG_TH, ZHI, ZHI_TH, ZODIAC,
 } from "../engine/constants";
 import { relation, tenGod } from "../engine/bazi";
 import { changSheng, combinations, naYin, shenSha, voidBranches } from "../engine/almanac";
@@ -288,4 +288,43 @@ export function buildReading(r: BaziResult): Reading {
     headline: `คุณคือ “${nat.name}”`,
     headlineSub: `ธาตุประจำตัว ${dm} (${dmE} ${EL_CN[dmE]} · ${polarity}) · ${r.strength}`,
   };
+}
+
+export interface AnnualItem {
+  year: number; age: number; gz: string; gan: Gan; zhi: Zhi;
+  el: ElementTH; elColor: string; tg: string; kind: LuckKind; relations: string[];
+}
+
+// ดวงรายปี (流年) — ฟังก์ชันบริสุทธิ์: ให้ผลคำนวณ + ปีเริ่ม + จำนวนปี + ปีเกิด (สำหรับอายุ)
+// ก้านปีเปลี่ยนจริงที่ 立春 — ระดับรายปีใช้ก้านปีตามปฏิทินตามธรรมเนียมตาราง 流年
+export function annualForecast(
+  r: BaziResult,
+  fromYear: number,
+  count: number,
+  birthYear: number,
+): AnnualItem[] {
+  const dm = r.dayMaster;
+  const usefulSet = new Set(r.useful);
+  const avoidSet = new Set(r.avoid);
+  const natal: [string, Zhi][] = [
+    ["ปี", r.pillars.year.zhi], ["เดือน", r.pillars.month.zhi],
+    ["วัน", r.pillars.day.zhi], ["เวลา", r.pillars.hour.zhi],
+  ];
+  const out: AnnualItem[] = [];
+  for (let i = 0; i < count; i++) {
+    const year = fromYear + i;
+    const gan = GAN[(((year - 4) % 10) + 10) % 10];
+    const zhi = ZHI[(((year - 4) % 12) + 12) % 12];
+    const el = GAN_E[gan][0];
+    const kind: LuckKind = usefulSet.has(el) ? "ส่งเสริม" : avoidSet.has(el) ? "ตั้งหลัก" : "ทั่วไป";
+    const relations: string[] = [];
+    natal.forEach(([label, nz]) => {
+      relation(zhi, nz).forEach((k) => relations.push(`${k}เสา${label}`));
+    });
+    out.push({
+      year, age: year - birthYear, gz: gan + zhi, gan, zhi,
+      el, elColor: col[el], tg: shortTg(tenGod(dm, gan)), kind, relations,
+    });
+  }
+  return out;
 }

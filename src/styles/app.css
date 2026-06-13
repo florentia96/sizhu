@@ -1135,6 +1135,56 @@ input[type="number"] {
   font-style: italic;
 }
 
+/* ===== 流年 ===== */
+.ln-intro {
+  color: var(--dark-faint);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+.ln-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ln-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 3px 10px;
+  padding: 7px 11px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+}
+.ln-year {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--dark-soft);
+  min-width: 84px;
+}
+.ln-year small {
+  color: var(--dark-faint);
+  font-weight: 400;
+}
+.ln-gz {
+  font-family: "Noto Serif SC", serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.ln-tg {
+  font-size: 0.74rem;
+  color: var(--dark-soft);
+}
+.ln-kind {
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+.ln-rel {
+  flex-basis: 100%;
+  font-size: 0.76rem;
+  color: var(--dark-faint);
+}
+
 /* ===== footer ===== */
 .result-footer {
   text-align: center;
