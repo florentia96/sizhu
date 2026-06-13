@@ -14,6 +14,7 @@ function assertComplete(c: Content): void {
   });
   (Object.keys(TG_TH) as (keyof typeof TG_TH)[]).forEach((g) => {
     if (!c.tgMean[g]) miss.push(`tgMean.${g}`);
+    if (!c.luckByTg[g]) miss.push(`luckByTg.${g}`);
   });
   ELEMENTS.forEach((e) => {
     if (!c.elInfo[e]) miss.push(`elInfo.${e}`);

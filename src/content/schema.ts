@@ -17,6 +17,7 @@ export const contentSchema = z.object({
   polarityNote: z.object({ หยาง: z.string(), ยิน: z.string() }),
   elInfo: z.record(z.string(), elInfo),
   tgMean: z.record(z.string(), z.string()),
+  luckByTg: z.record(z.string(), z.string()),
   relMean: z.record(z.string(), labeled),
   pillarDomain: z.record(z.string(), titleDesc),
   careerByGroup: z.record(z.string(), z.string()),

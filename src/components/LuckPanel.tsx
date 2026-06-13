@@ -26,7 +26,28 @@ export function LuckPanel({ reading }: { reading: Reading }) {
           </div>
         ))}
       </div>
-      <p className="luck-para">{luck.para}</p>
+
+      <p className="luck-intro">{luck.intro}</p>
+      {luck.sections.map((s) => (
+        <section className="luck-sect" key={s.kind}>
+          <div className="luck-sect-head" style={{ color: KIND_COLOR[s.kind] }}>
+            <span className="luck-sect-dot" style={{ background: KIND_COLOR[s.kind] }} aria-hidden="true" />
+            {s.title}
+          </div>
+          <div className="luck-sect-hint">{s.hint}</div>
+          <ul className="luck-list">
+            {s.items.map((it) => (
+              <li className="luck-li" key={it.age}>
+                <span className="luck-li-gz" style={{ color: it.color }}>{it.gz}</span>
+                <span className="luck-li-age">{it.age}</span>
+                <span className="luck-li-tg">{it.tg}</span>
+                <span className="luck-li-note">{it.note}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+      <p className="luck-foot">{luck.footnote}</p>
     </>
   );
 }

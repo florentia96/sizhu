@@ -1,7 +1,7 @@
 // แปลงผล compute() เป็นโครงข้อมูลพร้อมเรนเดอร์ (UI-agnostic) — ใช้ content ที่ validate แล้ว
 // สีใช้โทนมืด (EL_DARK) เพราะหน้าผลแสดงบนพื้นราตรีเสมอ
 import type {
-  BaziResult, ElementTH, Gan, PillarLabel, RelationKind, TenGod, Zhi,
+  BaziResult, ElementTH, Gan, LuckPillar, PillarLabel, RelationKind, TenGod, Zhi,
 } from "../types";
 import { ELEMENTS } from "../types";
 import {
@@ -29,13 +29,18 @@ export interface LuckCard {
   from: number; to: number; gz: string; gan: Gan; zhi: Zhi;
   el: ElementTH; elCn: string; color: string; tg: string; kind: LuckKind;
 }
+export interface LuckHighlight { age: string; gz: string; tg: string; note: string; color: string }
+export interface LuckSection { kind: LuckKind; title: string; hint: string; items: LuckHighlight[] }
 export interface ColorTip { el: ElementTH; color: string; swatch: string }
 export interface Tips {
   colors: ColorTip[]; dirs: string; fields: string;
   careerGroup: string; careerText: string; acts: string;
   weakEl: ElementTH; weakElCn: string; weakColor: string; organ: string;
 }
-export interface ReadingLuck { forward: boolean; startAge: number; pillars: LuckCard[]; para: string }
+export interface ReadingLuck {
+  forward: boolean; startAge: number; pillars: LuckCard[];
+  intro: string; sections: LuckSection[]; footnote: string;
+}
 export interface Reading {
   dayMaster: Gan; dayMasterElement: ElementTH; dmColor: string;
   polarity: "หยาง" | "ยิน"; polarityNote: string;
@@ -180,29 +185,43 @@ export function buildReading(r: BaziResult): Reading {
     weakEl, weakElCn: EL_CN[weakEl], weakColor: col[weakEl], organ: content.organ[weakEl],
   };
 
-  // ต้าอวิ้น
+  // ต้าอวิ้น — การ์ดไล่ช่วงอายุ + จัดกลุ่มช่วงเด่นเป็นรายการ พร้อมแนวทางรายช่วงตามสิบเทพ
   const usefulSet = new Set(r.useful);
   const avoidSet = new Set(r.avoid);
-  const good: LuckCard[] = [];
-  const care: LuckCard[] = [];
   const luckPillars: LuckCard[] = r.luck.pillars.map((l) => {
     const el = GAN_E[l.gan][0];
     const kind: LuckKind = usefulSet.has(el) ? "ส่งเสริม" : avoidSet.has(el) ? "ตั้งหลัก" : "ทั่วไป";
-    const item: LuckCard = {
+    return {
       from: l.from, to: l.to, gz: l.gz, gan: l.gan, zhi: l.zhi,
       el, elCn: EL_CN[el], color: col[el], tg: shortTg(l.tg), kind,
     };
-    if (kind === "ส่งเสริม") good.push(item);
-    else if (kind === "ตั้งหลัก") care.push(item);
-    return item;
   });
-  const fmt = (l: LuckCard): string => `${l.from}–${l.to} ปี (${l.gz})`;
-  let luckPara = "แต่ละช่วง 10 ปีได้รับอิทธิพลของธาตุต่างกัน ";
-  if (good.length)
-    luckPara += `ช่วงที่ธาตุ “ส่งเสริม” คุณ ได้แก่ ${good.map(fmt).join(", ")} เป็นจังหวะเหมาะเดินหน้า ลงทุนกับตัวเอง และคว้าโอกาส `;
-  if (care.length)
-    luckPara += `ส่วนช่วงที่ควร “ตั้งหลักและไม่หักโหม” คือ ${care.map(fmt).join(", ")} เน้นวางรากฐาน ดูแลสุขภาพและความสัมพันธ์ `;
-  luckPara += "ทั้งนี้เป็นแนวโน้มกว้าง ๆ ผลจริงขึ้นกับการกระทำและจังหวะที่คุณเลือกเอง";
+  const toHighlight = (l: LuckPillar): LuckHighlight => ({
+    age: `${l.from}–${l.to} ปี`,
+    gz: l.gz,
+    tg: shortTg(l.tg),
+    note: content.luckByTg[l.tg],
+    color: col[GAN_E[l.gan][0]],
+  });
+  const inUseful = r.luck.pillars.filter((l) => usefulSet.has(GAN_E[l.gan][0]));
+  const inAvoid = r.luck.pillars.filter((l) => avoidSet.has(GAN_E[l.gan][0]));
+  const luckSections: LuckSection[] = [];
+  if (inUseful.length)
+    luckSections.push({
+      kind: "ส่งเสริม",
+      title: "ช่วงส่งเสริม — เดินหน้าได้",
+      hint: "ธาตุประจำช่วงหนุนดวงคุณ เหมาะรุก ลงทุนกับตัวเอง คว้าโอกาส",
+      items: inUseful.map(toHighlight),
+    });
+  if (inAvoid.length)
+    luckSections.push({
+      kind: "ตั้งหลัก",
+      title: "ช่วงตั้งหลัก — ไม่หักโหม",
+      hint: "ธาตุประจำช่วงมีพอแล้ว เน้นวางรากฐาน ดูแลสุขภาพและความสัมพันธ์",
+      items: inAvoid.map(toHighlight),
+    });
+  const luckIntro = "ต้าอวิ้น (大運) คือดวงรอบ 10 ปี แต่ละช่วงเด่นคนละธาตุและสิบเทพ:";
+  const luckFootnote = "ทั้งหมดเป็นแนวโน้มกว้าง ๆ ผลจริงขึ้นกับการกระทำและจังหวะที่คุณเลือกเอง";
 
   const tldr: ReadingTldr[] = [
     { label: "ธาตุประจำตัว", value: `${nat.name} — ${dm} (${dmE} ${EL_CN[dmE]} · ${polarity})`, color: col[dmE] },
@@ -212,7 +231,7 @@ export function buildReading(r: BaziResult): Reading {
     { label: "สายงานที่เหมาะ", value: tips.fields, color: "#cfc7b2" },
     {
       label: "ช่วงชีวิตที่น่าจับตา",
-      value: good.length ? good.map((l) => `${l.from}–${l.to} ปี`).join(", ") : "ทุกช่วงต้องประคองสมดุล",
+      value: inUseful.length ? inUseful.map((l) => `${l.from}–${l.to} ปี`).join(", ") : "ทุกช่วงต้องประคองสมดุล",
       color: "#6cc18a",
     },
   ];
@@ -227,7 +246,10 @@ export function buildReading(r: BaziResult): Reading {
     pillars, domains,
     elementBars, usefulChips, avoidChips, elements: r.elements,
     tenGods, relations, tips,
-    luck: { forward: r.luck.forward, startAge: r.luck.startAge, pillars: luckPillars, para: luckPara },
+    luck: {
+      forward: r.luck.forward, startAge: r.luck.startAge, pillars: luckPillars,
+      intro: luckIntro, sections: luckSections, footnote: luckFootnote,
+    },
     tldr,
     headline: `คุณคือ “${nat.name}”`,
     headlineSub: `ธาตุประจำตัว ${dm} (${dmE} ${EL_CN[dmE]} · ${polarity}) · ${r.strength}`,

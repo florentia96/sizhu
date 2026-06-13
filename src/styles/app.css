@@ -963,13 +963,80 @@ input[type="number"] {
   font-size: 0.58rem;
   font-weight: 600;
 }
-.luck-para {
+.luck-intro {
   color: var(--dark-soft);
-  font-size: 0.92rem;
-  line-height: 1.78;
-  margin: 15px 0 0;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin: 16px 0 12px;
   padding-top: 13px;
   border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+.luck-sect {
+  margin-top: 14px;
+}
+.luck-sect-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+.luck-sect-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+}
+.luck-sect-hint {
+  color: var(--dark-faint);
+  font-size: 0.8rem;
+  margin: 3px 0 8px 16px;
+}
+.luck-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.luck-li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 3px 9px;
+  padding: 8px 11px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+  border-left: 2px solid rgba(255, 255, 255, 0.1);
+}
+.luck-li-gz {
+  font-family: "Noto Serif SC", serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.luck-li-age {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--dark-faint);
+}
+.luck-li-tg {
+  font-size: 0.74rem;
+  color: var(--dark-soft);
+}
+.luck-li-note {
+  flex-basis: 100%;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--dark-soft);
+}
+.luck-foot {
+  color: var(--dark-faint);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  margin: 14px 0 0;
+  font-style: italic;
 }
 
 /* ===== footer ===== */
