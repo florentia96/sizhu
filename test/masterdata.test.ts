@@ -1,0 +1,46 @@
+import { describe, it, expect } from "vitest";
+import { HIDDEN, XING } from "../src/engine/constants";
+import { relation } from "../src/engine/bazi";
+import type { Zhi } from "../src/types";
+
+// ล็อก master data ให้ตรงตำรา (子平 / 三命通會) — กันการแก้พลาดเงียบ ๆ
+describe("master data — 藏干 中氣 = ก้าน長生ของ三合 (ใช้กฎเดียวกันทุกเสา)", () => {
+  it("巳 = 丙庚戊 (中氣 庚 ตาม 巳酉丑金局 ไม่ใช่ 火土同宮)", () => {
+    expect(HIDDEN["巳"]).toEqual(["丙", "庚", "戊"]);
+  });
+  it("เสาอื่นที่มีก้านซ่อน 3 ตัวยังตรง", () => {
+    expect(HIDDEN["寅"]).toEqual(["甲", "丙", "戊"]); // 寅午戌火 → 中丙
+    expect(HIDDEN["申"]).toEqual(["庚", "壬", "戊"]); // 申子辰水 → 中壬
+    expect(HIDDEN["亥"]).toEqual(["壬", "甲"]); // 亥卯未木 → 中甲
+  });
+});
+
+describe("master data — 刑 ครบชุดตามตำรา", () => {
+  const hasXing = (a: Zhi, b: Zhi): boolean => relation(a, b).includes("เฮ่ง");
+  it("三刑 寅巳申", () => {
+    expect(hasXing("寅", "巳")).toBe(true);
+    expect(hasXing("巳", "申")).toBe(true);
+    expect(hasXing("申", "寅")).toBe(true);
+  });
+  it("三刑 丑戌未", () => {
+    expect(hasXing("丑", "戌")).toBe(true);
+    expect(hasXing("戌", "未")).toBe(true);
+    expect(hasXing("未", "丑")).toBe(true);
+  });
+  it("互刑 子卯", () => {
+    expect(hasXing("子", "卯")).toBe(true);
+  });
+  it("自刑 辰午酉亥 (ธาตุเดียวกันซ้ำสองเสา)", () => {
+    expect(hasXing("辰", "辰")).toBe(true);
+    expect(hasXing("午", "午")).toBe(true);
+    expect(hasXing("酉", "酉")).toBe(true);
+    expect(hasXing("亥", "亥")).toBe(true);
+  });
+  it("คู่ที่ไม่ใช่ 刑 ต้องไม่ติด", () => {
+    expect(hasXing("子", "丑")).toBe(false); // 六合
+    expect(hasXing("寅", "卯")).toBe(false);
+  });
+  it("XING รวม 11 คู่", () => {
+    expect(XING).toHaveLength(11);
+  });
+});
