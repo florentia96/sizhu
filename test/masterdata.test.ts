@@ -1,10 +1,13 @@
 import { describe, it, expect } from "vitest";
 import {
-  HIDDEN, HUAGAI, JIANGXING, LUSHEN, TAOHUA, TIANYI, WENCHANG, XING, YANGREN, YIMA,
+  HIDDEN, HUAGAI, JIANGXING, LUSHEN, SANHE, TAOHUA, TIANGAN_HE, TIANYI,
+  WENCHANG, XING, YANGREN, YIMA,
 } from "../src/engine/constants";
 import { compute, relation } from "../src/engine/bazi";
-import { changSheng, naYin, shenSha, voidBranches } from "../src/engine/almanac";
-import type { Zhi } from "../src/types";
+import { changSheng, combinations, naYin, shenSha, voidBranches } from "../src/engine/almanac";
+import type { Gan, Pillar, PillarLabel, Pillars, Zhi } from "../src/types";
+
+const mk = (gan: Gan, zhi: Zhi, label: PillarLabel): Pillar => ({ gan, zhi, label, gz: gan + zhi });
 
 // ล็อก master data ให้ตรงตำรา (子平 / 三命通會) — กันการแก้พลาดเงียบ ๆ
 describe("master data — 藏干 中氣 = ก้าน長生ของ三合 (ใช้กฎเดียวกันทุกเสา)", () => {
@@ -101,5 +104,33 @@ describe("master data — 神煞 (key + ค่าเทียบตำรา)", 
     expect(stars).toContain("羊刃"); // 戊刃ที่午 (วัน+เวลา)
     expect(stars).toContain("桃花"); // 午→卯 (ปี 卯)
     expect(stars).toContain("將星"); // 午→午
+  });
+});
+
+describe("master data — 三合 / 三會 / 五合", () => {
+  it("ตารางตรงตำรา", () => {
+    expect(SANHE[0]).toEqual(["申", "子", "辰", "น้ำ"]);
+    expect(TIANGAN_HE[0]).toEqual(["甲", "己", "ดิน"]);
+  });
+  it("三合เต็ม + 五合: 申子辰→น้ำ · 甲己→ดิน · 丙辛→น้ำ", () => {
+    const p: Pillars = {
+      year: mk("甲", "申", "ปี"), month: mk("己", "子", "เดือน"),
+      day: mk("丙", "辰", "วัน"), hour: mk("辛", "酉", "เวลา"),
+    };
+    const c = combinations(p);
+    const tags = c.map((x) => `${x.kind}${x.chars}`);
+    expect(tags).toContain("三合申子辰");
+    expect(c.find((x) => x.chars === "申子辰")?.el).toBe("น้ำ");
+    expect(tags).toContain("五合甲己");
+    expect(tags).toContain("五合丙辛");
+  });
+  it("三會เต็ม 寅卯辰→ไม้ + 半合 子辰→น้ำ (ต้องมี旺 子)", () => {
+    const p: Pillars = {
+      year: mk("甲", "子", "ปี"), month: mk("乙", "辰", "เดือน"),
+      day: mk("丙", "寅", "วัน"), hour: mk("丁", "卯", "เวลา"),
+    };
+    const c = combinations(p);
+    expect(c.some((x) => x.kind === "三會" && x.chars === "寅卯辰" && x.el === "ไม้")).toBe(true);
+    expect(c.some((x) => x.kind === "三合" && !x.full && x.el === "น้ำ")).toBe(true);
   });
 });

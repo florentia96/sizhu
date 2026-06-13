@@ -36,6 +36,7 @@ export const contentSchema = z.object({
     strong: z.string(),
   }),
   shenSha: z.record(z.string(), z.string()),
+  combine: z.record(z.string(), z.string()),
 });
 
 export type Content = z.infer<typeof contentSchema>;

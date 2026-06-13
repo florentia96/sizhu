@@ -8,7 +8,7 @@ import {
   BRANCH_EL, CTRL, EL_CN, GAN_E, GEN, GROUP, HEAD_CN, HIDDEN, SHENSHA_TH, TG_TH, ZHI_TH, ZODIAC,
 } from "../engine/constants";
 import { relation, tenGod } from "../engine/bazi";
-import { changSheng, naYin, shenSha, voidBranches } from "../engine/almanac";
+import { changSheng, combinations, naYin, shenSha, voidBranches } from "../engine/almanac";
 import { EL_DARK } from "../tokens/elements";
 import { content, type SeasonStateId } from "../content";
 
@@ -28,6 +28,7 @@ export interface ElementChip { el: ElementTH; cn: string; color: string }
 export interface TenGodItem { cn: TenGod; name: string; count: number; meaning: string; group: string }
 export interface RelationItem { label: string; pairs: string; meaning: string }
 export interface ShenShaItem { cn: string; name: string; meaning: string; where: string }
+export interface CombineItem { kind: string; chars: string; el: ElementTH; full: boolean; meaning: string }
 export type LuckKind = "ส่งเสริม" | "ตั้งหลัก" | "ทั่วไป";
 export interface LuckCard {
   from: number; to: number; gz: string; gan: Gan; zhi: Zhi;
@@ -55,7 +56,7 @@ export interface Reading {
   pillars: ReadingPillar[]; domains: ReadingDomain[];
   elementBars: ElementBar[]; usefulChips: ElementChip[]; avoidChips: ElementChip[];
   elements: Record<ElementTH, number>;
-  tenGods: TenGodItem[]; relations: RelationItem[]; shenSha: ShenShaItem[];
+  tenGods: TenGodItem[]; relations: RelationItem[]; shenSha: ShenShaItem[]; combines: CombineItem[];
   tips: Tips; luck: ReadingLuck;
   tldr: ReadingTldr[]; headline: string; headlineSub: string;
 }
@@ -261,6 +262,13 @@ export function buildReading(r: BaziResult): Reading {
     meaning: content.shenSha[h.star],
     where: h.where.join(", "),
   }));
+  const combineList: CombineItem[] = combinations(r.pillars).map((c) => ({
+    kind: c.kind,
+    chars: c.chars,
+    el: c.el,
+    full: c.full,
+    meaning: content.combine[c.kind],
+  }));
 
   return {
     dayMaster: dm, dayMasterElement: dmE, dmColor: col[dmE],
@@ -271,7 +279,7 @@ export function buildReading(r: BaziResult): Reading {
     solarShift: r.solarShift,
     pillars, domains,
     elementBars, usefulChips, avoidChips, elements: r.elements,
-    tenGods, relations, shenSha: shenShaList, tips,
+    tenGods, relations, shenSha: shenShaList, combines: combineList, tips,
     luck: {
       forward: r.luck.forward, startAge: r.luck.startAge, pillars: luckPillars,
       intro: luckIntro, sections: luckSections, footnote: luckFootnote,

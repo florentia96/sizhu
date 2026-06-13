@@ -35,6 +35,9 @@ function assertComplete(c: Content): void {
   Object.keys(SHENSHA_TH).forEach((s) => {
     if (!c.shenSha[s]) miss.push(`shenSha.${s}`);
   });
+  (["三合", "三會", "五合"] as const).forEach((k) => {
+    if (!c.combine[k]) miss.push(`combine.${k}`);
+  });
   if (miss.length) {
     throw new Error("content/th.json ขาดถ้อยคำ: " + miss.join(", "));
   }

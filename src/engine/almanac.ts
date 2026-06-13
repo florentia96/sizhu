@@ -2,7 +2,8 @@
 import type { ElementTH, Gan, Pillars, Zhi } from "../types";
 import {
   CHANGSHENG_NAMES, CHANGSHENG_START, GAN, GAN_E, HUAGAI, JIANGXING, LUSHEN,
-  NAYIN, TAOHUA, TIANYI, VOID_BY_XUN, WENCHANG, YANGREN, YIMA, ZHI,
+  NAYIN, SANHE, SANHUI, TAOHUA, TIANGAN_HE, TIANYI, VOID_BY_XUN, WENCHANG,
+  YANGREN, YIMA, ZHI,
 } from "./constants";
 
 const gi = (g: Gan): number => GAN.indexOf(g);
@@ -62,4 +63,34 @@ export function shenSha(pillars: Pillars): ShenShaHit[] {
   const yr = YANGREN[dayGan];
   if (yr) add("羊刃", [yr]);
   return hits;
+}
+
+export interface Combine {
+  kind: "三合" | "三會" | "五合";
+  chars: string;
+  el: ElementTH;
+  full: boolean;
+}
+
+// 合 ระดับกลุ่ม/ก้านบน (แยกจาก relation() ที่เป็นคู่ก้านดิน) — 三合(+半合) / 三會 / 天干五合
+export function combinations(pillars: Pillars): Combine[] {
+  const all = [pillars.year, pillars.month, pillars.day, pillars.hour];
+  const branches = all.map((p) => p.zhi);
+  const stems = all.map((p) => p.gan);
+  const out: Combine[] = [];
+  for (const [a, b, c, el] of SANHE) {
+    const present = [a, b, c].filter((z) => branches.includes(z));
+    if (present.length === 3) out.push({ kind: "三合", chars: `${a}${b}${c}`, el, full: true });
+    else if (present.length === 2 && present.includes(b))
+      out.push({ kind: "三合", chars: present.join(""), el, full: false });
+  }
+  for (const [a, b, c, el] of SANHUI) {
+    if (branches.includes(a) && branches.includes(b) && branches.includes(c))
+      out.push({ kind: "三會", chars: `${a}${b}${c}`, el, full: true });
+  }
+  for (const [a, b, el] of TIANGAN_HE) {
+    if (stems.includes(a) && stems.includes(b))
+      out.push({ kind: "五合", chars: `${a}${b}`, el, full: true });
+  }
+  return out;
 }

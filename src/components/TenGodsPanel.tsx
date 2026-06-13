@@ -31,6 +31,19 @@ export function TenGodsPanel({ reading }: { reading: Reading }) {
           ))}
         </div>
       )}
+      {reading.combines.length > 0 && (
+        <div className="rel-block">
+          <h3 className="rel-head">
+            <span className="mk" aria-hidden="true">合</span> การรวมธาตุ (三合 / 三會 / 五合)
+          </h3>
+          {reading.combines.map((c, i) => (
+            <p className="rel-item" key={`${c.kind}-${c.chars}-${i}`}>
+              <b>{c.kind} {c.chars}</b>
+              {c.full ? "" : " (ครึ่ง)"} → ธาตุ{c.el} — {c.meaning}
+            </p>
+          ))}
+        </div>
+      )}
     </>
   );
 }
