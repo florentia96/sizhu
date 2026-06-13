@@ -4,7 +4,7 @@ import {
   WENCHANG, XING, YANGREN, YIMA,
 } from "../src/engine/constants";
 import { compute, relation } from "../src/engine/bazi";
-import { changSheng, combinations, naYin, shenSha, voidBranches } from "../src/engine/almanac";
+import { changSheng, combinations, naYin, shenSha, taiYuan, voidBranches } from "../src/engine/almanac";
 import { annualForecast } from "../src/lib/reading";
 import type { Gan, Pillar, PillarLabel, Pillars, Zhi } from "../src/types";
 
@@ -133,6 +133,13 @@ describe("master data — 三合 / 三會 / 五合", () => {
     const c = combinations(p);
     expect(c.some((x) => x.kind === "三會" && x.chars === "寅卯辰" && x.el === "ไม้")).toBe(true);
     expect(c.some((x) => x.kind === "三合" && !x.full && x.el === "น้ำ")).toBe(true);
+  });
+});
+
+describe("胎元 — 月干+1, 月支+3", () => {
+  it("丙寅 → 丁巳 · 癸亥 → 甲寅 (wraparound)", () => {
+    expect(taiYuan("丙", "寅").gz).toBe("丁巳");
+    expect(taiYuan("癸", "亥").gz).toBe("甲寅");
   });
 });
 

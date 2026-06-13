@@ -8,7 +8,7 @@ import {
   BRANCH_EL, CTRL, EL_CN, GAN, GAN_E, GEN, GROUP, HEAD_CN, HIDDEN, SHENSHA_TH, TG_TH, ZHI, ZHI_TH, ZODIAC,
 } from "../engine/constants";
 import { relation, tenGod } from "../engine/bazi";
-import { changSheng, combinations, naYin, shenSha, voidBranches } from "../engine/almanac";
+import { changSheng, combinations, naYin, shenSha, taiYuan, voidBranches } from "../engine/almanac";
 import { EL_DARK } from "../tokens/elements";
 import { content, type SeasonStateId } from "../content";
 
@@ -29,6 +29,7 @@ export interface TenGodItem { cn: TenGod; name: string; count: number; meaning: 
 export interface RelationItem { label: string; pairs: string; meaning: string }
 export interface ShenShaItem { cn: string; name: string; meaning: string; where: string }
 export interface CombineItem { kind: string; chars: string; el: ElementTH; full: boolean; meaning: string }
+export interface AuxPillar { cn: string; label: string; gz: string; note: string }
 export type LuckKind = "ส่งเสริม" | "ตั้งหลัก" | "ทั่วไป";
 export interface LuckCard {
   from: number; to: number; gz: string; gan: Gan; zhi: Zhi;
@@ -57,6 +58,7 @@ export interface Reading {
   elementBars: ElementBar[]; usefulChips: ElementChip[]; avoidChips: ElementChip[];
   elements: Record<ElementTH, number>;
   tenGods: TenGodItem[]; relations: RelationItem[]; shenSha: ShenShaItem[]; combines: CombineItem[];
+  auxPillars: AuxPillar[];
   tips: Tips; luck: ReadingLuck;
   tldr: ReadingTldr[]; headline: string; headlineSub: string;
 }
@@ -269,6 +271,10 @@ export function buildReading(r: BaziResult): Reading {
     full: c.full,
     meaning: content.combine[c.kind],
   }));
+  const ty = taiYuan(r.pillars.month.gan, r.pillars.month.zhi);
+  const auxPillars: AuxPillar[] = [
+    { cn: "胎元", label: "เสาเกิดในครรภ์", gz: ty.gz, note: "อิทธิพลช่วงตั้งครรภ์ก่อนเกิด" },
+  ];
 
   return {
     dayMaster: dm, dayMasterElement: dmE, dmColor: col[dmE],
@@ -279,7 +285,7 @@ export function buildReading(r: BaziResult): Reading {
     solarShift: r.solarShift,
     pillars, domains,
     elementBars, usefulChips, avoidChips, elements: r.elements,
-    tenGods, relations, shenSha: shenShaList, combines: combineList, tips,
+    tenGods, relations, shenSha: shenShaList, combines: combineList, auxPillars, tips,
     luck: {
       forward: r.luck.forward, startAge: r.luck.startAge, pillars: luckPillars,
       intro: luckIntro, sections: luckSections, footnote: luckFootnote,

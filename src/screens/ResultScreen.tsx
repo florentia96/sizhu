@@ -58,6 +58,17 @@ export function ResultScreen({
               </p>
             ))}
           </div>
+          {reading.auxPillars.length > 0 && (
+            <div className="aux-pillars">
+              {reading.auxPillars.map((a) => (
+                <div className="aux-item" key={a.cn}>
+                  <span className="aux-gz">{a.gz}</span>
+                  <span className="aux-lbl"><b>{a.cn}</b> {a.label}</span>
+                  <span className="aux-note">{a.note}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </Panel>
 
         <Panel mark="主" title="ธาตุประจำตัว & กำลังดวง" delay={d(2)}>

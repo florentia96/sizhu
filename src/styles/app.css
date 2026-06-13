@@ -663,6 +663,36 @@ input[type="number"] {
   line-height: 1.65;
   margin-top: 10px;
 }
+.aux-pillars {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.aux-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 3px 9px;
+  padding: 7px 11px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+}
+.aux-gz {
+  font-family: "Noto Serif SC", serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+.aux-lbl {
+  font-size: 0.82rem;
+  color: var(--dark-soft);
+}
+.aux-note {
+  flex-basis: 100%;
+  font-size: 0.76rem;
+  color: var(--dark-faint);
+}
 .solar-note {
   text-align: center;
   color: var(--dark-faint);

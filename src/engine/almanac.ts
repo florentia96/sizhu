@@ -94,3 +94,10 @@ export function combinations(pillars: Pillars): Combine[] {
   }
   return out;
 }
+
+// 胎元 (เสาเกิดในครรภ์): ก้านบนเดือน +1, ก้านดินเดือน +3
+export function taiYuan(monthGan: Gan, monthZhi: Zhi): { gan: Gan; zhi: Zhi; gz: string } {
+  const gan = GAN[(gi(monthGan) + 1) % 10];
+  const zhi = ZHI[(zi(monthZhi) + 3) % 12];
+  return { gan, zhi, gz: gan + zhi };
+}
