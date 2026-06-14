@@ -135,7 +135,7 @@ export function FormScreen({
           <div className="form-err" role="alert">{error}</div>
         </div>
 
-        <div className="paper-foot">คำนวณในเครื่องของคุณทั้งหมด · ไม่ส่งข้อมูลออก</div>
+        <div className="paper-foot">คำนวณในเครื่องของคุณทั้งหมด · ไม่ส่งข้อมูลวันเกิดออก</div>
       </div>
     </main>
   );

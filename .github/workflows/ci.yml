@@ -1,9 +1,15 @@
-name: CI
+name: CI & Deploy
 
 on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   check:
@@ -19,3 +25,23 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
+      # อัปโหลด artifact เฉพาะ main เพราะมีแต่ main ที่ deploy (PR แค่ตรวจ)
+      - uses: actions/upload-pages-artifact@v5
+        if: github.ref == 'refs/heads/main'
+        with:
+          path: dist
+
+  # deploy ขึ้น Pages เฉพาะเมื่อ check ผ่านและอยู่บน main — กันโค้ดที่ test/lint แดงขึ้น production
+  deploy:
+    needs: check
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

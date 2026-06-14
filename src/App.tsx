@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import "./tokens/tokens.css";
 import "./styles/app.css";
 import { compute } from "./engine/bazi";
-import { annualForecast, buildReading, type AnnualItem, type Reading } from "./lib/reading";
+import { ageAt, annualForecast, buildReading, type AnnualItem, type Reading } from "./lib/reading";
 import { validateForm, type RawForm } from "./lib/validate";
 import { usePrefersReducedMotion } from "./hooks/usePrefersReducedMotion";
 import { FormScreen } from "./screens/FormScreen";
@@ -33,7 +33,12 @@ export default function App() {
     try {
       const bz = compute(v.input);
       R = buildReading(bz);
-      ann = annualForecast(bz, new Date().getFullYear(), 10, v.input.year);
+      const now = new Date();
+      const startAge = ageAt(
+        v.input.year, v.input.month, v.input.day,
+        now.getFullYear(), now.getMonth() + 1, now.getDate(),
+      );
+      ann = annualForecast(bz, now.getFullYear(), 10, startAge);
     } catch (e) {
       setError("คำนวณไม่สำเร็จ: " + (e instanceof Error ? e.message : String(e)));
       return;

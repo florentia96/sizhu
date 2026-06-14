@@ -10,7 +10,7 @@ export function LiuNianPanel({ annual }: { annual: AnnualItem[] }) {
   return (
     <>
       <p className="ln-intro">
-        แต่ละปีธาตุของปีปะทะหรือส่งเสริมดวงเดิมต่างกัน (ก้านปีเปลี่ยนจริงที่ 立春 ราว 4 ก.พ.)
+        แต่ละปีธาตุของปีปะทะหรือส่งเสริมดวงเดิมต่างกัน (ก้านปีเปลี่ยนจริงที่ 立春 ราว 4 ก.พ. · อายุนับตามวันเกิดจริง)
       </p>
       <div className="ln-grid">
         {annual.map((a) => (

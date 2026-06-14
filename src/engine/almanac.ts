@@ -16,7 +16,7 @@ export function sixtyIndex(gan: Gan, zhi: Zhi): number {
   for (let k = 0; k < 6; k++) {
     if ((g + 10 * k) % 12 === z) return g + 10 * k;
   }
-  return g; // ไม่ถึงในทางปฏิบัติ — ทุกคู่ที่ถูกต้องหาเจอภายใน k<6
+  throw new Error(`sixtyIndex: ${gan}${zhi} ไม่ใช่คู่ใน 60 甲子 (ก้าน/กิ่งขั้วไม่ตรง)`);
 }
 
 // 納音 ของเสาหนึ่ง

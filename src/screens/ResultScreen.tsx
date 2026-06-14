@@ -101,7 +101,7 @@ export function ResultScreen({
 
         <div className="reveal" style={{ animationDelay: `${d(9)}s` }}>
           <footer className="result-footer">
-            <div className="off">คำนวณทั้งหมดในเครื่องของคุณ · ไม่ส่งข้อมูลออก</div>
+            <div className="off">คำนวณทั้งหมดในเครื่องของคุณ · ไม่ส่งข้อมูลวันเกิดออก</div>
             ใช้สูตรตำแหน่งดวงอาทิตย์ (Meeus) หาจุดสารท 24 จุด — ผลตรงกับปฏิทินดาราศาสตร์ sxtwl
             (ฟอนต์โหลดจาก Google Fonts หากออฟไลน์จะใช้ฟอนต์ระบบแทน)
             <div className="disc">

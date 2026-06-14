@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { compute } from "../src/engine/bazi";
 import type { Sex } from "../src/types";
 import vectors from "./vectors/pillars.json";
+import monthVectors from "./vectors/pillars-months.json";
 
 // เกณฑ์ผ่าน: สี่เสาตรงเป๊ะ + อายุเริ่มต้าอวิ้นต่างได้ ≤0.2 ปี + ทิศเดินตรง
 // ใช้ useSolar:false เพราะ vectors สร้างจาก sxtwl โดยไม่ปรับเวลาสุริยคติ (ดู test/solar.test.ts สำหรับส่วน shift)
@@ -47,4 +48,21 @@ describe("engine: สำนักเวลาจื่อ late ↔ early", () =>
     expect(compute({ ...mid, zi: "early" }).pillars.day.gz).toBe(compute(mid).pillars.day.gz);
     expect(compute(mid).pillars.day.gz).toBe("甲子");
   });
+});
+
+// ครอบกิ่งเดือนครบ 12/12 (รวม 巳午戌亥 ที่ vectors หลักไม่มี) — oracle อิสระ lunar-javascript
+// เลือกกลางเดือน節 + เที่ยง เพื่อเลี่ยง edge ที่สองสำนักตีต่าง: ก้านยาม子時 (晚子) และขอบ節ที่ tz เลื่อน
+describe("engine: สี่เสาครอบ 12 กิ่งเดือน (oracle lunar-javascript, useSolar:false)", () => {
+  for (const v of monthVectors) {
+    const [y, mo, d, h, mi, s] = v.in as [number, number, number, number, number, Sex];
+    it(`${y}-${mo}-${d} ${h}:${mi} → เดือน ${v.p[1]}`, () => {
+      const r = compute({
+        year: y, month: mo, day: d, hour: h, minute: mi,
+        sex: s, tz: 7, lon: 100.5, useSolar: false,
+      });
+      expect([
+        r.pillars.year.gz, r.pillars.month.gz, r.pillars.day.gz, r.pillars.hour.gz,
+      ]).toEqual(v.p);
+    });
+  }
 });

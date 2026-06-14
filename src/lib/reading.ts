@@ -312,13 +312,23 @@ export interface AnnualItem {
   el: ElementTH; elColor: string; tg: string; kind: LuckKind; relations: string[];
 }
 
-// ดวงรายปี (流年) — ฟังก์ชันบริสุทธิ์: ให้ผลคำนวณ + ปีเริ่ม + จำนวนปี + ปีเกิด (สำหรับอายุ)
-// ก้านปีเปลี่ยนจริงที่ 立春 — ระดับรายปีใช้ก้านปีตามปฏิทินตามธรรมเนียมตาราง 流年
+// อายุจริง (實歲) ณ วันที่ asOf — นับตามวันเกิดจริง ไม่ใช่ส่วนต่างปีปฏิทินดิบ (กันคลาด ±1 เมื่อยังไม่ถึงวันเกิดในปีนั้น)
+export function ageAt(
+  birthYear: number, birthMonth: number, birthDay: number,
+  asOfYear: number, asOfMonth: number, asOfDay: number,
+): number {
+  const hadBirthday =
+    asOfMonth > birthMonth || (asOfMonth === birthMonth && asOfDay >= birthDay);
+  return asOfYear - birthYear - (hadBirthday ? 0 : 1);
+}
+
+// ดวงรายปี (流年) — ฟังก์ชันบริสุทธิ์: ผลคำนวณ + ปีเริ่ม + จำนวนปี + อายุจริงของปีเริ่ม (startAge) ที่ caller ส่งเข้า
+// ก้านปีเปลี่ยนจริงที่ 立春 — ระดับรายปีใช้ก้านปีตามปฏิทินตามธรรมเนียมตาราง 流年 · อายุไล่ +1 ต่อปีจาก startAge
 export function annualForecast(
   r: BaziResult,
   fromYear: number,
   count: number,
-  birthYear: number,
+  startAge: number,
 ): AnnualItem[] {
   const dm = r.dayMaster;
   const usefulSet = new Set(r.useful);
@@ -339,7 +349,7 @@ export function annualForecast(
       relation(zhi, nz).forEach((k) => relations.push(`${k}เสา${label}`));
     });
     out.push({
-      year, age: year - birthYear, gz: gan + zhi, gan, zhi,
+      year, age: startAge + i, gz: gan + zhi, gan, zhi,
       el, elColor: col[el], tg: shortTg(tenGod(dm, gan)), kind, relations,
     });
   }

@@ -1,12 +1,13 @@
 import { ELEMENTS, type ElementTH } from "../types";
-import { EL_CN } from "../engine/constants";
+import { EL_CN, GEN, CTRL } from "../engine/constants";
 import { EL_DARK } from "../tokens/elements";
 
 // ไดอะแกรมห้าเหลี่ยม: ขอบนอก = วงจรเกิด (生) เส้นทอง · เส้นดาวใน = วงจรข่ม (克) เส้นแดง
 // ขนาดโหนด = จำนวนธาตุในดวง
-const KE: [number, number][] = [
-  [0, 2], [1, 3], [2, 4], [3, 0], [4, 1],
-];
+// วงจร 生/克 derive จาก GEN/CTRL ของ engine — เป็น single source of truth ลำดับ ELEMENTS เปลี่ยนเส้นก็ตามถูกเอง
+const eIdx = (e: ElementTH): number => ELEMENTS.indexOf(e);
+export const SHENG: readonly [number, number][] = ELEMENTS.map((e, i) => [i, eIdx(GEN[e])]);
+export const KE: readonly [number, number][] = ELEMENTS.map((e, i) => [i, eIdx(CTRL[e])]);
 
 export function WuXingDiagram({ elements }: { elements: Record<ElementTH, number> }) {
   const cx = 120;
@@ -35,17 +36,13 @@ export function WuXingDiagram({ elements }: { elements: Record<ElementTH, number
           stroke="#e0584b" strokeWidth={1} strokeDasharray="3 4" opacity={0.32}
         />
       ))}
-      {pos.map((_, i) => {
-        const a = pos[i];
-        const b = pos[(i + 1) % 5];
-        return (
-          <line
-            key={`g${i}`}
-            x1={a.x} y1={a.y} x2={b.x} y2={b.y}
-            stroke="#d8a64a" strokeWidth={1.3} opacity={0.45}
-          />
-        );
-      })}
+      {SHENG.map(([a, b], k) => (
+        <line
+          key={`g${k}`}
+          x1={pos[a].x} y1={pos[a].y} x2={pos[b].x} y2={pos[b].y}
+          stroke="#d8a64a" strokeWidth={1.3} opacity={0.45}
+        />
+      ))}
       {pos.map((p, i) => {
         const r = 14 + p.n * 3.4;
         return (

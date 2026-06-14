@@ -5,9 +5,10 @@ import {
 } from "../src/engine/constants";
 import { compute, relation } from "../src/engine/bazi";
 import {
-  changSheng, combinations, mingGong, minorLuck, naYin, shenSha, taiYuan, voidBranches,
+  changSheng, combinations, mingGong, minorLuck, naYin, shenSha, sixtyIndex, taiYuan, voidBranches,
 } from "../src/engine/almanac";
-import { annualForecast } from "../src/lib/reading";
+import { ageAt, annualForecast } from "../src/lib/reading";
+import { KE as WX_KE, SHENG as WX_SHENG } from "../src/components/WuXingDiagram";
 import type { Gan, Pillar, PillarLabel, Pillars, Zhi } from "../src/types";
 
 const mk = (gan: Gan, zhi: Zhi, label: PillarLabel): Pillar => ({ gan, zhi, label, gz: gan + zhi });
@@ -61,6 +62,17 @@ describe("master data — 納音 (เทียบตาราง 60 甲子)", ()
     expect(naYin("乙", "丑").cn).toBe("海中金"); // คู่เดียวกับ 甲子
     expect(naYin("甲", "寅").cn).toBe("大溪水");
     expect(naYin("癸", "亥").cn).toBe("大海水");
+  });
+});
+
+describe("sixtyIndex — guard คู่ก้าน/กิ่งที่ไม่ใช่คู่จริง", () => {
+  it("คู่ valid คืน index ถูก (regression)", () => {
+    expect(sixtyIndex("甲", "子")).toBe(0);
+    expect(sixtyIndex("癸", "亥")).toBe(59);
+  });
+  it("คู่ขั้วไม่ตรง (甲丑 / 乙子) โยน error แทนคืนค่าผิดเงียบ ๆ", () => {
+    expect(() => sixtyIndex("甲", "丑")).toThrow();
+    expect(() => sixtyIndex("乙", "子")).toThrow();
   });
 });
 
@@ -167,8 +179,22 @@ describe("小運 — 時柱±1 ต่อปี (ทิศตาม大運)", () =
 describe("流年 — annualForecast (deterministic)", () => {
   it("ก้านปี + อายุ ถูกต้อง (2024=甲辰, 2025=乙巳, 2026=丙午)", () => {
     const r = compute({ year: 2000, month: 1, day: 1, hour: 12, minute: 0, sex: "F", useSolar: false });
-    const a = annualForecast(r, 2024, 3, 2000);
+    const a = annualForecast(r, 2024, 3, 24); // startAge 24 (เกิดต้นปี 2000 → อายุ 24 ในปี 2024)
     expect(a.map((x) => x.gz)).toEqual(["甲辰", "乙巳", "丙午"]);
     expect(a.map((x) => x.age)).toEqual([24, 25, 26]);
+  });
+  it("ageAt — อายุจริงนับตามวันเกิด (กัน off-by-one)", () => {
+    expect(ageAt(2000, 12, 31, 2024, 6, 14)).toBe(23); // ยังไม่ถึงวันเกิด ธ.ค. → 23 ไม่ใช่ 24
+    expect(ageAt(2000, 1, 1, 2024, 6, 14)).toBe(24); // เกิดต้นปี ผ่านวันเกิดแล้ว
+    expect(ageAt(2000, 6, 14, 2024, 6, 14)).toBe(24); // วันเกิดพอดี = ครบรอบ
+  });
+});
+
+describe("WuXingDiagram — วงจร derive จาก GEN/CTRL ตรงค่ามาตรฐาน", () => {
+  it("克 (KE) derive จาก CTRL === ดาวห้าแฉกเดิม", () => {
+    expect(WX_KE.map(([a, b]) => [a, b])).toEqual([[0, 2], [1, 3], [2, 4], [3, 0], [4, 1]]);
+  });
+  it("生 (SHENG) derive จาก GEN === วงแหวน adjacent", () => {
+    expect(WX_SHENG.map(([a, b]) => [a, b])).toEqual([[0, 1], [1, 2], [2, 3], [3, 4], [4, 0]]);
   });
 });
