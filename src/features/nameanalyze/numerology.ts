@@ -1,0 +1,54 @@
+import type { Section } from "../../shared/sections/types";
+import { THAI_LETTER_VALUE, TONE } from "./content";
+
+function digitRoot(n: number): number {
+  let x = n;
+  while (x > 9) {
+    x = String(x)
+      .split("")
+      .reduce((a, d) => a + Number(d), 0);
+  }
+  return x;
+}
+
+export function nameNumerologySum(raw: string): {
+  sum: number;
+  reduced: number;
+  perChar: { ch: string; v: number }[];
+} {
+  const perChar: { ch: string; v: number }[] = [];
+  let sum = 0;
+  for (const ch of raw) {
+    const v = THAI_LETTER_VALUE[ch];
+    if (v === undefined) continue;
+    perChar.push({ ch, v });
+    sum += v;
+  }
+  return { sum, reduced: digitRoot(sum), perChar };
+}
+
+export function numerologySections(first: string, last: string): Section[] {
+  const nameR = nameNumerologySum(first);
+  const surR = nameNumerologySum(last || "");
+  const totalR = nameNumerologySum((first || "") + (last || ""));
+
+  const secs: Section[] = [];
+  secs.push({
+    kind: "grid",
+    title: "ผลรวมเลขศาสตร์ของชื่อ",
+    glyph: "数",
+    accent: TONE.warn,
+    cells: [
+      { name: "ค่าชื่อ", value: String(nameR.sum), note: "ลดทอน → " + nameR.reduced },
+      { name: "ค่าสกุล", value: String(surR.sum), note: surR.sum ? "ลดทอน → " + surR.reduced : "ไม่ได้กรอก" },
+      { name: "ค่ารวม", value: String(totalR.sum), note: "ลดทอน → " + totalR.reduced },
+    ],
+  });
+  secs.push({
+    kind: "note",
+    text:
+      "ค่าผลรวมคำนวณตามตารางเลขศาสตร์สำนัก \"โหราเลขศาสตร์\" (ค่า 1–9 ตามพลังดวงดาว) " +
+      "นับทุกพยัญชนะ สระ และวรรณยุกต์ที่อยู่ในตาราง · ตารางของแต่ละสำนักอาจต่างกัน จึงใช้เป็นข้อมูลประกอบ ไม่นำมาตัดสินคะแนนหลัก",
+  });
+  return secs;
+}

@@ -62,6 +62,10 @@ export const RASI: RasiEntry[] = [
   { s: "ธนู", en: "Sagittarius", el: "ไฟ", from: [12, 16], to: [1, 14], tr: "มองโลกกว้าง รักอิสระ ตรงไปตรงมา ชอบเดินทางและเรียนรู้" },
 ];
 
+export function rasiAll(): RasiEntry[] {
+  return RASI;
+}
+
 export function rasiFromDate(m: number, d: number): RasiEntry {
   for (let i = 0; i < RASI.length; i++) {
     const r = RASI[i];
