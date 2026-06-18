@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App";
+import "./shared/theme/tokens.css";
+import { App } from "./app/App";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 
 const rootEl = document.getElementById("root");

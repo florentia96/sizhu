@@ -1,19 +1,20 @@
-import { useRef, useState } from "react";
-import "./tokens/tokens.css";
-import "./styles/app.css";
-import { compute } from "./engine/bazi";
-import { ageAt, annualForecast, buildReading, type AnnualItem, type Reading } from "./lib/reading";
-import { validateForm, type RawForm } from "./lib/validate";
-import { usePrefersReducedMotion } from "./hooks/usePrefersReducedMotion";
-import { FormScreen } from "./screens/FormScreen";
-import { CastingScreen } from "./screens/CastingScreen";
-import { ResultScreen } from "./screens/ResultScreen";
+import { useEffect, useRef, useState } from "react";
+import "../tokens/tokens.css";
+import "../styles/app.css";
+import { compute } from "../engine/bazi";
+import { ageAt, annualForecast, buildReading, type AnnualItem, type Reading } from "../lib/reading";
+import { validateForm, type RawForm } from "../lib/validate";
+import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
+import { FormScreen } from "./FormScreen";
+import { CastingScreen } from "./CastingScreen";
+import { ResultScreen } from "./ResultScreen";
+import type { BaziPrefill } from "./baziParams";
 
 type Mode = "paper" | "casting" | "result";
 
 const pad = (n: number): string => String(n).padStart(2, "0");
 
-export default function App() {
+export function BaziApp({ prefill }: { prefill?: BaziPrefill } = {}) {
   const reduced = usePrefersReducedMotion();
   const [mode, setMode] = useState<Mode>("paper");
   const [reading, setReading] = useState<Reading | null>(null);
@@ -21,6 +22,7 @@ export default function App() {
   const [recap, setRecap] = useState("");
   const [error, setError] = useState("");
   const castT = useRef<number | undefined>(undefined);
+  const autocast = useRef(false);
 
   const handleSubmit = (f: RawForm): void => {
     const v = validateForm(f);
@@ -61,6 +63,22 @@ export default function App() {
     }, 1650);
   };
 
+  // prefill จาก ?bd=&bt= → ยิง submit ครั้งเดียวบน mount (sex default 'M', time default '12:00')
+  // mirror _prefillFromURL: bd มี ⇒ ข้ามฟอร์มไป casting/result
+  useEffect(() => {
+    if (!prefill?.autocast || !prefill.date || autocast.current) return;
+    autocast.current = true;
+    handleSubmit({
+      date: prefill.date,
+      time: prefill.time ?? "12:00",
+      sex: "M",
+      tz: "7",
+      lon: "100.5",
+      useSolar: true,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const toResult = (): void => {
     window.clearTimeout(castT.current);
     setMode("result");
@@ -75,7 +93,14 @@ export default function App() {
 
   return (
     <div className="app">
-      {mode === "paper" && <FormScreen onSubmit={handleSubmit} error={error} />}
+      {mode === "paper" && (
+        <FormScreen
+          onSubmit={handleSubmit}
+          error={error}
+          initialDate={prefill?.date}
+          initialTime={prefill?.time}
+        />
+      )}
       {mode === "casting" && <CastingScreen onSkip={toResult} />}
       {mode === "result" && reading && (
         <ResultScreen reading={reading} annual={annual} recap={recap} onBack={back} />
@@ -83,3 +108,5 @@ export default function App() {
     </div>
   );
 }
+
+export default BaziApp;

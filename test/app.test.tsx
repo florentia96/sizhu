@@ -1,12 +1,12 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
-import App from "../src/App";
+import BaziApp from "../src/screens/BaziApp";
 
 describe("App — end-to-end ใน jsdom", () => {
   it("ฟอร์ม → เปิดดวง → casting → หน้าผลแสดงครบ", () => {
     vi.useFakeTimers();
     try {
-      render(<App />);
+      render(<BaziApp />);
       expect(screen.getByText("ปาจื้อ — ดูดวงสี่เสา")).toBeInTheDocument();
 
       fireEvent.click(screen.getByText("เปิดดวงปาจื้อ"));
@@ -24,7 +24,7 @@ describe("App — end-to-end ใน jsdom", () => {
   });
 
   it("กรอกวันว่างแล้วกด → ขึ้น error ไม่ crash", () => {
-    render(<App />);
+    render(<BaziApp />);
     fireEvent.change(screen.getByLabelText("วันเกิด (สากล)"), { target: { value: "" } });
     fireEvent.click(screen.getByText("เปิดดวงปาจื้อ"));
     expect(screen.getByText("กรุณาใส่วันเกิด")).toBeInTheDocument();
