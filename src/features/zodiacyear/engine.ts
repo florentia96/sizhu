@@ -37,7 +37,7 @@ export function zodiacYearReport(ce: number): Section[] {
   const secs: Section[] = [];
   secs.push({
     kind: "prose",
-    title: "ปี" + z.th + " (" + z.en + " " + z.cn + ") · ธาตุ" + el[0] + " " + el[1],
+    title: "ปี" + z.th + " (" + z.animal + " " + z.cn + ") · ธาตุ" + el[0] + " " + el[1],
     glyph: z.cn,
     paras: [
       { h: "นิสัยตามปีนักษัตร", t: z.tr },

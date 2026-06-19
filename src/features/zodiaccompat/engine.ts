@@ -43,8 +43,8 @@ export function zodiacCompatReport(aTh: string, bTh: string): Section[] {
     { kind: "compat", score, label, a: aTh + " " + ZODIAC[ai].cn, b: bTh + " " + ZODIAC[bi].cn, accent, points },
     {
       kind: "grid", title: "นิสัยของแต่ละนักษัตร", glyph: "肖", cells: [
-        { name: "ฝ่าย " + aTh + " (" + ZODIAC[ai].en + ")", value: ZODIAC[ai].cn, note: ZODIAC[ai].tr },
-        { name: "ฝ่าย " + bTh + " (" + ZODIAC[bi].en + ")", value: ZODIAC[bi].cn, note: ZODIAC[bi].tr },
+        { name: "ฝ่าย " + aTh + " (" + ZODIAC[ai].animal + ")", value: ZODIAC[ai].cn, note: ZODIAC[ai].tr },
+        { name: "ฝ่าย " + bTh + " (" + ZODIAC[bi].animal + ")", value: ZODIAC[bi].cn, note: ZODIAC[bi].tr },
       ],
     },
     { kind: "prose", title: "คำแนะนำสำหรับคู่นี้", glyph: "合", accent, paras: [{ t: advice }] },
