@@ -20,6 +20,9 @@ describe("license consonant table", () => {
     expect(LETTER_VALUE["ส"]).toBe(7);
     expect(LETTER_VALUE["พ"]).toBe(8);
     expect(LETTER_VALUE["ฐ"]).toBe(9);
+    // verified against ktc.co.th / insurverse.co.th — ฏ groups with ฐ (=9), ฑ with ต (=3)
+    expect(LETTER_VALUE["ฏ"]).toBe(9);
+    expect(LETTER_VALUE["ฑ"]).toBe(3);
   });
   it("hand-worked vector: 1กก234 -> letterSum 2, digitSum 10, combined 12", () => {
     expect(plateLetterSum("1กก234")).toBe(2);
