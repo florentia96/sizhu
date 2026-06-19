@@ -6,7 +6,7 @@ import { luckyColorReport } from "./engine";
 
 const engine: FeatureEngine = {
   build(vals: string[]): Section[] {
-    return luckyColorReport(vals[0] || "อาทิตย์", vals[1] || "");
+    return luckyColorReport(vals[0] || "", vals[1] || "");
   },
 };
 

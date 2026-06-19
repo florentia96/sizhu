@@ -41,12 +41,10 @@ describe("luckycolor engine", () => {
     }
   });
 
-  it("unknown day falls back to อาทิตย์", () => {
+  it("unknown day returns a note, not a silent อาทิตย์ fallback (regression)", () => {
     const unknown = luckyColorReport("ไม่ใช่วัน", "การงาน");
-    const sun = luckyColorReport("อาทิตย์", "การงาน");
-    expect(JSON.stringify(unknown).replace(/ไม่ใช่วัน/g, "อาทิตย์")).toBe(
-      JSON.stringify(sun),
-    );
+    expect(unknown.length).toBe(1);
+    expect(unknown[0].kind).toBe("note");
   });
 
   it("is deterministic + satisfies ReportSchema", () => {

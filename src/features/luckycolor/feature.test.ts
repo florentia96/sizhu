@@ -4,7 +4,7 @@ import { FEATURES } from "../../app/registry";
 import { ReportSchema } from "../../shared/sections/types";
 
 describe("luckycolor feature def", () => {
-  it("two selects: 7 days + 5 aspects", () => {
+  it("two selects: 7 days + 4 aspects", () => {
     expect(luckycolorFeature.meta.id).toBe("luckycolor");
     expect(luckycolorFeature.group).toBe("daily");
     const [f0, f1] = luckycolorFeature.fields;
@@ -17,7 +17,7 @@ describe("luckycolor feature def", () => {
     }
     if (f1.type === "select") {
       expect(f1.options).toEqual([
-        "การงาน","การเงิน","ความรัก","สุขภาพ","เมตตามหานิยม",
+        "การงาน","การเงิน","ความรัก","เมตตามหานิยม",
       ]);
     }
   });
@@ -34,13 +34,11 @@ describe("luckycolor feature def", () => {
     const out = luckycolorFeature.engine.build(["จันทร์", "การเงิน"]);
     expect(() => ReportSchema.parse(out)).not.toThrow();
   });
-  it("missing day defaults to อาทิตย์", () => {
+  it("missing/unknown day returns a note, not a silent อาทิตย์ fallback (regression)", () => {
     const out = luckycolorFeature.engine.build(["", "การงาน"]);
     expect(() => ReportSchema.parse(out)).not.toThrow();
-    const sun = luckycolorFeature.engine.build(["อาทิตย์", "การงาน"]);
-    expect(JSON.stringify(out)).toBe(
-      JSON.stringify(sun).replace(/สีมงคลประจำวันอาทิตย์/, "สีมงคลประจำวันอาทิตย์"),
-    );
+    expect(out.some((s) => s.kind === "note")).toBe(true);
+    expect(out.some((s) => s.kind === "swatches")).toBe(false);
   });
   it("registered under daily", () => {
     expect(FEATURES["luckycolor"]?.group).toBe("daily");

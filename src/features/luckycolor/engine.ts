@@ -12,12 +12,13 @@ const DAY_KEY: Record<string, string> = {
 };
 
 export function luckyColorReport(dayLabel: string, aspect: string): Section[] {
-  const info = DAY_LORD[DAY_KEY[dayLabel] ?? dayLabel] || DAY_LORD["อาทิตย์"];
+  const info = DAY_LORD[DAY_KEY[dayLabel] ?? dayLabel];
+  if (!info)
+    return [{ kind: "note", text: "กรุณาเลือกวันเกิดจากรายการ (ไม่พบวันที่ระบุ)" }];
   const aspMap: Record<string, string[]> = {
     การงาน: info.work,
     การเงิน: info.money,
     ความรัก: info.love,
-    สุขภาพ: info.color,
     เมตตามหานิยม: info.luck,
   };
   const asp = aspMap[aspect] || info.luck;
