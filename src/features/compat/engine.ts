@@ -88,7 +88,7 @@ function synastryBlock(
       chips: [`คลาด ${a.orb.toFixed(1)}°`],
     };
   });
-  return { kind: "blocks", title: "ดวงสมพงษ์จากดาวจริง (Synastry)", glyph: "合", items };
+  return { kind: "blocks", title: "ดวงสมพงษ์จากดาวจริงแบบสากล (Synastry · tropical)", glyph: "合", items };
 }
 
 export const compatEngine: FeatureEngine = {
@@ -154,7 +154,7 @@ export const compatEngine: FeatureEngine = {
     ];
     const trailingNote: Section = {
       kind: "note",
-      text: "ประเมินจากธาตุราศี + ผู้ครองวันเกิด + เลขชีวิต (คำนวณได้จริง · deterministic) · ใส่เวลาและเมืองเกิดครบทั้งสองฝ่ายเพื่อปลดล็อกชั้นดวงสมพงษ์ (synastry) จากดาวจริง",
+      text: "คะแนนหลักประเมินจากธาตุราศีไทย (นิรายนะ/sidereal) + ผู้ครองวันเกิด + เลขชีวิต — เป็นคนละระบบกับชั้นดวงสมพงษ์ (synastry) ที่ใช้ดาวจริงแบบสากล (tropical) · สองชั้นนี้คำนวณแยกกัน ไม่ได้นำมารวมเป็นคะแนนเดียว · deterministic · ใส่เวลาและเมืองเกิดครบทั้งสองฝ่ายเพื่อปลดล็อกชั้น synastry",
     };
     const syn = synastryBlock(s0, s1, (vals[2] || "").trim(), (vals[3] || "").trim(), (vals[4] || "").trim(), (vals[5] || "").trim());
     return syn ? [...base, syn, trailingNote] : [...base, trailingNote];
