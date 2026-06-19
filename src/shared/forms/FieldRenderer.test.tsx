@@ -73,4 +73,45 @@ describe("FieldRenderer", () => {
     expect(el.tagName).toBe("TEXTAREA");
     expect(el.placeholder).toBe("เล่าฝัน");
   });
+
+  it("renders hint text below the control when provided", () => {
+    const field: Field = {
+      label: "ปีเกิด",
+      type: "text",
+      placeholder: "เช่น 2535",
+      hint: "กรอกเป็น พ.ศ. หรือ ค.ศ. ก็ได้",
+    };
+    const { getByText } = render(
+      <FieldRenderer field={field} index={0} refFor={noopRefFor} />,
+    );
+    expect(getByText("กรอกเป็น พ.ศ. หรือ ค.ศ. ก็ได้")).toBeInTheDocument();
+  });
+
+  it("applies inputMode and maxLength to inputs", () => {
+    const field: Field = {
+      label: "เบอร์โทร",
+      type: "tel",
+      inputMode: "numeric",
+      maxLength: 10,
+    };
+    const { getByLabelText } = render(
+      <FieldRenderer field={field} index={0} refFor={noopRefFor} />,
+    );
+    const el = getByLabelText("เบอร์โทร") as HTMLInputElement;
+    expect(el.inputMode).toBe("numeric");
+    expect(el.maxLength).toBe(10);
+  });
+
+  it("hint renders for select (dropdown explanation)", () => {
+    const field: Field = {
+      label: "วันเกิด",
+      type: "select",
+      options: ["พุธ (กลางวัน)", "พุธ (กลางคืน)"],
+      hint: "เกิดหลัง 18:00 นับเป็นพุธกลางคืน",
+    };
+    const { getByText } = render(
+      <FieldRenderer field={field} index={0} refFor={noopRefFor} />,
+    );
+    expect(getByText("เกิดหลัง 18:00 นับเป็นพุธกลางคืน")).toBeInTheDocument();
+  });
 });

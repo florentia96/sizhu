@@ -15,6 +15,13 @@ const labelStyle: CSSProperties = {
   marginBottom: "7px",
 };
 
+const hintStyle: CSSProperties = {
+  margin: "6px 0 0",
+  fontSize: ".73rem",
+  lineHeight: 1.5,
+  color: "var(--text-faint, #8a8474)",
+};
+
 const controlStyle: CSSProperties = {
   fontSize: "16px",
   width: "100%",
@@ -39,22 +46,26 @@ export function FieldRenderer({
   field,
   index,
   refFor,
+  defaultValue,
 }: {
   field: Field;
   index: number;
   refFor: (i: number) => (node: FieldNode) => void;
+  defaultValue?: string;
 }) {
   const id = `mf-${index}`;
   const ref = refFor(index);
 
   let control;
   if (field.type === "select") {
+    const selDefault =
+      defaultValue && field.options.includes(defaultValue) ? defaultValue : field.options[0];
     control = (
       <select
         id={id}
         ref={ref}
         style={{ ...controlStyle, appearance: "none" }}
-        defaultValue={field.options[0]}
+        defaultValue={selDefault}
       >
         {field.options.map((o) => (
           <option key={o} value={o}>
@@ -70,6 +81,7 @@ export function FieldRenderer({
         ref={ref}
         rows={3}
         placeholder={field.placeholder}
+        defaultValue={defaultValue}
         style={{ ...controlStyle, resize: "vertical" }}
       />
     );
@@ -80,6 +92,7 @@ export function FieldRenderer({
         ref={ref}
         type="text"
         placeholder="พิมพ์ชื่อเมืองเกิด"
+        defaultValue={defaultValue}
         style={controlStyle}
       />
     );
@@ -91,6 +104,9 @@ export function FieldRenderer({
         ref={ref}
         type={field.type}
         placeholder={field.placeholder}
+        defaultValue={defaultValue}
+        inputMode={field.inputMode}
+        maxLength={field.maxLength}
         onClick={isPicker ? openPicker : undefined}
         style={controlStyle}
       />
@@ -103,6 +119,11 @@ export function FieldRenderer({
         {field.label}
       </label>
       {control}
+      {field.hint && (
+        <p id={`${id}-hint`} style={hintStyle}>
+          {field.hint}
+        </p>
+      )}
     </div>
   );
 }
