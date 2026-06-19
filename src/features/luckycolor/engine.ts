@@ -5,8 +5,14 @@ const JADE = "#6cc18a";
 const GOLD = "#d8a64a";
 const RED = "#e0584b";
 
+// dropdown แสดง "พุธ (กลางวัน)/(กลางคืน)" → map เป็น key ใน DAY_LORD (กลางคืน = ราหู)
+const DAY_KEY: Record<string, string> = {
+  "พุธ (กลางวัน)": "พุธ",
+  "พุธ (กลางคืน)": "ราหู",
+};
+
 export function luckyColorReport(dayLabel: string, aspect: string): Section[] {
-  const info = DAY_LORD[dayLabel] || DAY_LORD["อาทิตย์"];
+  const info = DAY_LORD[DAY_KEY[dayLabel] ?? dayLabel] || DAY_LORD["อาทิตย์"];
   const aspMap: Record<string, string[]> = {
     การงาน: info.work,
     การเงิน: info.money,

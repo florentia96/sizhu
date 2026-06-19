@@ -55,4 +55,13 @@ describe("findlucky engine", () => {
     expect(ranked.length).toBeGreaterThan(0);
     ranked.forEach((r) => expect(r.raw).toMatch(/^\d{4}$/));
   });
+
+  it("phone raws are 10 digits with 3-3-4 display (regression: was 9-digit)", () => {
+    const ranked = rankLucky("เบอร์โทรศัพท์", "", "มาตรฐาน");
+    expect(ranked.length).toBeGreaterThan(0);
+    ranked.slice(0, 30).forEach((r) => {
+      expect(r.raw).toMatch(/^\d{10}$/);
+      expect(r.value).toMatch(/^\d{3}-\d{3}-\d{4}$/);
+    });
+  });
 });

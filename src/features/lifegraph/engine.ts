@@ -12,7 +12,6 @@ const STAR = "#7da6d8";
 const GOOD = "#6cc18a";
 const WARN = "#d8a64a";
 const INFO = "#7da6d8";
-const BANGKOK = { name: "กรุงเทพมหานคร", lat: 13.7563, lon: 100.5018, tz: 7 };
 
 const PLANET_TH: Record<string, string> = {
   Sun: "อาทิตย์", Moon: "จันทร์", Mercury: "พุธ", Venus: "ศุกร์",
@@ -20,11 +19,19 @@ const PLANET_TH: Record<string, string> = {
 };
 const PLANETS = ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"];
 
+// แต่ละด้าน → ดาวที่เกี่ยวข้องตามหลักโหราศาสตร์ (ใช้กรองดาวจรให้ตรงเรื่องที่ผู้ใช้เน้น)
+const SCOPE_PLANETS: Record<string, string[]> = {
+  "เน้นการงาน": ["Sun", "Saturn", "Mars", "Jupiter"],
+  "เน้นการเงิน": ["Jupiter", "Venus", "Saturn"],
+  "เน้นความรัก": ["Venus", "Moon", "Mars"],
+};
+
 export const lifeEngine: FeatureEngine = {
   build(vals: string[]): Section[] {
     const dateStr = (vals[0] || "").trim();
     const timeStr = (vals[1] || "").trim();
     const cityName = (vals[2] || "").trim();
+    const scope = (vals[3] || "").trim();
     const nowStr = (vals[4] || "").trim();
     if (
       !/^\d{4}-\d{2}-\d{2}$/.test(dateStr) ||
@@ -36,7 +43,9 @@ export const lifeEngine: FeatureEngine = {
         { kind: "note", text: "กรอกวันเกิด เวลาเกิด เมืองเกิด และวันที่ที่ต้องการดู ให้ครบ แล้วลองใหม่" },
       ];
     }
-    const city = parseCityValue(cityName) ?? BANGKOK;
+    const city = parseCityValue(cityName);
+    if (!city)
+      return [{ kind: "note", text: `ไม่พบเมือง "${cityName}" — เลือกจากรายการที่ขึ้นให้ หรือพิมพ์พิกัดเป็น lat,lon (เช่น 18.79,98.98)` }];
 
     const [by, bm, bd] = dateStr.split("-").map(Number);
     const ut = toUT(dateStr, timeStr, city.tz);
@@ -54,9 +63,11 @@ export const lifeEngine: FeatureEngine = {
       transitLon[p] = transit[p as keyof typeof transit].lon;
     }
 
-    const asps = aspectsBetween(transitLon, natalLon)
-      .sort((x, y) => x.orb - y.orb)
-      .slice(0, 6);
+    const focus = SCOPE_PLANETS[scope];
+    const ranked = aspectsBetween(transitLon, natalLon).sort((x, y) => x.orb - y.orb);
+    const asps = (
+      focus ? ranked.filter((a) => focus.includes(a.a) || focus.includes(a.b)) : ranked
+    ).slice(0, 6);
     const transitItems = asps.map((a) => {
       const meta = TRANSIT_NOTE[a.type] ?? { th: a.type, tone: "info" as const };
       const accent = meta.tone === "good" ? GOOD : meta.tone === "warn" ? WARN : INFO;
@@ -91,13 +102,23 @@ export const lifeEngine: FeatureEngine = {
       score: 0,
       hideRing: true,
       grade: `ปีส่วนตัว ${py}`,
-      gradeLabel: `Personal Year ${ny} · ดาวจร ณ ${nowStr}`,
+      gradeLabel: `Personal Year ${ny}${focus ? " · " + scope : ""} · ดาวจร ณ ${nowStr}`,
       accent: STAR,
       summary: PY_THEME[py] || "",
       meta: `ดาวจรเทียบดวงเดิม (transit) + ปีส่วนตัว (เลขศาสตร์) · as-of ${nowStr}`,
     });
     if (transitItems.length)
-      secs.push({ kind: "blocks", title: "ดาวจรช่วงนี้เทียบดวงเดิม (Transits)", glyph: "行", items: transitItems });
+      secs.push({
+        kind: "blocks",
+        title: focus ? `ดาวจรช่วงนี้ (${scope})` : "ดาวจรช่วงนี้เทียบดวงเดิม (Transits)",
+        glyph: "行",
+        items: transitItems,
+      });
+    else if (focus)
+      secs.push({
+        kind: "note",
+        text: `ช่วงนี้ยังไม่มีดาวจรเด่นที่เกี่ยวกับ "${scope}" โดยตรง ลองดู "ภาพรวมปีนี้" เพื่อเห็นดาวจรทั้งหมด`,
+      });
     secs.push({
       kind: "prose",
       title: "ภาพรวมจังหวะชีวิต",

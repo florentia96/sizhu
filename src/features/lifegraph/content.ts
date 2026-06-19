@@ -28,7 +28,7 @@ export const LIFEPATH: Record<number, { k: string; d: string }> = {
 
 export const TRANSIT_NOTE: Record<string, { th: string; tone: "good" | "warn" | "info" }> = {
   conjunction: { th: "ดาวจรร่วมดาวเดิม (Conjunction)", tone: "info" },
-  sextile: { th: "ดาวจรเล็ง 60° (Sextile)", tone: "good" },
+  sextile: { th: "ดาวจรทำมุม 60° (Sextile)", tone: "good" },
   square: { th: "ดาวจรกากบาท 90° (Square)", tone: "warn" },
   trine: { th: "ดาวจรตรีโกณ 120° (Trine)", tone: "good" },
   opposition: { th: "ดาวจรเล็งตรงข้าม 180° (Opposition)", tone: "warn" },

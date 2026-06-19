@@ -9,7 +9,6 @@ import { RASI_TH, RASI_RULER, RASI_EL, RASI_TRAIT, EL_NOTE } from "./content";
 
 const STAR = "#7da6d8";
 const GOLD = "#d8a64a";
-const BANGKOK = { name: "กรุงเทพมหานคร", lat: 13.7563, lon: 100.5018, tz: 7 };
 
 function degStr(deg: number): string {
   const d = Math.floor(deg % 30);
@@ -25,7 +24,9 @@ export const ascEngine: FeatureEngine = {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr) || !/^\d{2}:\d{2}$/.test(timeStr) || !cityName) {
       return [{ kind: "note", text: "กรอกวันเกิด เวลาเกิด และเมืองเกิด ให้ครบ แล้วลองใหม่" }];
     }
-    const city = parseCityValue(cityName) ?? BANGKOK;
+    const city = parseCityValue(cityName);
+    if (!city)
+      return [{ kind: "note", text: `ไม่พบเมือง "${cityName}" — เลือกจากรายการที่ขึ้นให้ หรือพิมพ์พิกัดเป็น lat,lon (เช่น 18.79,98.98)` }];
     const ut = toUT(dateStr, timeStr, city.tz);
     const jdUT = julianDay(ut.y, ut.m, ut.d, ut.hourUT);
 
@@ -46,8 +47,8 @@ export const ascEngine: FeatureEngine = {
       accent: STAR,
       paras: [
         { h: `ลัคนาราศี${ascRasi} (ภาพลักษณ์/วิธีเริ่มต้น) · ${EL_NOTE[ascEl]}`, t: RASI_TRAIT[ascRasi] },
-        { h: `ราศีอาทิตย์ราศี${sunRasi} (แก่นตัวตน)`, t: RASI_TRAIT[sunRasi] },
-        { h: `ราศีจันทร์ราศี${moonRasi} (โลกภายใน/อารมณ์)`, t: RASI_TRAIT[moonRasi] },
+        { h: `อาทิตย์ในราศี${sunRasi} (แก่นตัวตน)`, t: RASI_TRAIT[sunRasi] },
+        { h: `จันทร์ในราศี${moonRasi} (โลกภายใน/อารมณ์)`, t: RASI_TRAIT[moonRasi] },
       ],
     });
     secs.push({

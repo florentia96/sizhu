@@ -12,7 +12,7 @@ describe("luckycolor feature def", () => {
     expect(f1.type).toBe("select");
     if (f0.type === "select") {
       expect(f0.options).toEqual([
-        "อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์",
+        "อาทิตย์","จันทร์","อังคาร","พุธ (กลางวัน)","พุธ (กลางคืน)","พฤหัสบดี","ศุกร์","เสาร์",
       ]);
     }
     if (f1.type === "select") {
@@ -44,5 +44,14 @@ describe("luckycolor feature def", () => {
   });
   it("registered under daily", () => {
     expect(FEATURES["luckycolor"]?.group).toBe("daily");
+  });
+
+  it("พุธ (กลางคืน) → ราหู colors, distinct from กลางวัน and not the อาทิตย์ fallback (regression)", () => {
+    const night = JSON.stringify(luckycolorFeature.engine.build(["พุธ (กลางคืน)", "การงาน"]));
+    const day = JSON.stringify(luckycolorFeature.engine.build(["พุธ (กลางวัน)", "การงาน"]));
+    const sun = JSON.stringify(luckycolorFeature.engine.build(["อาทิตย์", "การงาน"]));
+    expect(night).not.toBe(day);
+    expect(night).not.toBe(sun);
+    expect(night).toContain("พุธ (กลางคืน)");
   });
 });

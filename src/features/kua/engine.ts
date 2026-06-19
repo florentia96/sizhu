@@ -14,7 +14,10 @@ export function reduceSingle(n: number): number {
 }
 
 export function kuaNumber(ce: number, gender: string): number {
-  const s = reduceSingle(sumDigits("" + ce));
+  // สูตร Eight Mansions (โป๊ยแถ่ว) มาตรฐาน ใช้ "2 หลักท้าย" ของปี ค.ศ. — ไม่ใช่รวมทั้ง 4 หลัก
+  // ค่าคงที่ที่สลับตอนปี 2000 (10−s vs 9−s) ออกแบบมาเพื่อ 2 หลักท้ายโดยเฉพาะ
+  // ที่มา: prokerala.com/feng-shui/kua-number.php (1978 ชาย=4), calculator.academy/kua-number-calculator, lovetoknow.com
+  const s = reduceSingle(sumDigits(String(ce).slice(-2)));
   const male = gender === "ชาย";
   let k: number;
   if (ce >= 2000) {
@@ -82,6 +85,8 @@ export const engine: FeatureEngine = {
     const gender = (vals[1] ?? "").trim();
     if (ce == null || (gender !== "ชาย" && gender !== "หญิง"))
       return [{ kind: "note", text: "กรุณากรอกปีเกิด (พ.ศ.) และเลือกเพศ" }];
+    if (ce < 1900 || ce > 2100)
+      return [{ kind: "note", text: "กรุณากรอกปีเกิดให้ถูกต้อง (ค.ศ. 1900–2100 หรือ พ.ศ. 2443–2643)" }];
     const dateStr = (vals[2] ?? "").trim();
     let effectiveCE = ce;
     const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr);

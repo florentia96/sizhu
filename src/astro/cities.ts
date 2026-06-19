@@ -2,7 +2,7 @@ export type City = { name: string; lat: number; lon: number; tz: number };
 
 // All 77 Thai provinces (provincial-capital coordinates, tz +7).
 const THAI: City[] = [
-  { name: "Bangkok", lat: 13.75, lon: 100.5, tz: 7 },
+  { name: "Bangkok", lat: 13.7563, lon: 100.5018, tz: 7 },
   { name: "Amnat Charoen", lat: 15.86, lon: 104.63, tz: 7 },
   { name: "Ang Thong", lat: 14.59, lon: 100.46, tz: 7 },
   { name: "Bueng Kan", lat: 18.36, lon: 103.65, tz: 7 },
@@ -113,9 +113,38 @@ const WORLD: City[] = [
 
 export const CITY: City[] = [...THAI, ...WORLD];
 
+// ชื่อไทย → ชื่อในตาราง (อังกฤษ) — ครบ 77 จังหวัด + ชื่อเรียกที่นิยม + เมืองโลกหลัก
+// แอปเป็นภาษาไทย ผู้ใช้พิมพ์ชื่อไทยต้องค้นเจอ (ไม่งั้นจะ fallback ผิดเมือง)
+const TH_ALIAS: Record<string, string> = {
+  กรุงเทพมหานคร: "Bangkok", กรุงเทพ: "Bangkok", กทม: "Bangkok", บางกอก: "Bangkok",
+  กระบี่: "Krabi", กาญจนบุรี: "Kanchanaburi", กาฬสินธุ์: "Kalasin", กำแพงเพชร: "Kamphaeng Phet",
+  ขอนแก่น: "Khon Kaen", จันทบุรี: "Chanthaburi", ฉะเชิงเทรา: "Chachoengsao", ชลบุรี: "Chonburi",
+  ชัยนาท: "Chai Nat", ชัยภูมิ: "Chaiyaphum", ชุมพร: "Chumphon", เชียงราย: "Chiang Rai",
+  เชียงใหม่: "Chiang Mai", ตรัง: "Trang", ตราด: "Trat", ตาก: "Tak", นครนายก: "Nakhon Nayok",
+  นครปฐม: "Nakhon Pathom", นครพนม: "Nakhon Phanom", นครราชสีมา: "Nakhon Ratchasima", โคราช: "Nakhon Ratchasima",
+  นครศรีธรรมราช: "Nakhon Si Thammarat", นครสวรรค์: "Nakhon Sawan", นนทบุรี: "Nonthaburi",
+  นราธิวาส: "Narathiwat", น่าน: "Nan", บึงกาฬ: "Bueng Kan", บุรีรัมย์: "Buriram",
+  ปทุมธานี: "Pathum Thani", ประจวบคีรีขันธ์: "Prachuap Khiri Khan", ปราจีนบุรี: "Prachinburi",
+  ปัตตานี: "Pattani", พระนครศรีอยุธยา: "Phra Nakhon Si Ayutthaya", อยุธยา: "Phra Nakhon Si Ayutthaya",
+  พะเยา: "Phayao", พังงา: "Phang Nga", พัทลุง: "Phatthalung", พิจิตร: "Phichit", พิษณุโลก: "Phitsanulok",
+  เพชรบุรี: "Phetchaburi", เพชรบูรณ์: "Phetchabun", แพร่: "Phrae", ภูเก็ต: "Phuket",
+  มหาสารคาม: "Maha Sarakham", มุกดาหาร: "Mukdahan", แม่ฮ่องสอน: "Mae Hong Son", ยโสธร: "Yasothon",
+  ยะลา: "Yala", ร้อยเอ็ด: "Roi Et", ระนอง: "Ranong", ระยอง: "Rayong", ราชบุรี: "Ratchaburi",
+  ลพบุรี: "Lopburi", ลำปาง: "Lampang", ลำพูน: "Lamphun", เลย: "Loei", ศรีสะเกษ: "Sisaket",
+  สกลนคร: "Sakon Nakhon", สงขลา: "Songkhla", หาดใหญ่: "Songkhla", สตูล: "Satun",
+  สมุทรปราการ: "Samut Prakan", สมุทรสงคราม: "Samut Songkhram", สมุทรสาคร: "Samut Sakhon",
+  สระแก้ว: "Sa Kaeo", สระบุรี: "Saraburi", สิงห์บุรี: "Sing Buri", สุโขทัย: "Sukhothai",
+  สุพรรณบุรี: "Suphan Buri", สุราษฎร์ธานี: "Surat Thani", สุรินทร์: "Surin", หนองคาย: "Nong Khai",
+  หนองบัวลำภู: "Nong Bua Lamphu", อ่างทอง: "Ang Thong", อำนาจเจริญ: "Amnat Charoen",
+  อุดรธานี: "Udon Thani", อุตรดิตถ์: "Uttaradit", อุทัยธานี: "Uthai Thani", อุบลราชธานี: "Ubon Ratchathani",
+  ลอนดอน: "London", ปารีส: "Paris", โตเกียว: "Tokyo", โซล: "Seoul", สิงคโปร์: "Singapore",
+  ฮ่องกง: "Hong Kong", ปักกิ่ง: "Beijing", ดูไบ: "Dubai", นิวยอร์ก: "New York", ซิดนีย์: "Sydney",
+};
+
 export function findCity(name: string): City | null {
-  const q = (name || "").trim().toLowerCase();
-  if (!q) return null;
+  const raw = (name || "").trim();
+  if (!raw) return null;
+  const q = (TH_ALIAS[raw] ?? raw).toLowerCase();
   for (const c of CITY) {
     if (c.name.toLowerCase() === q) return c;
   }

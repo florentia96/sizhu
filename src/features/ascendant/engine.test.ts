@@ -50,4 +50,19 @@ describe("ascendant engine", () => {
       { kind: "note", text: "กรอกวันเกิด เวลาเกิด และเมืองเกิด ให้ครบ แล้วลองใหม่" },
     ]);
   });
+
+  it("unknown city returns a note, not a silent Bangkok chart (regression)", () => {
+    const out = ascEngine.build(["1990-01-15", "14:30", "เมืองที่ไม่มีจริง"]);
+    expect(out).toHaveLength(1);
+    expect(out[0].kind).toBe("note");
+    if (out[0].kind === "note") expect(out[0].text).toContain("ไม่พบเมือง");
+  });
+
+  it("resolves a Thai city name (เชียงใหม่) and differs from กรุงเทพ", () => {
+    const cm = ascEngine.build(["1990-01-15", "14:30", "เชียงใหม่"]);
+    expect(() => ReportSchema.parse(cm)).not.toThrow();
+    expect(cm[0].kind).not.toBe("note");
+    // different latitude → Thai lagna differs from the Bangkok chart
+    expect(JSON.stringify(cm)).not.toBe(JSON.stringify(ascEngine.build(VALS)));
+  });
 });

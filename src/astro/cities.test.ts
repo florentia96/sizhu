@@ -24,6 +24,17 @@ describe("F4.7 cities — Thai provinces", () => {
     expect(findCity("Atlantis")).toBeNull();
   });
 
+  it("resolves Thai province names via alias", () => {
+    expect(findCity("กรุงเทพมหานคร")?.name).toBe("Bangkok");
+    expect(findCity("เชียงใหม่")?.name).toBe("Chiang Mai");
+    expect(findCity("ภูเก็ต")?.name).toBe("Phuket");
+    expect(findCity("โคราช")?.name).toBe("Nakhon Ratchasima");
+  });
+
+  it("returns null for an unknown Thai name", () => {
+    expect(findCity("เมืองสมมติ")).toBeNull();
+  });
+
   it("every Thai entry has plausible coordinates within Thailand's bounding box", () => {
     for (const c of CITY.filter((x) => x.tz === 7)) {
       expect(c.lat).toBeGreaterThan(5);

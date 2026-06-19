@@ -38,4 +38,18 @@ describe("lifegraph engine", () => {
       { kind: "note", text: "กรอกวันเกิด เวลาเกิด เมืองเกิด และวันที่ที่ต้องการดู ให้ครบ แล้วลองใหม่" },
     ]);
   });
+
+  it("scope (vals[3]) is read and filters transits (regression: was ignored)", () => {
+    const love = lifeEngine.build(["1985-07-20", "08:30", "กรุงเทพมหานคร", "เน้นความรัก", "2026-06-19"]);
+    const all = lifeEngine.build(["1985-07-20", "08:30", "กรุงเทพมหานคร", "ภาพรวมปีนี้", "2026-06-19"]);
+    const verdict = (r: typeof love) => JSON.stringify(r.find((s) => s.kind === "verdict"));
+    expect(verdict(love)).toContain("เน้นความรัก");
+    expect(verdict(all)).not.toContain("เน้นความรัก");
+    const blocks = love.find((s) => s.kind === "blocks");
+    if (blocks && blocks.kind === "blocks") {
+      for (const it of blocks.items) {
+        expect(/ศุกร์|จันทร์|อังคาร/.test(it.title)).toBe(true);
+      }
+    }
+  });
 });

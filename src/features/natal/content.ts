@@ -41,7 +41,7 @@ export const HOUSE_MEANING: string[] = [
 
 export const ASPECT_TH: Record<string, { th: string; tone: "good" | "warn" | "info" }> = {
   conjunction: { th: "ร่วม (Conjunction 0°)", tone: "info" },
-  sextile: { th: "เล็ง 60° (Sextile)", tone: "good" },
+  sextile: { th: "ทำมุม 60° (Sextile)", tone: "good" },
   square: { th: "กากบาท 90° (Square)", tone: "warn" },
   trine: { th: "ตรีโกณ 120° (Trine)", tone: "good" },
   opposition: { th: "เล็งตรงข้าม 180° (Opposition)", tone: "warn" },

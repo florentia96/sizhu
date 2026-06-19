@@ -55,4 +55,10 @@ describe("namesuggest engine — pool filter", () => {
     const cards = out.find((s) => s.kind === "cards");
     expect(cards).toBeDefined();
   });
+
+  it("prefix matching no name returns a no-match note, not unfiltered names (regression)", () => {
+    const out = namesuggestEngine.build(["1990-01-07", "ชาย", "ฮฮฮ"]);
+    expect(out.some((s) => s.kind === "cards")).toBe(false);
+    expect(out.some((s) => s.kind === "note")).toBe(true);
+  });
 });

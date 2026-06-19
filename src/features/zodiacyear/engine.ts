@@ -88,6 +88,8 @@ export const engine: FeatureEngine = {
   build(vals: string[]): Section[] {
     const ce = toCE(vals[0] ?? "");
     if (ce == null) return [{ kind: "note", text: "กรุณากรอกปีเกิด (พ.ศ.) เช่น 2535" }];
+    if (ce < 1900 || ce > 2100)
+      return [{ kind: "note", text: "กรุณากรอกปีเกิดให้ถูกต้อง (ค.ศ. 1900–2100 หรือ พ.ศ. 2443–2643)" }];
     const dateStr = (vals[1] ?? "").trim();
     let effectiveCE = ce;
     const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr);

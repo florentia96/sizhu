@@ -11,7 +11,9 @@ describe("num7 data layer", () => {
     expect(meta.long.length).toBeGreaterThan(20);
   });
   it("fields = single date field 'วันเกิด'", () => {
-    expect(fields).toEqual([{ label: "วันเกิด", type: "date" }]);
+    expect(fields).toEqual([
+      { label: "วันเกิด", type: "date", hint: "กรอก พ.ศ. หรือ ค.ศ. ก็ได้ ระบบปรับให้อัตโนมัติ" },
+    ]);
   });
   it("PHOP_NAMES has 3 rows of exactly 7 ภพ each", () => {
     expect(PHOP_NAMES).toHaveLength(3);

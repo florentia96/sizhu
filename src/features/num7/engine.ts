@@ -101,7 +101,7 @@ function build(vals: string[]): Section[] {
   const phopParas = PHOP_NAMES[0].map((_, c) => {
     const top = PHOP_NAMES[0][c];
     return {
-      h: top + " (ภพหลักหลักที่ " + (c + 1) + ")",
+      h: top + " (ภพหลักที่ " + (c + 1) + ")",
       t:
         "ฐานบน " +
         g[0][c] +

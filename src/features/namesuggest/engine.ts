@@ -55,20 +55,29 @@ export function suggestNames(dateStr: string, gender: string, prefix: string): S
     });
   }
 
-  const chosen = (safe.length ? safe : pool).slice(0, 9);
-  secs.push({
-    kind: "cards",
-    title: "ชื่อแนะนำ (ผ่านการคัดอักษรกาลกิณีแล้ว)",
-    glyph: "名",
-    subtitle: dayLabel
-      ? "ทุกชื่อด้านล่างไม่มีอักษรกาลกิณีของคนเกิดวัน" + dayLabel
-      : "กรอกวันเกิดเพื่อให้ระบบคัดอักษรกาลกิณีออกให้",
-    items: chosen.map((nm) => {
-      const ns = nameSum(nm);
-      const base = dayLabel ? "เลี่ยงกาลกิณีแล้ว" : "ชื่อมงคล";
-      return { value: nm, badge: gender || "", note: base + " · เลข " + ns.reduced };
-    }),
-  });
+  const chosen = safe.slice(0, 9);
+  if (!chosen.length) {
+    secs.push({
+      kind: "note",
+      text: prefix
+        ? `ไม่พบชื่อในคลังที่ขึ้นต้นด้วย "${prefix}"${dayLabel ? " และเลี่ยงอักษรกาลกิณีของคนเกิดวัน" + dayLabel : ""} — ลองเอาอักษรขึ้นต้นออก หรือเปลี่ยนตัวอักษร`
+        : `ไม่พบชื่อในคลังที่เลี่ยงอักษรกาลกิณีของคนเกิดวัน${dayLabel} ครบทุกชื่อ`,
+    });
+  } else {
+    secs.push({
+      kind: "cards",
+      title: dayLabel ? "ชื่อแนะนำ (ผ่านการคัดอักษรกาลกิณีแล้ว)" : "ชื่อแนะนำ",
+      glyph: "名",
+      subtitle: dayLabel
+        ? "ทุกชื่อด้านล่างไม่มีอักษรกาลกิณีของคนเกิดวัน" + dayLabel
+        : "กรอกวันเกิดเพื่อให้ระบบคัดอักษรกาลกิณีออกให้",
+      items: chosen.map((nm) => {
+        const ns = nameSum(nm);
+        const base = dayLabel ? "เลี่ยงกาลกิณีแล้ว" : "ชื่อมงคล";
+        return { value: nm, badge: gender || "", note: base + " · เลข " + ns.reduced };
+      }),
+    });
+  }
   secs.push({
     kind: "note",
     text: "ระบบคัดชื่อที่ไม่มีอักษรกาลกิณีตามวันเกิดจริง · ค่าผลรวมเลขศาสตร์ของชื่อขึ้นกับตารางของแต่ละสำนัก ควรตรวจกับซินแสอีกครั้งก่อนใช้จริง",

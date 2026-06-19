@@ -36,7 +36,8 @@ export function rankLucky(type: string, want: string, level: string): LuckyItem[
     if (examined >= MAX_EXAMINE) return;
     examined++;
     let core = coreParts.join("");
-    core = core.slice(0, isPlate ? 4 : 7);
+    // เบอร์มือถือไทย = 10 หลัก: prefix "06" (2) + core 8 = 10 · ทะเบียน = 4 ตัวเลข
+    core = core.slice(0, isPlate ? 4 : 8);
     const num = isPlate ? core : PHONE_PREFIX + core;
     if (wantDigits && num.indexOf(wantDigits) < 0) return;
     if (seen.has(num)) return;

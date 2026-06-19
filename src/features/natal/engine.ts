@@ -16,7 +16,6 @@ const SIGN_ORDER = [
   "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
   "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces",
 ];
-const BANGKOK = { name: "กรุงเทพมหานคร", lat: 13.7563, lon: 100.5018, tz: 7 };
 
 export function toUT(
   dateStr: string,
@@ -72,7 +71,9 @@ export const natalEngine: FeatureEngine = {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr) || !/^\d{2}:\d{2}$/.test(timeStr) || !cityName) {
       return [{ kind: "note", text: "กรอกวันเกิด เวลาเกิด และเมืองเกิด ให้ครบ แล้วลองใหม่" }];
     }
-    const city = parseCityValue(cityName) ?? BANGKOK;
+    const city = parseCityValue(cityName);
+    if (!city)
+      return [{ kind: "note", text: `ไม่พบเมือง "${cityName}" — เลือกจากรายการที่ขึ้นให้ หรือพิมพ์พิกัดเป็น lat,lon (เช่น 18.79,98.98)` }];
     const ut = toUT(dateStr, timeStr, city.tz);
     const jdUT = julianDay(ut.y, ut.m, ut.d, ut.hourUT);
 

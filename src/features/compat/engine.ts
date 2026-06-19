@@ -12,7 +12,6 @@ const JADE = "#6cc18a";
 const GOLD = "#d8a64a";
 const STAR = "#7da6d8";
 const PLANETS = ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"];
-const BANGKOK = { name: "กรุงเทพมหานคร", lat: 13.7563, lon: 100.5018, tz: 7 };
 
 export function reduceSingle(n: number): number {
   let x = n;
@@ -55,8 +54,9 @@ function synastryBlock(
   c1: string,
 ): Section | null {
   if (!/^\d{2}:\d{2}$/.test(t0) || !/^\d{2}:\d{2}$/.test(t1) || !c0 || !c1) return null;
-  const cityA = parseCityValue(c0) ?? BANGKOK;
-  const cityB = parseCityValue(c1) ?? BANGKOK;
+  const cityA = parseCityValue(c0);
+  const cityB = parseCityValue(c1);
+  if (!cityA || !cityB) return null;
   const ua = toUT(s0, t0, cityA.tz);
   const ub = toUT(s1, t1, cityB.tz);
   const posA = bodyPositions(julianDay(ua.y, ua.m, ua.d, ua.hourUT));
