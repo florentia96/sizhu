@@ -47,9 +47,11 @@ export function parseCityValue(
 export function CityField({
   index,
   refFor,
+  defaultValue,
 }: {
   index: number;
   refFor: (i: number) => (node: HTMLInputElement | null) => void;
+  defaultValue?: string;
 }) {
   const id = `mf-${index}`;
   const listId = `mf-city-${index}`;
@@ -82,6 +84,7 @@ export function CityField({
         type="text"
         list={listId}
         placeholder="พิมพ์ชื่อเมือง หรือ lat,lon"
+        defaultValue={defaultValue}
         onBlur={normalize}
         style={controlStyle}
       />

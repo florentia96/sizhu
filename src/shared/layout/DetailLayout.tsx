@@ -6,6 +6,14 @@ import { useFormRefs } from "../forms/useFormRefs";
 import { FieldRenderer } from "../forms/FieldRenderer";
 import { CityField } from "../forms/CityField";
 import { SectionRenderer } from "../sections/SectionRenderer";
+import {
+  loadProfile,
+  patchProfile,
+  clearProfile,
+  hasProfile,
+  slotForField,
+  type Profile,
+} from "../profile/profile";
 
 function useIsNarrow(): boolean {
   const [narrow, setNarrow] = useState(
@@ -28,6 +36,9 @@ export function DetailLayout({
 }) {
   const { refFor, readInputs } = useFormRefs();
   const [sections, setSections] = useState<Section[] | null>(null);
+  const [profile, setProfile] = useState(loadProfile);
+  const [remember, setRemember] = useState(true);
+  const [formKey, setFormKey] = useState(0);
   const narrow = useIsNarrow();
 
   const def = FEATURES[id];
@@ -58,9 +69,27 @@ export function DetailLayout({
 
   const accent = accentOf(def.group);
 
+  const eligibleSlots = def.fields.map((f) => slotForField(f));
+  const hasEligible = eligibleSlots.some(Boolean);
+  const autofilled = eligibleSlots.some((s) => s && profile[s]);
+
   const onSubmit = (): void => {
     const vals = readInputs(def.fields.length);
+    if (remember && hasEligible) {
+      const patch: Partial<Profile> = {};
+      eligibleSlots.forEach((s, i) => {
+        if (s && vals[i]?.trim()) patch[s] = vals[i];
+      });
+      if (Object.keys(patch).length) setProfile(patchProfile(patch));
+    }
     setSections(def.engine.build(vals));
+  };
+
+  const onClearSaved = (): void => {
+    clearProfile();
+    setProfile({});
+    setRemember(false);
+    setFormKey((k) => k + 1);
   };
 
   const gridStyle: CSSProperties = narrow
@@ -97,6 +126,53 @@ export function DetailLayout({
     boxShadow: "0 2px 0 var(--primary-shadow, #8a2820)",
   };
 
+  const autofillNote: CSSProperties = {
+    margin: "0 0 14px",
+    fontSize: ".78rem",
+    lineHeight: 1.5,
+    color: "var(--jade, #6cc18a)",
+  };
+
+  const rememberRow: CSSProperties = {
+    display: "flex",
+    alignItems: "center",
+    gap: "9px",
+    width: "100%",
+    margin: "4px 0 12px",
+    background: "none",
+    border: 0,
+    padding: 0,
+    cursor: "pointer",
+    textAlign: "left",
+    fontFamily: "inherit",
+    fontSize: ".82rem",
+    color: "var(--text-muted, #b9b2a0)",
+  };
+  const rememberBox: CSSProperties = {
+    flex: "0 0 auto",
+    width: "18px",
+    height: "18px",
+    borderRadius: "var(--radius-input, 4px)",
+    border: "1px solid var(--primary-bright, #e0584b)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: ".7rem",
+    color: "#fff",
+  };
+  const rememberBoxOn: CSSProperties = { background: "var(--primary, #b1352a)" };
+
+  const clearLink: CSSProperties = {
+    background: "none",
+    border: 0,
+    padding: 0,
+    cursor: "pointer",
+    fontFamily: "inherit",
+    fontSize: ".74rem",
+    color: "var(--text-dim, #8a8474)",
+    textDecoration: "underline dotted",
+  };
+
   return (
     <div style={gridStyle}>
       <div style={formCardStyle}>
@@ -118,12 +194,33 @@ export function DetailLayout({
           กรอกข้อมูล
         </div>
 
-        {def.fields.map((f, i) =>
-          f.type === "city" ? (
-            <CityField key={i} index={i} refFor={refFor} />
-          ) : (
-            <FieldRenderer key={i} field={f} index={i} refFor={refFor} />
-          ),
+        {autofilled && <p style={autofillNote}>กรอกให้อัตโนมัติจากวันเกิดที่บันทึกไว้ในเครื่องนี้</p>}
+
+        <div key={formKey}>
+          {def.fields.map((f, i) => {
+            const slot = eligibleSlots[i];
+            const dv = slot ? profile[slot] : undefined;
+            return f.type === "city" ? (
+              <CityField key={i} index={i} refFor={refFor} defaultValue={dv} />
+            ) : (
+              <FieldRenderer key={i} field={f} index={i} refFor={refFor} defaultValue={dv} />
+            );
+          })}
+        </div>
+
+        {hasEligible && (
+          <button
+            type="button"
+            role="checkbox"
+            aria-checked={remember}
+            onClick={() => setRemember((v) => !v)}
+            style={rememberRow}
+          >
+            <span style={{ ...rememberBox, ...(remember ? rememberBoxOn : {}) }}>
+              {remember ? "✓" : ""}
+            </span>
+            จำวันเกิดไว้ในเครื่องนี้ (กรอกครั้งเดียว ใช้ได้ทุกศาสตร์)
+          </button>
         )}
 
         <button
@@ -150,6 +247,13 @@ export function DetailLayout({
         >
           ผลทำนายเป็นกรอบอ้างอิงเชิงสัญลักษณ์ตามตำรา ไม่ใช่คำพยากรณ์ตายตัว
         </p>
+        {hasProfile(profile) && (
+          <p style={{ textAlign: "center", margin: "10px 0 0" }}>
+            <button type="button" onClick={onClearSaved} style={clearLink}>
+              ล้างข้อมูลที่บันทึกไว้
+            </button>
+          </p>
+        )}
       </div>
 
       <div>

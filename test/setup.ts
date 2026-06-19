@@ -20,3 +20,25 @@ if (!window.matchMedia) {
     dispatchEvent: vi.fn(),
   }));
 }
+
+// jsdom คอนฟิกนี้ไม่ได้เปิด localStorage — ใส่ in-memory polyfill ให้ profile store ทดสอบได้ (browser จริงมีครบ)
+if (!globalThis.localStorage) {
+  let store: Record<string, string> = {};
+  const mem = {
+    getItem: (k: string) => (Object.prototype.hasOwnProperty.call(store, k) ? store[k] : null),
+    setItem: (k: string, v: string) => {
+      store[k] = String(v);
+    },
+    removeItem: (k: string) => {
+      delete store[k];
+    },
+    clear: () => {
+      store = {};
+    },
+    key: (i: number) => Object.keys(store)[i] ?? null,
+    get length() {
+      return Object.keys(store).length;
+    },
+  };
+  Object.defineProperty(globalThis, "localStorage", { value: mem, configurable: true, writable: true });
+}

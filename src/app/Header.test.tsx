@@ -7,7 +7,6 @@ describe("Header", () => {
     query: "",
     onQueryChange: () => {},
     onLogo: () => {},
-    onDesign: () => {},
   };
 
   it("renders the 卜 logo and the brand", () => {
@@ -30,12 +29,5 @@ describe("Header", () => {
     expect(input.value).toBe("เบอร์");
     fireEvent.change(input, { target: { value: "ฝัน" } });
     expect(onQueryChange).toHaveBeenCalledWith("ฝัน");
-  });
-
-  it("fires onDesign from the ดีไซน์ button", () => {
-    const onDesign = vi.fn();
-    render(<Header {...base} onDesign={onDesign} />);
-    fireEvent.click(screen.getByRole("button", { name: "ดีไซน์" }));
-    expect(onDesign).toHaveBeenCalledTimes(1);
   });
 });

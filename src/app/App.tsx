@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHashRoute } from "./useHashRoute";
 import { Header } from "./Header";
 import { Starfield } from "./Starfield";
@@ -17,15 +17,34 @@ const MAIN: React.CSSProperties = {
   padding: "0 22px 90px",
 };
 
+const BRAND_TITLE = "MooDee · มูดี — ดูดวงครบ จบในที่เดียว 22 บริการ";
+const BRAND_DESC =
+  "รวมศาสตร์มงคล 22 บริการ — เบอร์มงคล ทำนายฝัน ดวงคู่ สีมงคล ราศี ปาจื้อ · คำนวณในเครื่อง 100% ไม่ส่งข้อมูลออก";
+
+function activeFeatureId(route: ReturnType<typeof useHashRoute>["route"]): string | undefined {
+  if (route.name === "feature") return route.id;
+  if (route.name === "bazi") return "bazi";
+  return undefined;
+}
+
 export function App() {
   const { route, navigate } = useHashRoute();
   const [query, setQuery] = useState("");
+
+  // title/description ต่อ route — ช่วย browser tab และบริบทตอนคัดลอกลิงก์ไปแชร์
+  useEffect(() => {
+    const id = activeFeatureId(route);
+    const meta = id ? FEATURES[id]?.meta : undefined;
+    document.title = meta ? `${meta.name} · MooDee` : BRAND_TITLE;
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute("content", meta ? meta.desc : BRAND_DESC);
+  }, [route]);
 
   const goHome = () => {
     setQuery("");
     navigate({ name: "hub" });
   };
-  const goDesign = () => navigate({ name: "ds" });
 
   const onOpen = (id: string) => {
     if (FEATURES[id]?.fullRoute) navigate({ name: "bazi" });
@@ -60,7 +79,7 @@ export function App() {
   return (
     <div style={{ position: "relative", minHeight: "100vh" }}>
       <Starfield />
-      <Header query={query} onQueryChange={onQueryChange} onLogo={goHome} onDesign={goDesign} />
+      <Header query={query} onQueryChange={onQueryChange} onLogo={goHome} />
       <main style={MAIN}>{body}</main>
     </div>
   );

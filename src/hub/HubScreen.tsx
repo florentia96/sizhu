@@ -1,6 +1,7 @@
 import { FEATURES } from "../app/registry";
 import type { FeatureDef, GroupId } from "../app/feature";
 import { GROUPS, type GroupMeta } from "./groups";
+import { TodayCard } from "./TodayCard";
 
 export interface HubProps {
   query: string;
@@ -208,6 +209,7 @@ export function HubScreen({ query, onOpen, features = FEATURES }: HubProps) {
 
   return (
     <>
+      {!searching && <TodayCard onOpen={onOpen} />}
       <Hero flat={flat} onOpen={onOpen} />
 
       {searching ? (

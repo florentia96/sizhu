@@ -2,7 +2,6 @@ export interface HeaderProps {
   query: string;
   onQueryChange: (q: string) => void;
   onLogo: () => void;
-  onDesign: () => void;
 }
 
 const HEADER: React.CSSProperties = {
@@ -57,18 +56,6 @@ const SEARCH_INPUT: React.CSSProperties = {
   colorScheme: "dark",
 };
 
-const DESIGN_BTN: React.CSSProperties = {
-  flexShrink: 0,
-  border: "1px solid rgba(216,166,74,.3)",
-  background: "none",
-  color: "#cfc7b2",
-  borderRadius: "var(--radius-input)",
-  padding: "10px 15px",
-  fontSize: 13.5,
-  fontWeight: 500,
-  cursor: "pointer",
-};
-
 function SearchIcon() {
   return (
     <svg
@@ -87,7 +74,7 @@ function SearchIcon() {
   );
 }
 
-export function Header({ query, onQueryChange, onLogo, onDesign }: HeaderProps) {
+export function Header({ query, onQueryChange, onLogo }: HeaderProps) {
   return (
     <header style={HEADER}>
       <div style={INNER}>
@@ -141,10 +128,6 @@ export function Header({ query, onQueryChange, onLogo, onDesign }: HeaderProps) 
             style={SEARCH_INPUT}
           />
         </div>
-
-        <button type="button" onClick={onDesign} style={DESIGN_BTN}>
-          ดีไซน์
-        </button>
       </div>
     </header>
   );
