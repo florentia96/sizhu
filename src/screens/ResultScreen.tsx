@@ -17,11 +17,13 @@ export function ResultScreen({
   annual,
   recap,
   onBack,
+  onHome,
 }: {
   reading: Reading;
   annual: AnnualItem[];
   recap: string;
   onBack: () => void;
+  onHome?: () => void;
 }) {
   const reduced = usePrefersReducedMotion();
   // หน่วงเผยผลทีละแผง — ปิดเมื่อผู้ใช้ขอลดการเคลื่อนไหว
@@ -35,6 +37,11 @@ export function ResultScreen({
 
       <div className="result-header">
         <div className="result-brand">
+          {onHome && (
+            <button type="button" className="btn-home" onClick={onHome}>
+              <span aria-hidden="true">←</span> หน้าหลัก
+            </button>
+          )}
           <span className="cn" aria-hidden="true">八字</span>
           <span className="recap">{recap}</span>
         </div>

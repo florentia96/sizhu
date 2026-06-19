@@ -7,11 +7,13 @@ export function FormScreen({
   error,
   initialDate = "2000-01-01",
   initialTime = "00:00",
+  onHome,
 }: {
   onSubmit: (f: RawForm) => void;
   error: string;
   initialDate?: string;
   initialTime?: string;
+  onHome?: () => void;
 }) {
   const [date, setDate] = useState(initialDate);
   const [time, setTime] = useState(initialTime);
@@ -32,6 +34,11 @@ export function FormScreen({
   return (
     <main className="paper-screen screen-paper">
       <div className="paper-wrap">
+        {onHome && (
+          <button type="button" className="btn-home paper-home" onClick={onHome}>
+            <span aria-hidden="true">←</span> หน้าหลัก
+          </button>
+        )}
         <header className="brand">
           <div className="brand-eyebrow">เครื่องเปิดดวงจีน · คำนวณในเครื่อง</div>
           <h1 className="brand-cn">

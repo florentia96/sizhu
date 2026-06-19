@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
+import "./hub.css";
 import { FEATURES } from "../app/registry";
 import type { FeatureDef, GroupId } from "../app/feature";
 import { GROUPS, type GroupMeta } from "./groups";
@@ -18,7 +19,6 @@ interface FlatFeature {
   cn: string;
   group: GroupId;
   color: string;
-  glow: string;
   groupTitle: string;
 }
 
@@ -34,169 +34,114 @@ function flatten(features: Record<string, FeatureDef>): FlatFeature[] {
       cn: f.meta.cn,
       group: f.group,
       color: g.color,
-      glow: g.glow,
       groupTitle: g.title,
     };
   });
 }
 
-const CARD: React.CSSProperties = {
-  position: "relative",
-  textAlign: "left",
-  background: "var(--surface)",
-  border: "1px solid rgba(216,166,74,.14)",
-  borderRadius: "var(--radius-card)",
-  padding: 20,
-  cursor: "pointer",
-  overflow: "hidden",
+// ตั้งค่าตัวแปร CSS --c (สีประจำหมวด) ให้ลูกหลานในกล่องใช้ต่อ — กัน TS ด้วย cast
+const cvar = (c: string): CSSProperties => ({ "--c": c }) as unknown as CSSProperties;
+
+// ป้ายสั้นของแต่ละหมวดสำหรับราวห้าศาสตร์ใน masthead
+const ART_SHORT: Record<GroupId, string> = {
+  numbers: "เลข",
+  names: "ชื่อ",
+  astro: "โหรา",
+  chinese: "จีน",
+  daily: "รายวัน",
 };
 
-const GRID: React.CSSProperties = {
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fill,minmax(238px,1fr))",
-  gap: 13,
+const POP_META: Record<string, { cn: string; label: string }> = {
+  phone: { cn: "號", label: "เบอร์มงคล" },
+  dream: { cn: "夢", label: "ฝัน→เลขเด็ด" },
+  luckycolor: { cn: "彩", label: "สีมงคล" },
+  compat: { cn: "緣", label: "ดวงคู่" },
+  bazi: { cn: "八", label: "ปาจื้อ" },
 };
+const POP_IDS = ["phone", "dream", "luckycolor", "compat", "bazi"];
+
+function Masthead({ flat, onOpen }: { flat: FlatFeature[]; onOpen: (id: string) => void }) {
+  const known = new Set(flat.map((f) => f.id));
+  const popular = POP_IDS.filter((id) => known.has(id)).map((id) => ({ id, ...POP_META[id] }));
+
+  return (
+    <section className="hub-mast" aria-label="ภาพรวมมูดี">
+      <div className="hub-mast-water" aria-hidden="true">通</div>
+      <div className="hub-mast-inner">
+        <div className="hub-mast-top">
+          <div className="hub-seal" aria-hidden="true">卜</div>
+          <div>
+            <div className="hub-mast-eyebrow">通書 · รวมศาสตร์มงคล {flat.length} บริการ</div>
+            <h1 className="hub-mast-title">ดูดวงครบ จบในที่เดียว</h1>
+          </div>
+        </div>
+        <p className="hub-mast-sub">
+          เลขศาสตร์ · นามศาสตร์ · โหราศาสตร์ · ศาสตร์จีน และความเชื่อไทย รวมไว้ที่เดียว —
+          เลือกศาสตร์ที่อยากเปิดได้เลย
+        </p>
+        <div className="hub-arts" aria-hidden="true">
+          {GROUPS.map((g) => (
+            <div className="hub-art" key={g.id} style={cvar(g.color)}>
+              <span className="hub-art-cn">{g.cn}</span>
+              <span className="hub-art-th">{ART_SHORT[g.id]}</span>
+            </div>
+          ))}
+        </div>
+        <div className="hub-pills">
+          {popular.map((p) => (
+            <button key={p.id} type="button" className="hub-pill" onClick={() => onOpen(p.id)}>
+              <span className="hub-pill-cn" aria-hidden="true">{p.cn}</span>
+              {p.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function FeatureCard({ f, onOpen }: { f: FlatFeature; onOpen: (id: string) => void }) {
   return (
-    <button type="button" onClick={() => onOpen(f.id)} style={CARD}>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: 13,
-        }}
-      >
-        <span style={{ fontFamily: "var(--font-cn)", fontSize: "2.3rem", lineHeight: 1, color: f.color }}>
-          {f.cn}
-        </span>
-        <span style={{ color: "#4a4740", fontSize: "1.1rem" }}>→</span>
-      </div>
-      <div
-        style={{
-          fontFamily: "var(--font-head)",
-          fontWeight: 600,
-          fontSize: "1.02rem",
-          color: "#ece4d2",
-          marginBottom: 5,
-          lineHeight: 1.3,
-        }}
-      >
-        {f.name}
-      </div>
-      <div style={{ fontSize: ".9rem", color: "var(--text-muted)", lineHeight: 1.55 }}>{f.desc}</div>
+    <button type="button" className="hub-card" style={cvar(f.color)} onClick={() => onOpen(f.id)}>
+      <span className="hub-card-top">
+        <span className="hub-glyph hub-card-seal" aria-hidden="true">{f.cn}</span>
+        <span className="hub-card-arrow" aria-hidden="true">→</span>
+      </span>
+      <span className="hub-card-name">{f.name}</span>
+      <span className="hub-card-desc">{f.desc}</span>
     </button>
   );
 }
 
-function Hero({ flat, onOpen }: { flat: FlatFeature[]; onOpen: (id: string) => void }) {
-  const popularIds = ["phone", "dream", "luckycolor", "compat", "bazi"];
-  const popMeta: Record<string, { cn: string; label: string }> = {
-    phone: { cn: "號", label: "เบอร์มงคล" },
-    dream: { cn: "夢", label: "ฝัน→เลขเด็ด" },
-    luckycolor: { cn: "彩", label: "สีมงคล" },
-    compat: { cn: "緣", label: "ดวงคู่" },
-    bazi: { cn: "八", label: "ปาจื้อ" },
-  };
-  const known = new Set(flat.map((f) => f.id));
-  const popular = popularIds.filter((id) => known.has(id)).map((id) => ({ id, ...popMeta[id] }));
-
+function SearchResults({
+  results,
+  onOpen,
+}: {
+  results: FlatFeature[];
+  onOpen: (id: string) => void;
+}) {
   return (
-    <section
-      style={{
-        position: "relative",
-        overflow: "hidden",
-        marginTop: 30,
-        border: "1px solid rgba(216,166,74,.2)",
-        borderRadius: 6,
-        background: "linear-gradient(165deg, rgba(40,30,28,.55), rgba(22,26,34,.5))",
-        padding: "clamp(34px,6vw,56px) clamp(26px,5vw,48px)",
-      }}
-    >
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          right: "clamp(24px,6vw,60px)",
-          top: "50%",
-          transform: "translateY(-50%)",
-          fontFamily: "var(--font-cn)",
-          fontSize: "clamp(90px,18vw,180px)",
-          color: "rgba(216,166,74,.13)",
-          animation: "floaty 7s ease-in-out infinite",
-          pointerEvents: "none",
-          lineHeight: 1,
-        }}
-      >
-        運
+    <section className="hub-search">
+      <div className="hub-search-head">
+        <h2 className="hub-search-title">ผลการค้นหา</h2>
+        <span className="hub-search-count">พบ {results.length} ศาสตร์</span>
       </div>
-      <div style={{ position: "relative", maxWidth: 600 }}>
-        <div
-          style={{
-            fontSize: ".74rem",
-            letterSpacing: ".36em",
-            textTransform: "uppercase",
-            color: "var(--primary-bright)",
-            fontWeight: 600,
-            marginBottom: 16,
-          }}
-        >
-          รวมศาสตร์มงคล · 22 บริการ
-        </div>
-        <h1
-          style={{
-            fontFamily: "var(--font-head)",
-            fontWeight: 700,
-            fontSize: "clamp(2.4rem,6.5vw,3.6rem)",
-            lineHeight: 1.1,
-            color: "var(--text-strong)",
-            marginBottom: 14,
-          }}
-        >
-          ดูดวงครบ
-          <br />
-          จบในที่เดียว
-        </h1>
-        <div
-          style={{
-            fontFamily: "var(--font-cn)",
-            fontSize: "clamp(1.1rem,3vw,1.5rem)",
-            color: "var(--gold)",
-            letterSpacing: ".22em",
-            marginBottom: 16,
-            textShadow: "0 0 16px rgba(216,166,74,.3)",
-          }}
-        >
-          命 · 名 · 數 · 星 · 緣
-        </div>
-        <p style={{ fontSize: "1rem", color: "var(--text-muted)", marginBottom: 28, maxWidth: 480, fontWeight: 300 }}>
-          เลขศาสตร์ · นามศาสตร์ · โหราศาสตร์ · ศาสตร์จีน และความเชื่อไทย รวมไว้ในที่เดียว — เลือกศาสตร์ที่อยากเปิดได้เลย
-        </p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-          {popular.map((p) => (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => onOpen(p.id)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 9,
-                minHeight: "var(--tap-min)",
-                background: "rgba(255,255,255,.04)",
-                color: "var(--text)",
-                border: "1px solid rgba(216,166,74,.3)",
-                borderRadius: 24,
-                padding: "9px 16px",
-                fontSize: 13.5,
-                cursor: "pointer",
-              }}
-            >
-              <span style={{ fontFamily: "var(--font-cn)", color: "var(--gold)" }}>{p.cn}</span> {p.label}
-            </button>
-          ))}
-        </div>
+      <div className="hub-sr-grid" data-testid="hub-search-results">
+        {results.map((f) => (
+          <button
+            key={f.id}
+            type="button"
+            className="hub-sr"
+            style={cvar(f.color)}
+            onClick={() => onOpen(f.id)}
+          >
+            <span className="hub-glyph hub-sr-seal" aria-hidden="true">{f.cn}</span>
+            <span style={{ minWidth: 0 }}>
+              <span className="hub-sr-name" style={{ display: "block" }}>{f.name}</span>
+              <span className="hub-sr-grp" style={{ display: "block" }}>{f.groupTitle}</span>
+            </span>
+          </button>
+        ))}
       </div>
     </section>
   );
@@ -219,145 +164,47 @@ export function HubScreen({ query, onOpen, features = FEATURES }: HubProps) {
     {} as Record<GroupId, number>,
   );
 
+  if (searching) {
+    return (
+      <div className="hub">
+        <SearchResults results={results} onOpen={onOpen} />
+      </div>
+    );
+  }
+
   return (
-    <>
-      {!searching && <TodayCard onOpen={onOpen} />}
-      <Hero flat={flat} onOpen={onOpen} />
+    <div className="hub">
+      <Masthead flat={flat} onOpen={onOpen} />
+      <TodayCard onOpen={onOpen} />
+      <CategoryNav active={activeGroup} onPick={setActiveGroup} counts={counts} />
 
-      {searching ? (
-        <section style={{ marginTop: 40 }}>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 11, marginBottom: 20 }}>
-            <h2
-              style={{
-                fontFamily: "var(--font-head)",
-                fontWeight: 600,
-                fontSize: "1.4rem",
-                color: "var(--text-strong)",
-                margin: 0,
-              }}
-            >
-              ผลการค้นหา
-            </h2>
-            <span style={{ color: "var(--text-dim)", fontSize: ".9rem" }}>พบ {results.length} ศาสตร์</span>
-          </div>
-          <div
-            data-testid="hub-search-results"
-            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(252px,1fr))", gap: 13 }}
-          >
-            {results.map((f) => (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => onOpen(f.id)}
-                style={{
-                  textAlign: "left",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 15,
-                  background: "var(--surface)",
-                  border: "1px solid var(--border-gold)",
-                  borderRadius: "var(--radius-card)",
-                  padding: 16,
-                  cursor: "pointer",
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: "var(--font-cn)",
-                    fontSize: "1.9rem",
-                    color: f.color,
-                    flexShrink: 0,
-                    lineHeight: 1,
-                  }}
-                >
-                  {f.cn}
-                </span>
-                <div style={{ minWidth: 0 }}>
-                  <div style={{ fontWeight: 500, fontSize: ".97rem", color: "#ece4d2" }}>{f.name}</div>
-                  <div
-                    style={{
-                      fontSize: ".84rem",
-                      color: "var(--text-dim)",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    {f.groupTitle}
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
-        </section>
-      ) : (
-        <>
-          <CategoryNav active={activeGroup} onPick={setActiveGroup} counts={counts} />
-          {GROUPS.map((g) => {
-            if (activeGroup !== "all" && g.id !== activeGroup) return null;
-            const items = flat.filter((f) => f.group === g.id);
-            if (items.length === 0) return null;
-            return (
-              <section key={g.id} style={{ marginTop: 46 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 20 }}>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-cn)",
-                      fontSize: "2.1rem",
-                      lineHeight: 1,
-                      color: g.color,
-                      textShadow: `0 0 18px ${g.color}`,
-                    }}
-                  >
-                    {g.cn}
-                  </span>
-                  <div>
-                    <h2
-                      style={{
-                        fontFamily: "var(--font-head)",
-                        fontWeight: 600,
-                        fontSize: "1.32rem",
-                        color: "var(--text-strong)",
-                        margin: 0,
-                        lineHeight: 1.2,
-                      }}
-                    >
-                      {g.title}
-                    </h2>
-                    <div style={{ fontSize: ".84rem", color: "var(--text-dim)" }}>{g.sub}</div>
-                  </div>
-                  <div
-                    style={{
-                      flex: 1,
-                      height: 1,
-                      background: "linear-gradient(90deg,rgba(216,166,74,.3),transparent)",
-                      marginLeft: 6,
-                    }}
-                  />
-                </div>
-                <div style={GRID}>
-                  {items.map((f) => (
-                    <FeatureCard key={f.id} f={f} onOpen={onOpen} />
-                  ))}
-                </div>
-              </section>
-            );
-          })}
+      {GROUPS.map((g) => {
+        if (activeGroup !== "all" && g.id !== activeGroup) return null;
+        const items = flat.filter((f) => f.group === g.id);
+        if (items.length === 0) return null;
+        return (
+          <section className="hub-ch" key={g.id} style={cvar(g.color)}>
+            <div className="hub-ch-head">
+              <span className="hub-glyph hub-ch-seal" aria-hidden="true">{g.cn}</span>
+              <div>
+                <h2 className="hub-ch-title">{g.title}</h2>
+                <div className="hub-ch-sub">{g.sub}</div>
+              </div>
+              <span className="hub-ch-rule" aria-hidden="true" />
+              <span className="hub-ch-count">{items.length} ศาสตร์</span>
+            </div>
+            <div className="hub-grid">
+              {items.map((f) => (
+                <FeatureCard key={f.id} f={f} onOpen={onOpen} />
+              ))}
+            </div>
+          </section>
+        );
+      })}
 
-          <p
-            style={{
-              textAlign: "center",
-              color: "var(--text-faint)",
-              fontSize: ".82rem",
-              marginTop: 60,
-              lineHeight: 1.8,
-              fontStyle: "italic",
-            }}
-          >
-            มูดี · ผลทำนายเป็นกรอบอ้างอิงเชิงสัญลักษณ์ตามตำรา ใช้เพื่อความบันเทิง โปรดใช้วิจารณญาณ
-          </p>
-        </>
-      )}
-    </>
+      <p className="hub-foot">
+        มูดี · ผลทำนายเป็นกรอบอ้างอิงเชิงสัญลักษณ์ตามตำรา ใช้เพื่อความบันเทิง โปรดใช้วิจารณญาณ
+      </p>
+    </div>
   );
 }

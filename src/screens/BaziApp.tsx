@@ -14,7 +14,7 @@ type Mode = "paper" | "casting" | "result";
 
 const pad = (n: number): string => String(n).padStart(2, "0");
 
-export function BaziApp({ prefill }: { prefill?: BaziPrefill } = {}) {
+export function BaziApp({ prefill, onHome }: { prefill?: BaziPrefill; onHome?: () => void } = {}) {
   const reduced = usePrefersReducedMotion();
   const [mode, setMode] = useState<Mode>("paper");
   const [reading, setReading] = useState<Reading | null>(null);
@@ -99,11 +99,12 @@ export function BaziApp({ prefill }: { prefill?: BaziPrefill } = {}) {
           error={error}
           initialDate={prefill?.date}
           initialTime={prefill?.time}
+          onHome={onHome}
         />
       )}
       {mode === "casting" && <CastingScreen onSkip={toResult} />}
       {mode === "result" && reading && (
-        <ResultScreen reading={reading} annual={annual} recap={recap} onBack={back} />
+        <ResultScreen reading={reading} annual={annual} recap={recap} onBack={back} onHome={onHome} />
       )}
     </div>
   );

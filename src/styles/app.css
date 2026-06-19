@@ -1289,3 +1289,32 @@ input[type="number"] {
   box-shadow: 0 0 20px rgba(224, 88, 75, 0.4);
   transform: translateY(-2px);
 }
+
+/* ปุ่มกลับหน้าหลัก — มีได้ทั้งหน้าฟอร์มและหน้าผล (เปิดดวงเต็มจอ ไม่มี Header) */
+.btn-home {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--tap-min);
+  font-family: "Anuphan", system-ui, sans-serif;
+  font-size: 0.85rem;
+  color: var(--text);
+  background: var(--surface-inset);
+  border: 1px solid var(--border-gold);
+  border-radius: 20px;
+  padding: 7px 15px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.btn-home:hover {
+  background: var(--gold-soft);
+  border-color: rgba(216, 166, 74, 0.5);
+}
+/* หน้าฟอร์ม: วางชิดซ้ายเหนือแบรนด์ */
+.paper-home {
+  align-self: flex-start;
+  margin-bottom: 14px;
+}

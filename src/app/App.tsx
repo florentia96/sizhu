@@ -59,7 +59,7 @@ export function App() {
   // ปาจื้อใช้หน้าเต็ม (/bazi) — ไม่มี Header/chrome ตาม spec §5.1
   if (route.name === "bazi") {
     const q = route.params ? new URLSearchParams(route.params).toString() : "";
-    return <BaziApp prefill={parseBaziParams(q)} />;
+    return <BaziApp prefill={parseBaziParams(q)} onHome={goHome} />;
   }
 
   let body: React.ReactNode;
