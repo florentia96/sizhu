@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { App } from "./App";
+import { hrefFor, type Route } from "./routes";
 
 vi.mock("../shared/layout/DetailLayout", () => ({
   DetailLayout: ({ id }: { id: string }) => <div data-testid="detail">detail:{id}</div>,
@@ -9,16 +10,20 @@ vi.mock("../screens/BaziApp", () => ({
   BaziApp: () => <div data-testid="bazi">bazi</div>,
 }));
 
+function go(route: Route): void {
+  window.history.pushState(null, "", hrefFor(route));
+}
+
 describe("App header-search parity", () => {
   beforeEach(() => {
-    window.location.hash = "";
+    go({ name: "hub" });
   });
   afterEach(() => {
-    window.location.hash = "";
+    go({ name: "hub" });
   });
 
   it("typing a query while on the design system jumps back to the hub results", () => {
-    window.location.hash = "#/ds";
+    go({ name: "ds" });
     render(<App />);
     expect(screen.getByText(/Design System/)).toBeInTheDocument();
     const input = screen.getByPlaceholderText(/ค้นหาศาสตร์/);

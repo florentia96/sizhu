@@ -1,26 +1,31 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { act, render, screen, fireEvent } from "@testing-library/react";
 import { App } from "./App";
+import { hrefFor, type Route } from "./routes";
 
 // Real DetailLayout + BaziApp are rendered here (no mocks) — this is render-level
 // proof that the routing → form → engine → SectionRenderer seam works end-to-end.
 
-function setHash(hash: string): void {
+function go(route: Route): void {
+  window.history.pushState(null, "", hrefFor(route));
+}
+
+function navigate(route: Route): void {
   act(() => {
-    window.location.hash = hash;
-    window.dispatchEvent(new HashChangeEvent("hashchange"));
+    window.history.pushState(null, "", hrefFor(route));
+    window.dispatchEvent(new PopStateEvent("popstate"));
   });
 }
 
 describe("App integration — real screens", () => {
   beforeEach(() => {
-    window.location.hash = "";
+    go({ name: "hub" });
   });
   afterEach(() => {
-    window.location.hash = "";
+    go({ name: "hub" });
   });
 
-  it("default hash renders the Hub with the 5 group headers", () => {
+  it("default path renders the Hub with the 5 group headers", () => {
     render(<App />);
     expect(screen.getByRole("heading", { name: "ตัวเลขมงคล" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "ชื่อมงคล" })).toBeInTheDocument();
@@ -31,7 +36,7 @@ describe("App integration — real screens", () => {
 
   it("phone feature: fill input, submit, and a result appears", () => {
     render(<App />);
-    setHash("#/f/phone");
+    navigate({ name: "feature", id: "phone" });
 
     // The phone feature has a single tel input.
     const input = document.getElementById("mf-0") as HTMLInputElement;
@@ -46,9 +51,9 @@ describe("App integration — real screens", () => {
     expect(screen.getByText("78")).toBeInTheDocument();
   });
 
-  it("#/bazi renders the full BaZi screen", () => {
+  it("/bazi renders the full BaZi screen", () => {
     render(<App />);
-    setHash("#/bazi");
+    navigate({ name: "bazi" });
     expect(screen.getByText("เปิดดวงปาจื้อ")).toBeInTheDocument();
   });
 });

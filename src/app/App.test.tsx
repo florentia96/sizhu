@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { App } from "./App";
+import { hrefFor, type Route } from "./routes";
 
 vi.mock("../shared/layout/DetailLayout", () => ({
   DetailLayout: ({ id }: { id: string }) => <div data-testid="detail">detail:{id}</div>,
@@ -11,33 +12,37 @@ vi.mock("../screens/BaziApp", () => ({
   ),
 }));
 
+function go(route: Route): void {
+  window.history.pushState(null, "", hrefFor(route));
+}
+
 describe("App route switch", () => {
   beforeEach(() => {
-    window.location.hash = "";
+    go({ name: "hub" });
   });
   afterEach(() => {
-    window.location.hash = "";
+    go({ name: "hub" });
   });
 
-  it("shows the hub at the root hash", () => {
+  it("shows the hub at the root path", () => {
     render(<App />);
     expect(screen.getByRole("heading", { name: "ตัวเลขมงคล" })).toBeInTheDocument();
   });
 
   it("renders DetailLayout for a feature route", () => {
-    window.location.hash = "#/f/phone";
+    go({ name: "feature", id: "phone" });
     render(<App />);
     expect(screen.getByTestId("detail")).toHaveTextContent("detail:phone");
   });
 
-  it("renders BaziApp with params for #/bazi", () => {
-    window.location.hash = "#/bazi?bd=1990-05-12";
+  it("renders BaziApp with params for /bazi", () => {
+    go({ name: "bazi", params: { bd: "1990-05-12" } });
     render(<App />);
     expect(screen.getByTestId("bazi")).toHaveTextContent("bazi:1990-05-12");
   });
 
-  it("renders the design system for #/ds", () => {
-    window.location.hash = "#/ds";
+  it("renders the design system for /ds", () => {
+    go({ name: "ds" });
     render(<App />);
     expect(screen.getByText(/Design System/)).toBeInTheDocument();
   });
@@ -50,7 +55,7 @@ describe("App route switch", () => {
   });
 
   it("clicking the logo returns to the hub and clears the query", () => {
-    window.location.hash = "#/ds";
+    go({ name: "ds" });
     render(<App />);
     fireEvent.click(screen.getByText("卜"));
     expect(screen.getByRole("heading", { name: "ตัวเลขมงคล" })).toBeInTheDocument();

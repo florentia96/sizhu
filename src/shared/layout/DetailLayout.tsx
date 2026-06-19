@@ -1,6 +1,7 @@
 import { useState, useEffect, type CSSProperties } from "react";
 import type { Section } from "../sections/types";
 import { FEATURES } from "../../app/registry";
+import { hrefFor } from "../../app/routes";
 import { accentOf } from "../../hub/groups";
 import { useFormRefs } from "../forms/useFormRefs";
 import { FieldRenderer } from "../forms/FieldRenderer";
@@ -272,8 +273,8 @@ export function DetailLayout({
               sections={sections}
               url={
                 typeof window !== "undefined"
-                  ? `${window.location.origin}${window.location.pathname}#/f/${id}`
-                  : `#/f/${id}`
+                  ? `${window.location.origin}${hrefFor({ name: "feature", id })}`
+                  : hrefFor({ name: "feature", id })
               }
             />
             <SectionRenderer sections={sections} accent={accent} />

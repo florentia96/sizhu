@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 import App from "../src/app/App";
+import { hrefFor, type Route } from "../src/app/routes";
 
 function mockReducedMotion() {
   window.matchMedia = ((q: string) => ({
@@ -11,18 +12,22 @@ function mockReducedMotion() {
   })) as unknown as typeof window.matchMedia;
 }
 
-beforeEach(() => { mockReducedMotion(); });
-afterEach(() => { cleanup(); window.location.hash = ""; });
+function go(route: Route): void {
+  window.history.pushState(null, "", hrefFor(route));
+}
 
-describe("App shell: #/bazi route", () => {
-  it("#/bazi (no params) → BaziApp in paper mode (form visible)", () => {
-    window.location.hash = "#/bazi";
+beforeEach(() => { mockReducedMotion(); });
+afterEach(() => { cleanup(); go({ name: "hub" }); });
+
+describe("App shell: /bazi route", () => {
+  it("/bazi (no params) → BaziApp in paper mode (form visible)", () => {
+    go({ name: "bazi" });
     render(<App />);
     expect(screen.getByText("กรอกวัน-เวลาเกิด")).toBeTruthy();
   });
 
-  it("#/bazi?bd=1996-04-03&bt=23:58 → prefill autocast → result (form skipped)", () => {
-    window.location.hash = "#/bazi?bd=1996-04-03&bt=23:58";
+  it("/bazi?bd=1996-04-03&bt=23:58 → prefill autocast → result (form skipped)", () => {
+    go({ name: "bazi", params: { bd: "1996-04-03", bt: "23:58" } });
     render(<App />);
     expect(screen.queryByText("กรอกวัน-เวลาเกิด")).toBeNull();
     expect(screen.getByText(/03\/04\/1996/)).toBeTruthy();
