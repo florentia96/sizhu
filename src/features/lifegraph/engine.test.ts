@@ -39,6 +39,12 @@ describe("lifegraph engine", () => {
     ]);
   });
 
+  it("unknown city → note, not a silent Bangkok chart (regression: H6)", () => {
+    const r = lifeEngine.build(["1990-01-15", "14:30", "เมืองที่ไม่มีจริง", "ภาพรวมปีนี้", "2026-06-19"]);
+    expect(r.some((s) => s.kind === "note")).toBe(true);
+    expect(r.some((s) => s.kind === "verdict")).toBe(false);
+  });
+
   it("scope (vals[3]) is read and filters transits (regression: was ignored)", () => {
     const love = lifeEngine.build(["1985-07-20", "08:30", "กรุงเทพมหานคร", "เน้นความรัก", "2026-06-19"]);
     const all = lifeEngine.build(["1985-07-20", "08:30", "กรุงเทพมหานคร", "ภาพรวมปีนี้", "2026-06-19"]);

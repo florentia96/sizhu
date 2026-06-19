@@ -9,7 +9,7 @@ export const natalMeta: FeatureMeta = {
 };
 
 export const natalFields: Field[] = [
-  { label: "วันเกิด", type: "date" },
-  { label: "เวลาเกิด", type: "time" },
-  { label: "เมืองเกิด", type: "city" },
+  { label: "วันเกิด", type: "date", hint: "กรอก พ.ศ. หรือ ค.ศ. ก็ได้ ระบบปรับให้อัตโนมัติ" },
+  { label: "เวลาเกิด", type: "time", hint: "ต้องแม่นยำ — เวลาเกิดกำหนดลัคนาและตำแหน่งเรือน ถ้าไม่แน่ใจให้ใช้เวลาโดยประมาณ" },
+  { label: "เมืองเกิด", type: "city", hint: "เลือกจากรายการที่ขึ้นให้ ถ้าไม่พบให้พิมพ์พิกัด lat,lon (เช่น 18.79,98.98)" },
 ];

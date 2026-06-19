@@ -56,6 +56,12 @@ describe("natal engine", () => {
     ]);
   });
 
+  it("unknown city → note, not a silent Bangkok chart (regression: H6)", () => {
+    const r = natalEngine.build(["1990-01-15", "14:30", "เมืองที่ไม่มีจริง"]);
+    expect(r.some((s) => s.kind === "note")).toBe(true);
+    expect(r.some((s) => s.kind === "grid")).toBe(false);
+  });
+
   it("reference vector: Bangkok 1990-01-15 14:30 → Sun in Capricorn (มังกร)", () => {
     const r = natalEngine.build(VALS);
     const grid = r.find((s) => s.kind === "grid");
