@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { FEATURES } from "../app/registry";
 import type { FeatureDef, GroupId } from "../app/feature";
 import { GROUPS, type GroupMeta } from "./groups";
 import { TodayCard } from "./TodayCard";
+import { CategoryNav, type GroupFilter } from "./CategoryNav";
 
 export interface HubProps {
   query: string;
@@ -83,7 +85,7 @@ function FeatureCard({ f, onOpen }: { f: FlatFeature; onOpen: (id: string) => vo
       >
         {f.name}
       </div>
-      <div style={{ fontSize: ".83rem", color: "var(--text-dim)", lineHeight: 1.5 }}>{f.desc}</div>
+      <div style={{ fontSize: ".9rem", color: "var(--text-muted)", lineHeight: 1.55 }}>{f.desc}</div>
     </button>
   );
 }
@@ -207,6 +209,15 @@ export function HubScreen({ query, onOpen, features = FEATURES }: HubProps) {
     ? flat.filter((f) => (f.name + f.desc + f.groupTitle).toLowerCase().includes(q))
     : [];
 
+  const [activeGroup, setActiveGroup] = useState<GroupFilter>("all");
+  const counts = GROUPS.reduce(
+    (acc, g) => {
+      acc[g.id] = flat.filter((f) => f.group === g.id).length;
+      return acc;
+    },
+    {} as Record<GroupId, number>,
+  );
+
   return (
     <>
       {!searching && <TodayCard onOpen={onOpen} />}
@@ -264,7 +275,7 @@ export function HubScreen({ query, onOpen, features = FEATURES }: HubProps) {
                   <div style={{ fontWeight: 500, fontSize: ".97rem", color: "#ece4d2" }}>{f.name}</div>
                   <div
                     style={{
-                      fontSize: ".78rem",
+                      fontSize: ".84rem",
                       color: "var(--text-dim)",
                       whiteSpace: "nowrap",
                       overflow: "hidden",
@@ -280,7 +291,9 @@ export function HubScreen({ query, onOpen, features = FEATURES }: HubProps) {
         </section>
       ) : (
         <>
+          <CategoryNav active={activeGroup} onPick={setActiveGroup} counts={counts} />
           {GROUPS.map((g) => {
+            if (activeGroup !== "all" && g.id !== activeGroup) return null;
             const items = flat.filter((f) => f.group === g.id);
             if (items.length === 0) return null;
             return (
