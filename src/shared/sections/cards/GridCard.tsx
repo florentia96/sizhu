@@ -21,7 +21,7 @@ export function GridCard({ section, accent }: { section: Grid; accent: string })
             }}
           >
             <div style={{ fontSize: ".76rem", color: "var(--text-dim)" }}>{c.name}</div>
-            <div style={{ fontFamily: "'Noto Serif Thai',serif", fontWeight: 600, fontSize: "1.02rem", marginTop: 4, color: a }}>
+            <div style={{ fontFamily: "'Anuphan',system-ui,sans-serif", fontWeight: 600, fontSize: "1.02rem", marginTop: 4, color: a }}>
               {c.value}
             </div>
             {c.note && <div style={{ fontSize: ".74rem", color: "var(--text-faint)", marginTop: 3, lineHeight: 1.45 }}>{c.note}</div>}

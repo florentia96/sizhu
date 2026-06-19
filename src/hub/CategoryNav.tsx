@@ -7,7 +7,7 @@ export type GroupFilter = GroupId | "all";
 const WRAP: CSSProperties = {
   display: "flex",
   flexWrap: "wrap",
-  gap: 8,
+  gap: "var(--tap-gap, 8px)",
   margin: "36px 0 6px",
 };
 
@@ -15,7 +15,7 @@ const chip = (activeColor: string | null): CSSProperties => ({
   display: "inline-flex",
   alignItems: "center",
   gap: 8,
-  minHeight: 44,
+  minHeight: "var(--tap-min, 44px)",
   padding: "8px 15px",
   borderRadius: 24,
   cursor: "pointer",

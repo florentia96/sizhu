@@ -32,7 +32,7 @@ const EYEBROW: CSSProperties = {
 };
 
 const NAME: CSSProperties = {
-  fontFamily: "var(--font-head, 'Noto Serif Thai', serif)",
+  fontFamily: "var(--font-head, 'Anuphan', system-ui, sans-serif)",
   fontWeight: 700,
   fontSize: "clamp(1.4rem,4.6vw,1.95rem)",
   lineHeight: 1.18,
@@ -41,7 +41,7 @@ const NAME: CSSProperties = {
 };
 
 const HEADLINE: CSSProperties = {
-  fontFamily: "var(--font-head, 'Noto Serif Thai', serif)",
+  fontFamily: "var(--font-head, 'Anuphan', system-ui, sans-serif)",
   fontWeight: 600,
   fontSize: "clamp(1.02rem,3vw,1.22rem)",
   lineHeight: 1.4,

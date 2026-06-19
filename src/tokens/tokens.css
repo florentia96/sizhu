@@ -28,6 +28,10 @@
   --radius-sm: 4px;
   --maxw-form: 540px;
   --maxw-result: 880px;
+
+  /* touch: 44px = พื้นต่ำสุดของ tap target, 8px = ระยะห่างขั้นต่ำระหว่างปุ่ม */
+  --tap-min: 44px;
+  --tap-gap: 8px;
 }
 
 * {
@@ -39,13 +43,26 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 body {
-  font-family: "Noto Sans Thai", system-ui, sans-serif;
+  font-family: "Anuphan", system-ui, sans-serif;
   color: var(--ink);
   line-height: 1.6;
   background: var(--dark-bg);
 }
 .cn {
   font-family: "Noto Serif SC", serif;
+}
+
+/* แตะแล้วตอบสนองทันที (กัน tap-delay 300ms) + ฟีดแบ็กตอนกดทุกปุ่ม */
+button,
+[role="button"],
+select,
+summary,
+label {
+  touch-action: manipulation;
+}
+button:active,
+[role="button"]:active {
+  opacity: 0.82;
 }
 
 /* focus ที่มองเห็นได้ชัดทุก control (a11y) */

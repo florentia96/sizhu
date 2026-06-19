@@ -9,7 +9,7 @@ export function CardsCard({ section, accent }: { section: Cards; accent: string 
     <CardSurface>
       <div
         style={{
-          fontFamily: "'Noto Serif Thai',serif",
+          fontFamily: "'Anuphan',system-ui,sans-serif",
           fontWeight: 600,
           fontSize: "1.05rem",
           color: "var(--text-strong)",
@@ -62,7 +62,7 @@ export function CardsCard({ section, accent }: { section: Cards; accent: string 
             )}
             <div
               style={{
-                fontFamily: "'Noto Serif SC',serif",
+                fontFamily: "'Anuphan','Noto Serif SC',sans-serif",
                 fontWeight: 700,
                 fontSize: "1.3rem",
                 letterSpacing: ".04em",

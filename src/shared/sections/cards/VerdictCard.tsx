@@ -41,7 +41,7 @@ export function VerdictCard({ section, accent }: { section: Verdict; accent: str
             padding: "6px 15px",
             borderRadius: 20,
             fontWeight: 600,
-            fontFamily: "'Noto Serif Thai',serif",
+            fontFamily: "'Anuphan',system-ui,sans-serif",
             fontSize: "1rem",
           }}
         >

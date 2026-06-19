@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Serif+Thai:wght@500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Anuphan:wght@300;400;500;600;700&display=swap");
 
 :root {
   --bg: #0e1116;
@@ -26,9 +26,14 @@
   --radius-input: 4px;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 
+  /* touch: 44px = พื้นต่ำสุดของ tap target (Apple HIG / Material), 8px = ระยะห่างขั้นต่ำระหว่างปุ่ม */
+  --tap-min: 44px;
+  --tap-gap: 8px;
+
   --font-cn: "Noto Serif SC", serif;
-  --font-head: "Noto Serif Thai", serif;
-  --font-body: "Noto Sans Thai", system-ui, sans-serif;
+  /* ฟอนต์ไทยไม่มีหัว (loopless) ตัวเดียวทั้งเว็บ — หัวเรื่อง/เนื้อหาแยกด้วยน้ำหนัก */
+  --font-head: "Anuphan", system-ui, sans-serif;
+  --font-body: "Anuphan", system-ui, sans-serif;
 }
 
 * {
@@ -62,6 +67,19 @@ select,
 textarea,
 button {
   font-family: inherit;
+}
+
+/* แตะแล้วตอบสนองทันที (กัน tap-delay 300ms) + ฟีดแบ็กตอนกดทุกปุ่มทั้งเว็บ */
+button,
+[role="button"],
+select,
+summary,
+label {
+  touch-action: manipulation;
+}
+button:active,
+[role="button"]:active {
+  opacity: 0.82;
 }
 
 input::placeholder,

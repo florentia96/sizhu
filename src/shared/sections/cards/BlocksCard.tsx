@@ -20,7 +20,7 @@ export function BlocksCard({ section }: { section: Blocks }) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
-              <div style={{ fontFamily: "'Noto Serif Thai',serif", fontWeight: 600, fontSize: "1rem", color: "var(--text-strong)" }}>
+              <div style={{ fontFamily: "'Anuphan',system-ui,sans-serif", fontWeight: 600, fontSize: "1rem", color: "var(--text-strong)" }}>
                 {bl.title}
               </div>
               <span
@@ -43,7 +43,7 @@ export function BlocksCard({ section }: { section: Blocks }) {
                 <span
                   key={j}
                   style={{
-                    fontFamily: "'Noto Serif Thai',serif",
+                    fontFamily: "'Anuphan',system-ui,sans-serif",
                     fontWeight: 500,
                     fontSize: ".92rem",
                     padding: "6px 14px",

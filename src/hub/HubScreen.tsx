@@ -183,6 +183,7 @@ function Hero({ flat, onOpen }: { flat: FlatFeature[]; onOpen: (id: string) => v
                 display: "flex",
                 alignItems: "center",
                 gap: 9,
+                minHeight: "var(--tap-min)",
                 background: "rgba(255,255,255,.04)",
                 color: "var(--text)",
                 border: "1px solid rgba(216,166,74,.3)",

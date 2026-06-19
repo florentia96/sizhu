@@ -9,7 +9,7 @@ export function ProseCard({ section, accent }: { section: Prose; accent: string 
     <CardSurface>
       <div
         style={{
-          fontFamily: "'Noto Serif Thai',serif",
+          fontFamily: "'Anuphan',system-ui,sans-serif",
           fontWeight: 600,
           fontSize: "1.05rem",
           color: "var(--text-strong)",
@@ -25,7 +25,7 @@ export function ProseCard({ section, accent }: { section: Prose; accent: string 
         {section.paras.map((p, i) => (
           <div key={i}>
             {p.h && <div style={{ fontWeight: 600, fontSize: ".95rem", color: "var(--text-strong)", marginBottom: 3 }}>{p.h}</div>}
-            <p style={{ margin: 0, fontSize: ".92rem", lineHeight: 1.75, color: "var(--text)" }}>{p.t}</p>
+            <p style={{ margin: 0, fontSize: "1rem", lineHeight: 1.8, color: "var(--text)" }}>{p.t}</p>
           </div>
         ))}
       </div>

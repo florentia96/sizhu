@@ -73,7 +73,7 @@ function featureHtml(template: string, f: Feat): string {
 
   // เนื้อหา static ใน #root — crawler ที่ไม่รัน JS เห็นชื่อ+คำอธิบาย (React แทนที่ตอน mount)
   const intro =
-    `<div id="root"><main style="max-width:680px;margin:0 auto;padding:48px 22px;font-family:sans-serif">` +
+    `<div id="root"><main style="max-width:680px;margin:0 auto;padding:48px 22px;font-family:'Anuphan',system-ui,sans-serif">` +
     `<h1>${esc(f.name)}</h1><p>${esc(f.desc)}</p>` +
     `<p><a href="${SITE}/">MooDee — ดูดวงครบ จบในที่เดียว 22 บริการ</a></p></main></div>`;
   html = replaceOnce(html, /<div id="root">\s*<\/div>/, intro, "#root");

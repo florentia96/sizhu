@@ -1,4 +1,4 @@
-import { useState, useEffect, type CSSProperties } from "react";
+import { useState, useEffect, useRef, type CSSProperties } from "react";
 import type { Section } from "../sections/types";
 import { FEATURES } from "../../app/registry";
 import { hrefFor } from "../../app/routes";
@@ -39,6 +39,7 @@ export function DetailLayout({
 }) {
   const { refFor, readInputs } = useFormRefs();
   const [sections, setSections] = useState<Section[] | null>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
   const [profile, setProfile] = useState(loadProfile);
   const [remember, setRemember] = useState(true);
   const [formKey, setFormKey] = useState(0);
@@ -55,6 +56,10 @@ export function DetailLayout({
           onClick={onHome}
           style={{
             marginTop: "14px",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "var(--tap-min, 44px)",
             border: "1px solid var(--border-gold, rgba(216,166,74,.3))",
             background: "var(--surface-inset, rgba(255,255,255,.04))",
             color: "var(--text, #e7dcc2)",
@@ -86,6 +91,15 @@ export function DetailLayout({
       if (Object.keys(patch).length) setProfile(patchProfile(patch));
     }
     setSections(def.engine.build(vals));
+    // มือถือ (คอลัมน์เดียว): ผลอยู่ใต้ฟอร์ม — เลื่อนไปให้เห็นผลทันทีหลังกด
+    if (narrow) {
+      const reduce =
+        typeof window !== "undefined" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      requestAnimationFrame(() =>
+        resultRef.current?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }),
+      );
+    }
   };
 
   const onClearSaved = (): void => {
@@ -120,7 +134,7 @@ export function DetailLayout({
     border: "none",
     borderRadius: "4px",
     padding: "14px",
-    fontFamily: "'Noto Serif Thai',serif",
+    fontFamily: "'Anuphan',system-ui,sans-serif",
     fontWeight: 600,
     fontSize: "1.05rem",
     color: "#fff",
@@ -141,10 +155,11 @@ export function DetailLayout({
     alignItems: "center",
     gap: "9px",
     width: "100%",
-    margin: "4px 0 12px",
+    minHeight: "var(--tap-min, 44px)",
+    margin: "4px 0 8px",
     background: "none",
     border: 0,
-    padding: 0,
+    padding: "4px 0",
     cursor: "pointer",
     textAlign: "left",
     fontFamily: "inherit",
@@ -166,9 +181,12 @@ export function DetailLayout({
   const rememberBoxOn: CSSProperties = { background: "var(--primary, #b1352a)" };
 
   const clearLink: CSSProperties = {
+    display: "inline-flex",
+    alignItems: "center",
+    minHeight: "var(--tap-min, 44px)",
     background: "none",
     border: 0,
-    padding: 0,
+    padding: "0 16px",
     cursor: "pointer",
     fontFamily: "inherit",
     fontSize: ".74rem",
@@ -181,7 +199,7 @@ export function DetailLayout({
       <div style={formCardStyle}>
         <div
           style={{
-            fontFamily: "'Noto Serif Thai',serif",
+            fontFamily: "'Anuphan',system-ui,sans-serif",
             fontWeight: 600,
             fontSize: "1.05rem",
             color: "var(--text-strong, #ece4d2)",
@@ -259,7 +277,8 @@ export function DetailLayout({
         )}
       </div>
 
-      <div>
+      {/* scrollMarginTop เผื่อ sticky header (สูง ~68px) ไม่ให้บังหัวผลตอน scrollIntoView — ตรงกับ top ของฟอร์ม sticky */}
+      <div ref={resultRef} style={{ scrollMarginTop: "80px" }}>
         {sections ? (
           <>
             <ResultHero
@@ -304,7 +323,7 @@ export function DetailLayout({
             </div>
             <div
               style={{
-                fontFamily: "'Noto Serif Thai',serif",
+                fontFamily: "'Anuphan',system-ui,sans-serif",
                 fontWeight: 600,
                 fontSize: "1.1rem",
                 color: "var(--text-muted, #b9b2a0)",

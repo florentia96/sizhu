@@ -61,7 +61,7 @@ export function CompatCard({ section, accent }: { section: Compat; accent: strin
           color: a,
           padding: "7px 19px",
           borderRadius: 20,
-          fontFamily: "'Noto Serif Thai',serif",
+          fontFamily: "'Anuphan',system-ui,sans-serif",
           fontWeight: 600,
           fontSize: "1.02rem",
           margin: "8px 0 4px",

@@ -5,6 +5,7 @@ const controlStyle: CSSProperties = {
   fontSize: "16px",
   width: "100%",
   minWidth: "0px",
+  minHeight: "var(--tap-min, 44px)",
   colorScheme: "dark",
   border: "1px solid var(--border-gold, rgba(216,166,74,.22))",
   background: "var(--surface-inset, rgba(255,255,255,.04))",

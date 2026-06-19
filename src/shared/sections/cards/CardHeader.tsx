@@ -10,7 +10,7 @@ export function CardHeader({
   return (
     <div
       style={{
-        fontFamily: "'Noto Serif Thai',serif",
+        fontFamily: "'Anuphan',system-ui,sans-serif",
         fontWeight: 600,
         fontSize: "1.05rem",
         color: "var(--text-strong)",

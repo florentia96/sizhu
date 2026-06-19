@@ -24,6 +24,7 @@ const BTN: CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
   gap: 7,
+  minHeight: "var(--tap-min, 44px)",
   fontFamily: "inherit",
   fontSize: ".84rem",
   color: "var(--paper, #e7dcc2)",

@@ -44,7 +44,7 @@
   color: var(--primary-bright);
 }
 .brand-sub {
-  font-family: "Noto Serif Thai", serif;
+  font-family: "Anuphan", system-ui, sans-serif;
   font-size: clamp(1.15rem, 4vw, 1.4rem);
   font-weight: 600;
   margin-top: 10px;
@@ -65,7 +65,7 @@
   padding: clamp(18px, 4vw, 28px);
 }
 .form-head {
-  font-family: "Noto Serif Thai", serif;
+  font-family: "Anuphan", system-ui, sans-serif;
   font-weight: 600;
   font-size: 1.05rem;
   color: var(--text-strong);
@@ -109,6 +109,7 @@ input[type="number"] {
   border: 1px solid var(--border-gold);
   border-radius: var(--radius-input);
   padding: 10px;
+  min-height: var(--tap-min);
   width: 100%;
   min-width: 0;
   display: block;
@@ -164,6 +165,7 @@ input[type="number"] {
   font-family: inherit;
   font-size: 0.98rem;
   padding: 11px 4px;
+  min-height: var(--tap-min);
   border: 0;
   background: transparent;
   color: var(--text-muted);
@@ -176,7 +178,10 @@ input[type="number"] {
   font-weight: 600;
 }
 .adv-toggle {
-  margin-top: 16px;
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
   font-size: 0.82rem;
   color: var(--primary-bright);
   background: none;
@@ -195,7 +200,8 @@ input[type="number"] {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 13px;
+  margin-top: 8px;
+  min-height: var(--tap-min);
   background: none;
   border: 0;
   cursor: pointer;
@@ -228,7 +234,7 @@ input[type="number"] {
 .go {
   width: 100%;
   margin-top: 18px;
-  font-family: "Noto Serif Thai", serif;
+  font-family: "Anuphan", system-ui, sans-serif;
   font-weight: 600;
   font-size: 1.1rem;
   color: var(--text-strong);
@@ -286,6 +292,10 @@ input[type="number"] {
   cursor: pointer;
   color: var(--dark-text);
 }
+/* ยกเว้นปุ่มเต็มจอจาก :active dim ทั่วโลก — ไม่ให้ทั้งจอหรี่ตอนแตะเพื่อข้าม */
+.casting:active {
+  opacity: 1;
+}
 .orb {
   position: relative;
   width: 170px;
@@ -317,7 +327,7 @@ input[type="number"] {
   text-shadow: 0 0 18px rgba(216, 166, 74, 0.6);
 }
 .casting-text {
-  font-family: "Noto Serif Thai", serif;
+  font-family: "Anuphan", system-ui, sans-serif;
   font-size: 1.2rem;
   letter-spacing: 0.14em;
 }
@@ -393,7 +403,7 @@ input[type="number"] {
   text-shadow: 0 0 14px rgba(216, 166, 74, 0.35);
 }
 .recap {
-  font-family: "Noto Serif Thai", serif;
+  font-family: "Anuphan", system-ui, sans-serif;
   color: var(--dark-soft);
   font-size: 0.92rem;
   white-space: nowrap;
@@ -401,13 +411,16 @@ input[type="number"] {
   text-overflow: ellipsis;
 }
 .btn-back {
-  font-family: "Noto Sans Thai", sans-serif;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  font-family: "Anuphan", system-ui, sans-serif;
   font-size: 0.85rem;
   color: var(--paper);
   background: var(--ember-soft);
   border: 1px solid rgba(224, 88, 75, 0.4);
   border-radius: 20px;
-  padding: 7px 15px;
+  padding: 7px 16px;
   cursor: pointer;
   white-space: nowrap;
   flex: 0 0 auto;
@@ -445,7 +458,7 @@ input[type="number"] {
   box-shadow: 0 16px 46px rgba(0, 0, 0, 0.55), 0 0 24px rgba(216, 166, 74, 0.13);
 }
 .panel-head {
-  font-family: "Noto Serif Thai", serif;
+  font-family: "Anuphan", system-ui, sans-serif;
   font-weight: 600;
   font-size: clamp(1.02rem, 3.4vw, 1.18rem);
   color: var(--dark-text);
@@ -483,7 +496,7 @@ input[type="number"] {
   margin-bottom: 10px;
 }
 .tldr-headline {
-  font-family: "Noto Serif Thai", serif;
+  font-family: "Anuphan", system-ui, sans-serif;
   font-weight: 700;
   font-size: clamp(1.5rem, 5.4vw, 2rem);
   color: #f4ecd9;
@@ -707,7 +720,7 @@ input[type="number"] {
   gap: 9px;
 }
 .domains .dhead {
-  font-family: "Noto Serif Thai", serif;
+  font-family: "Anuphan", system-ui, sans-serif;
   font-weight: 600;
   font-size: 0.95rem;
   color: var(--dark-text);
@@ -721,8 +734,8 @@ input[type="number"] {
 }
 .domain {
   color: var(--dark-soft);
-  font-size: 0.9rem;
-  line-height: 1.65;
+  font-size: 0.95rem;
+  line-height: 1.7;
 }
 .domain b {
   color: var(--dark-text);
@@ -754,7 +767,7 @@ input[type="number"] {
   min-width: 180px;
 }
 .dm-name {
-  font-family: "Noto Serif Thai", serif;
+  font-family: "Anuphan", system-ui, sans-serif;
   font-weight: 600;
   font-size: 1.18rem;
   color: #f4ecd9;
@@ -927,7 +940,7 @@ input[type="number"] {
   margin-top: 16px;
 }
 .rel-head {
-  font-family: "Noto Serif Thai", serif;
+  font-family: "Anuphan", system-ui, sans-serif;
   font-weight: 600;
   font-size: 0.95rem;
   color: var(--dark-text);
@@ -945,8 +958,9 @@ input[type="number"] {
   line-height: 1.65;
   margin: 8px 0 0;
 }
+/* label ไทย + อักษรจีน (เช่น "ชง (สวน 沖)") ในแถวเดียว — ไทยใช้ Anuphan, จีนตกไป SC ทีละตัวอักษร */
 .rel-item b {
-  font-family: "Noto Serif Thai", serif;
+  font-family: "Anuphan", "Noto Serif SC", sans-serif;
   color: var(--ember);
 }
 .rel-item .pairs {
@@ -1256,7 +1270,11 @@ input[type="number"] {
 }
 .btn-restart {
   margin-top: 18px;
-  font-family: "Noto Serif Thai", serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap-min);
+  font-family: "Anuphan", system-ui, sans-serif;
   font-size: 1rem;
   color: var(--paper);
   background: var(--ember-soft);

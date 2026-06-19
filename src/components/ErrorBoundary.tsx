@@ -35,7 +35,7 @@ export class ErrorBoundary extends Component<Props, State> {
             textAlign: "center",
             background: "#e7dcc2",
             color: "#22262d",
-            fontFamily: "'Noto Sans Thai', system-ui, sans-serif",
+            fontFamily: "'Anuphan', system-ui, sans-serif",
           }}
         >
           <div style={{ fontFamily: "'Noto Serif SC', serif", fontSize: "3rem", color: "#b1352a" }}>
@@ -50,7 +50,8 @@ export class ErrorBoundary extends Component<Props, State> {
             onClick={() => window.location.reload()}
             style={{
               marginTop: "8px",
-              fontFamily: "'Noto Serif Thai', serif",
+              minHeight: "var(--tap-min, 44px)",
+              fontFamily: "'Anuphan', system-ui, sans-serif",
               fontSize: "1rem",
               color: "#fff",
               background: "#b1352a",

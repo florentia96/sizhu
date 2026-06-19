@@ -46,6 +46,7 @@ const SEARCH_WRAP: React.CSSProperties = {
 const SEARCH_INPUT: React.CSSProperties = {
   width: "100%",
   minWidth: 0,
+  minHeight: "var(--tap-min)",
   border: "1px solid rgba(216,166,74,.22)",
   background: "rgba(255,255,255,.035)",
   borderRadius: "var(--radius-input)",
@@ -86,7 +87,7 @@ export function Header({ query, onQueryChange, onLogo }: HeaderProps) {
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") onLogo();
           }}
-          style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer", flexShrink: 0 }}
+          style={{ display: "flex", alignItems: "center", gap: 12, minHeight: "var(--tap-min)", cursor: "pointer", flexShrink: 0 }}
         >
           <div style={LOGO_MARK}>卜</div>
           <div style={{ lineHeight: 1.05 }}>

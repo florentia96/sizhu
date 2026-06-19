@@ -48,11 +48,10 @@ describe("tokens.css", () => {
     }
   });
 
-  it("imports the three Noto fonts from Google Fonts", () => {
+  it("imports Noto Serif SC (Chinese glyphs) + Anuphan (Thai, loopless) from Google Fonts", () => {
     expect(css).toContain("fonts.googleapis.com");
     expect(css).toContain("Noto+Serif+SC");
-    expect(css).toContain("Noto+Serif+Thai");
-    expect(css).toContain("Noto+Sans+Thai");
+    expect(css).toContain("Anuphan");
   });
 
   it("sets the body background and a radial gradient", () => {

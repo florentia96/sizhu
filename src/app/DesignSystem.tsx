@@ -39,6 +39,7 @@ export function DesignSystem({ onHome }: { onHome: () => void }) {
           display: "inline-flex",
           alignItems: "center",
           gap: 8,
+          minHeight: "var(--tap-min, 44px)",
           background: "none",
           border: "none",
           color: "var(--text-dim)",
@@ -114,11 +115,11 @@ export function DesignSystem({ onHome }: { onHome: () => void }) {
             หัวเรื่องอักษรไทย
           </div>
           <div style={{ fontSize: ".74rem", color: "var(--text-dim)", margin: "4px 0 18px" }}>
-            Noto Serif Thai — หัวเรื่อง
+Anuphan (ไม่มีหัว) — หัวเรื่อง น้ำหนัก 600–700
           </div>
           <div style={{ fontSize: "1rem", color: "var(--text)" }}>เนื้อความอ่านสบายตา</div>
           <p style={{ fontSize: ".88rem", color: "var(--text-muted)", margin: "5px 0 0" }}>
-            Noto Sans Thai — ย่อหน้าและคำอธิบายทั่วไป น้ำหนัก 300–500
+Anuphan (ไม่มีหัว) — ย่อหน้าและคำอธิบายทั่วไป น้ำหนัก 300–500
           </p>
         </div>
 
@@ -131,6 +132,7 @@ export function DesignSystem({ onHome }: { onHome: () => void }) {
               type="button"
               style={{
                 border: "none",
+                minHeight: "var(--tap-min, 44px)",
                 background: "var(--primary)",
                 color: "#fff",
                 borderRadius: "var(--radius-input)",
@@ -148,6 +150,7 @@ export function DesignSystem({ onHome }: { onHome: () => void }) {
               type="button"
               style={{
                 border: "1px solid rgba(216,166,74,.3)",
+                minHeight: "var(--tap-min, 44px)",
                 background: "none",
                 color: "#cfc7b2",
                 borderRadius: "var(--radius-input)",
@@ -187,6 +190,7 @@ export function DesignSystem({ onHome }: { onHome: () => void }) {
             style={{
               width: "100%",
               minWidth: 0,
+              minHeight: "var(--tap-min, 44px)",
               border: "1px solid rgba(216,166,74,.22)",
               background: "var(--surface-inset)",
               borderRadius: "var(--radius-input)",

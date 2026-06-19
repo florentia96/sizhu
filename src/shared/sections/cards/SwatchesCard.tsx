@@ -10,7 +10,7 @@ export function SwatchesCard({ section, accent }: { section: Swatches; accent: s
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
         <div
           style={{
-            fontFamily: "'Noto Serif Thai',serif",
+            fontFamily: "'Anuphan',system-ui,sans-serif",
             fontWeight: 600,
             fontSize: "1.05rem",
             color: "var(--text-strong)",

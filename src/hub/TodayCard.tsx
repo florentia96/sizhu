@@ -50,7 +50,7 @@ const EYEBROW: CSSProperties = {
 };
 
 const DATELINE: CSSProperties = {
-  fontFamily: "var(--font-head, serif)",
+  fontFamily: "var(--font-head, 'Anuphan', system-ui, sans-serif)",
   fontWeight: 600,
   fontSize: "clamp(1.15rem,3.4vw,1.5rem)",
   color: "var(--text-strong, #f4ecd9)",
@@ -75,6 +75,7 @@ const CHIP: CSSProperties = {
   display: "flex",
   alignItems: "center",
   gap: 9,
+  minHeight: "var(--tap-min, 44px)",
   background: "rgba(255,255,255,.04)",
   color: "var(--text, #e7dcc2)",
   border: "1px solid rgba(216,166,74,.3)",
@@ -87,6 +88,7 @@ const CHIP: CSSProperties = {
 
 const DATE_INPUT: CSSProperties = {
   fontSize: "16px",
+  minHeight: "var(--tap-min, 44px)",
   colorScheme: "dark",
   border: "1px solid var(--border-gold, rgba(216,166,74,.3))",
   background: "var(--surface-inset, rgba(255,255,255,.04))",
@@ -97,9 +99,12 @@ const DATE_INPUT: CSSProperties = {
 };
 
 const LINK: CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  minHeight: "var(--tap-min, 44px)",
   background: "none",
   border: 0,
-  padding: 0,
+  padding: "0 12px",
   cursor: "pointer",
   fontFamily: "inherit",
   fontSize: ".78rem",
