@@ -114,4 +114,12 @@ describe("swatch / DAY_LORD / COLOR_HEX", () => {
   it("COLOR_HEX maps ทอง to the gold tone hex", () => {
     expect(COLOR_HEX["ทอง"]).toBe("#d8a64a");
   });
+  it("every DAY_LORD color name across all aspects resolves to a real hex (no #888 fallback)", () => {
+    Object.entries(DAY_LORD).forEach(([day, info]) => {
+      const names = [...info.color, ...info.avoid, ...info.work, ...info.money, ...info.love, ...info.luck];
+      names.forEach((name) => {
+        expect(COLOR_HEX[name], `${day}: "${name}" has no COLOR_HEX entry`).toBeDefined();
+      });
+    });
+  });
 });

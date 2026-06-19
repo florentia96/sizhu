@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="th" data-mode="light" data-theme="kkpam" data-font="serif">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>MooDee — Content Verification Audit</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Anuphan:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Bai+Jamjuree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script>
+  (function(){
+    try{
+      var r=document.documentElement;
+      var m=localStorage.getItem('hs-mode')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+      r.setAttribute('data-mode',m);
+      r.setAttribute('data-theme',localStorage.getItem('hs-skin')||'kkpam');
+      r.setAttribute('data-font',localStorage.getItem('hs-font')||'serif');
+    }catch(e){}
+  })();
+</script>
+
+<style>
+  :root{
+    --sage-ink:#3E8C63; --sage-soft:#DDF1E6;
+    --amber-ink:#977414; --amber-soft:#FBEFCF;
+    --rose-ink:#BC4F6E; --rose-soft:#FBE1E8;
+    --sky-ink:#3E72A8; --sky-soft:#DEEAF8;
+    --lilac-ink:#7257A8; --lilac-soft:#ECE5F8;
+    --pill-radius:999px; --border-w:1px; --backdrop:none; --blob-op:0;
+  }
+  [data-mode="dark"]{
+    --sage-ink:#9AD4B6; --sage-soft:#21332A;
+    --amber-ink:#F0D08A; --amber-soft:#352E1F;
+    --rose-ink:#F2AABA; --rose-soft:#36222A;
+    --sky-ink:#A6CAEC; --sky-soft:#1F2D3A;
+    --lilac-ink:#C7B6EC; --lilac-soft:#2C2542;
+  }
+
+  [data-font="serif"]{
+    --font-display:"Fraunces",Georgia,"Noto Serif Thai",serif;
+    --font-body:"Anuphan","Noto Sans Thai","Sukhumvit Set",-apple-system,BlinkMacSystemFont,sans-serif;
+    --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --h-weight:600; --h-track:-.02em;
+  }
+  [data-font="grotesque"]{
+    --font-display:"Bricolage Grotesque","Anuphan",system-ui,sans-serif;
+    --font-body:"Bai Jamjuree","Noto Sans Thai","Sukhumvit Set",-apple-system,BlinkMacSystemFont,sans-serif;
+    --font-mono:"Spline Sans Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --h-weight:700; --h-track:-.03em;
+  }
+
+  /* ============ THEME 1 · PASTEL ============ */
+  [data-theme="pastel"]{
+    --page-bg:#F7F4FB; --ink:#3A3550; --ink-soft:#615B7C; --muted:#938CAC;
+    --surface:#FFFFFF; --surface-2:#FBF9FE; --border:#EAE3F3; --hair:#EAE3F3;
+    --radius:16px; --radius-sm:11px; --backdrop:none;
+    --shadow:0 2px 6px rgba(120,95,160,.06),0 14px 38px -14px rgba(120,95,160,.24);
+    --shadow-sm:0 1px 3px rgba(120,95,160,.07),0 5px 16px -8px rgba(120,95,160,.18);
+    --accent:#F2A48E; --accent-ink:#C66A4D; --accent-soft:#FCE6DD; --pill-bg:#EFEAF7; --code-bg:#FBF9FE;
+    --grad-accent:linear-gradient(120deg,#F2A48E,#BBA6E0);
+    --blob-op:1; --blob-a:rgba(242,164,142,.22); --blob-b:rgba(187,166,224,.20); --blob-c:rgba(140,203,168,.18);
+  }
+  [data-theme="pastel"][data-mode="dark"]{
+    --page-bg:#1F1A29; --ink:#ECE6F2; --ink-soft:#C8C0D8; --muted:#968CAE;
+    --surface:#282234; --surface-2:#312940; --border:#3C3450; --hair:#3C3450;
+    --accent:#F4AD97; --accent-ink:#F8BEA8; --accent-soft:#3A2C2E; --pill-bg:#282234; --code-bg:#1A1726;
+    --shadow:0 2px 6px rgba(0,0,0,.3),0 16px 40px -16px rgba(0,0,0,.6);
+    --shadow-sm:0 1px 3px rgba(0,0,0,.3),0 6px 18px -8px rgba(0,0,0,.5);
+    --blob-a:rgba(244,173,151,.10); --blob-b:rgba(199,182,236,.12); --blob-c:rgba(154,212,182,.08);
+  }
+
+  /* ============ THEME 2 · GLASS ============ */
+  [data-theme="glass"]{
+    --page-bg:linear-gradient(135deg,#DCE6FF 0%,#ECDFFB 36%,#FBE5DF 70%,#E1F3EC 100%);
+    --ink:#2D2A45; --ink-soft:#565379; --muted:#8E89AC;
+    --surface:rgba(255,255,255,.55); --surface-2:rgba(255,255,255,.40); --border:rgba(255,255,255,.75); --hair:rgba(120,110,160,.16);
+    --radius:20px; --radius-sm:14px; --backdrop:blur(18px) saturate(1.6);
+    --shadow:0 4px 24px -8px rgba(90,75,160,.22),0 2px 6px rgba(90,75,160,.07);
+    --shadow-sm:0 2px 14px -6px rgba(90,75,160,.18);
+    --accent:#7B6BE6; --accent-ink:#5B43C8; --accent-soft:rgba(123,107,230,.14); --pill-bg:rgba(255,255,255,.40); --code-bg:rgba(255,255,255,.66);
+    --grad-accent:linear-gradient(120deg,#5E83F2,#B07FE6,#F2978A);
+    --blob-op:1; --blob-a:rgba(110,140,255,.30); --blob-b:rgba(208,135,232,.30); --blob-c:rgba(245,150,135,.30);
+  }
+  [data-theme="glass"][data-mode="dark"]{
+    --page-bg:linear-gradient(140deg,#1A1D37 0%,#2A1F40 38%,#3A2238 70%,#152E32 100%);
+    --ink:#ECE9F6; --ink-soft:#C5C0DC; --muted:#928BB0;
+    --surface:rgba(42,38,66,.50); --surface-2:rgba(42,38,66,.40); --border:rgba(255,255,255,.12); --hair:rgba(255,255,255,.09);
+    --accent:#A99BF2; --accent-ink:#C0B4FB; --accent-soft:rgba(169,155,242,.16); --pill-bg:rgba(42,38,66,.40); --code-bg:rgba(20,18,32,.50);
+    --shadow:0 8px 30px -10px rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.3);
+    --shadow-sm:0 4px 18px -8px rgba(0,0,0,.5);
+    --blob-a:rgba(110,140,255,.22); --blob-b:rgba(208,135,232,.22); --blob-c:rgba(245,150,135,.20);
+  }
+
+  /* ============ THEME 3 · NEO-BRUTALISM ============ */
+  [data-theme="brutal"]{
+    --page-bg:#FFFDF5; --ink:#15130F; --ink-soft:#3A352B; --muted:#6B6456;
+    --surface:#FFFFFF; --surface-2:#FFF8DC; --border:#15130F; --hair:#15130F;
+    --radius:0; --radius-sm:0; --pill-radius:0; --border-w:2.5px; --backdrop:none;
+    --shadow:5px 5px 0 #15130F; --shadow-sm:3px 3px 0 #15130F;
+    --accent:#FF5277; --accent-ink:#15130F; --accent-soft:#FFE94D; --pill-bg:#FFE94D; --code-bg:#FFF8DC;
+    --grad-accent:linear-gradient(120deg,#FF5277,#3D7BFF);
+    --blob-op:0;
+  }
+  [data-theme="brutal"][data-mode="dark"]{
+    --page-bg:#13110C; --ink:#FFFDF5; --ink-soft:#D9D3C4; --muted:#9A9484;
+    --surface:#1E1B14; --surface-2:#262218; --border:#FFFDF5; --hair:#FFFDF5;
+    --shadow:5px 5px 0 #FFFDF5; --shadow-sm:3px 3px 0 #FFFDF5;
+    --accent:#FF7A98; --accent-ink:#FFFDF5; --accent-soft:#3A3410; --pill-bg:#3A3410; --code-bg:#262218;
+  }
+
+  /* ============ THEME 4 · BENTO ============ */
+  [data-theme="bento"]{
+    --page-bg:#EEF1F7; --ink:#1E2233; --ink-soft:#535873; --muted:#8A90A8;
+    --surface:#FFFFFF; --surface-2:#F4F6FB; --border:#E6EAF2; --hair:#ECEFF5;
+    --radius:20px; --radius-sm:13px; --backdrop:none;
+    --shadow:0 1px 2px rgba(30,40,70,.04),0 12px 28px -12px rgba(30,40,70,.16);
+    --shadow-sm:0 1px 2px rgba(30,40,70,.05),0 5px 14px -8px rgba(30,40,70,.12);
+    --accent:#5B5FE0; --accent-ink:#4044C8; --accent-soft:#E6E7FB; --pill-bg:#EEF1F7; --code-bg:#F4F6FB;
+    --grad-accent:linear-gradient(120deg,#5B5FE0,#8A5CE0);
+    --blob-op:0;
+  }
+  [data-theme="bento"][data-mode="dark"]{
+    --page-bg:#0F1117; --ink:#E8EAF2; --ink-soft:#A8AEC4; --muted:#71778F;
+    --surface:#181B24; --surface-2:#1F2330; --border:#262B38; --hair:#232834;
+    --accent:#7C80F0; --accent-ink:#9498F8; --accent-soft:#222447; --pill-bg:#1F2330; --code-bg:#11141D;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 32px -14px rgba(0,0,0,.6);
+    --shadow-sm:0 1px 2px rgba(0,0,0,.4),0 6px 16px -8px rgba(0,0,0,.5);
+  }
+
+  /* ============ THEME 5 · MINIMAL ============ */
+  [data-theme="minimal"]{
+    --page-bg:#FBFBFA; --ink:#1A1A1A; --ink-soft:#4A4A48; --muted:#8A8A86;
+    --surface:#FFFFFF; --surface-2:#F6F6F4; --border:#E6E6E2; --hair:#ECECE8;
+    --radius:8px; --radius-sm:6px; --backdrop:none;
+    --shadow:none; --shadow-sm:0 1px 0 rgba(0,0,0,.05);
+    --accent:#E4002B; --accent-ink:#C00024; --accent-soft:#FBE3E7; --pill-bg:#F2F2EE; --code-bg:#F5F5F3;
+    --grad-accent:linear-gradient(120deg,#1A1A1A,#5A5A56);
+    --blob-op:0;
+  }
+  [data-theme="minimal"][data-mode="dark"]{
+    --page-bg:#0E0E0D; --ink:#EDEDEA; --ink-soft:#B5B5B0; --muted:#7E7E78;
+    --surface:#161615; --surface-2:#1C1C1A; --border:#2A2A27; --hair:#232321;
+    --accent:#FF4D6D; --accent-ink:#FF6B85; --accent-soft:#2A1A1D; --pill-bg:#1C1C1A; --code-bg:#1A1A18;
+    --shadow:none; --shadow-sm:0 1px 0 rgba(255,255,255,.05);
+  }
+
+  /* ============ THEME 6 · KKPAM ============ */
+  [data-theme="kkpam"]{
+    --page-bg:#EEF4F7; --ink:#10262E; --ink-soft:#41555E; --muted:#7C8F99;
+    --surface:#FFFFFF; --surface-2:#F3F8FB; --border:#DCE7EC; --hair:#E7EFF3;
+    --radius:14px; --radius-sm:10px; --backdrop:none;
+    --shadow:0 1px 2px rgba(8,50,66,.05),0 12px 30px -14px rgba(8,60,82,.20);
+    --shadow-sm:0 1px 2px rgba(8,50,66,.05),0 5px 14px -8px rgba(8,60,82,.15);
+    --accent:#019CCA; --accent-ink:#03769C; --accent-soft:#DAF1F8; --pill-bg:#E6F1F5; --code-bg:#F2F8FB;
+    --grad-accent:linear-gradient(120deg,#019CCA,#22B8D4);
+    --blob-op:0;
+  }
+  [data-theme="kkpam"][data-mode="dark"]{
+    --page-bg:#0A1A20; --ink:#E6F3F8; --ink-soft:#AEC6CE; --muted:#6E848C;
+    --surface:#102830; --surface-2:#16323B; --border:#1F3A44; --hair:#1A333C;
+    --accent:#1FB6D8; --accent-ink:#5FCDE6; --accent-soft:#0C323D; --pill-bg:#16323B; --code-bg:#0E2029;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 32px -14px rgba(0,0,0,.6);
+    --shadow-sm:0 1px 2px rgba(0,0,0,.4),0 6px 16px -8px rgba(0,0,0,.5);
+  }
+
+  /* ============================================================ */
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;color:var(--ink);background:var(--page-bg) fixed;background-size:cover;
+    font-family:var(--font-body);font-size:17px;line-height:1.78;font-weight:400;
+    -webkit-font-smoothing:antialiased;
+    transition:background-color .4s ease,color .4s ease;
+  }
+  body::before{
+    content:"";position:fixed;inset:-25%;z-index:0;pointer-events:none;opacity:var(--blob-op);
+    background:
+      radial-gradient(38% 48% at 20% 22%, var(--blob-a,transparent) 0,transparent 70%),
+      radial-gradient(36% 44% at 82% 16%, var(--blob-b,transparent) 0,transparent 70%),
+      radial-gradient(44% 50% at 76% 86%, var(--blob-c,transparent) 0,transparent 70%);
+    filter:blur(26px);transition:opacity .4s ease;
+  }
+  [data-theme="glass"] body::before{animation:drift 26s ease-in-out infinite alternate}
+  @keyframes drift{to{transform:translate3d(0,-3%,0) scale(1.06)}}
+
+  .page{position:relative;z-index:1;max-width:1060px;margin:0 auto;padding:0 24px 110px}
+  a{color:var(--accent-ink);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .mono{font-family:var(--font-mono)}
+
+  .controls{position:fixed;top:18px;right:18px;z-index:20;display:flex;gap:10px;align-items:flex-start}
+  .ctrl-btn{width:46px;height:46px;border-radius:var(--pill-radius);cursor:pointer;font-size:18px;
+    color:var(--ink);background:var(--surface);border:var(--border-w) solid var(--border);
+    box-shadow:var(--shadow-sm);-webkit-backdrop-filter:var(--backdrop);backdrop-filter:var(--backdrop);
+    display:flex;align-items:center;justify-content:center;transition:transform .2s ease}
+  .ctrl-btn:hover{transform:translateY(-2px)}
+  .ctrl-btn .moon{display:none}
+  [data-mode="dark"] .ctrl-btn .sun{display:none}
+  [data-mode="dark"] .ctrl-btn .moon{display:inline}
+
+  .panel{position:absolute;top:56px;right:0;width:248px;padding:16px;border-radius:var(--radius);
+    background:var(--surface);border:var(--border-w) solid var(--border);box-shadow:var(--shadow);
+    -webkit-backdrop-filter:var(--backdrop);backdrop-filter:var(--backdrop)}
+  .panel[hidden]{display:none}
+  .panel-grp+.panel-grp{margin-top:14px}
+  .panel-lbl{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:9px}
+  .opts{display:flex;flex-direction:column;gap:6px}
+  .opts.row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .opts button{display:flex;align-items:center;gap:9px;width:100%;text-align:left;cursor:pointer;
+    font-size:13.5px;font-weight:600;color:var(--ink-soft);padding:9px 11px;border-radius:var(--radius-sm);
+    background:var(--surface-2);border:var(--border-w) solid transparent;transition:.15s}
+  .opts button:hover{color:var(--ink);border-color:var(--border)}
+  .opts button.active{color:var(--accent-ink);border-color:var(--accent);background:var(--accent-soft)}
+  .opts button i{width:16px;height:16px;border-radius:50%;flex:none;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+
+  header.doc{padding:78px 0 40px}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;font-weight:700;
+    letter-spacing:.15em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:18px}
+  .eyebrow .dot{width:8px;height:8px;border-radius:50%;background:var(--grad-accent)}
+  h1.title{font-family:var(--font-display);font-weight:var(--h-weight);font-size:clamp(36px,5.6vw,58px);
+    line-height:1.06;letter-spacing:var(--h-track);font-optical-sizing:auto;margin:0 0 16px}
+  [data-theme="glass"] h1.title{background:var(--grad-accent);-webkit-background-clip:text;background-clip:text;color:transparent}
+  [data-theme="brutal"] h1.title,[data-theme="brutal"] h2{text-transform:uppercase}
+  .lede{font-size:clamp(17px,2.2vw,20px);color:var(--ink-soft);max-width:670px;margin:0 0 26px;line-height:1.62}
+  .meta{display:flex;flex-wrap:wrap;gap:9px}
+  .pill{font-size:12.5px;font-weight:600;padding:5px 13px;border-radius:var(--pill-radius);color:var(--ink-soft);
+    background:var(--pill-bg);border:var(--border-w) solid var(--border)}
+  .pill.accent{color:var(--accent-ink);background:var(--accent-soft);border-color:transparent}
+  .pill.sage{color:var(--sage-ink);background:var(--sage-soft);border-color:transparent}
+  .pill.rose{color:var(--rose-ink);background:var(--rose-soft);border-color:transparent}
+  [data-theme="brutal"] .pill{border-color:var(--border)}
+
+  nav.jump{position:sticky;top:14px;z-index:5;display:flex;flex-wrap:wrap;gap:5px;margin:0 0 14px;
+    padding:7px;border-radius:var(--pill-radius);width:fit-content;max-width:100%;
+    background:var(--surface);border:var(--border-w) solid var(--border);box-shadow:var(--shadow-sm);
+    -webkit-backdrop-filter:var(--backdrop);backdrop-filter:var(--backdrop)}
+  nav.jump a{font-size:13px;font-weight:500;padding:6px 13px;border-radius:var(--pill-radius);color:var(--ink-soft)}
+  nav.jump a:hover{text-decoration:none;color:var(--accent-ink);background:var(--accent-soft)}
+
+  section{padding:40px 0 12px;scroll-margin-top:72px;border-top:1px solid var(--hair)}
+  section:first-of-type{border-top:none}
+  h2{font-family:var(--font-display);font-weight:var(--h-weight);font-size:clamp(23px,3.3vw,32px);
+    line-height:1.16;letter-spacing:var(--h-track);font-optical-sizing:auto;margin:0 0 5px;
+    display:flex;align-items:baseline;gap:12px}
+  h2 .idx{font-size:14px;font-weight:600;color:var(--accent);font-family:var(--font-mono);-webkit-text-fill-color:initial}
+  .sub{color:var(--muted);font-size:15px;margin:0 0 24px}
+  h3{font-size:18px;font-weight:600;margin:26px 0 8px}
+  p{margin:0 0 14px;color:var(--ink-soft)}
+  p strong,li strong{color:var(--ink);font-weight:600}
+
+  ul.clean{list-style:none;margin:0 0 14px;padding:0}
+  ul.clean li{position:relative;padding-left:26px;margin-bottom:10px;color:var(--ink-soft)}
+  ul.clean li::before{content:"";position:absolute;left:3px;top:10px;width:9px;height:9px;
+    border-radius:50%;background:var(--grad-accent)}
+  [data-theme="brutal"] ul.clean li::before{border-radius:0}
+
+  .grid{display:grid;gap:18px}
+  .cols-auto{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+  .cols-3{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+  .card{background:var(--surface);border:var(--border-w) solid var(--border);border-radius:var(--radius);
+    padding:22px;box-shadow:var(--shadow);-webkit-backdrop-filter:var(--backdrop);backdrop-filter:var(--backdrop)}
+  .card .tag{display:inline-block;font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:var(--pill-radius);
+    background:var(--lilac-soft);color:var(--lilac-ink);margin-bottom:12px}
+  [data-theme="brutal"] .card .tag{border:var(--border-w) solid var(--border)}
+  .card h3{margin:0 0 6px;font-size:17px}
+  .card p{margin:0;font-size:14.5px;line-height:1.6}
+  .card .tradeoff{margin-top:13px;font-size:13px;color:var(--muted);border-top:1px solid var(--hair);padding-top:11px}
+  .card.pick{border-color:var(--accent);box-shadow:0 0 0 1.5px var(--accent),var(--shadow)}
+  [data-theme="brutal"] .card.pick{box-shadow:var(--shadow)}
+  .card.pick .tag{background:var(--accent-soft);color:var(--accent-ink)}
+
+  .stat{text-align:center}
+  .stat .num{font-family:var(--font-display);font-weight:var(--h-weight);font-size:clamp(30px,5vw,46px);line-height:1;color:var(--ink)}
+  .stat .num.good{color:var(--sage-ink)} .stat .num.warn{color:var(--amber-ink)} .stat .num.bad{color:var(--rose-ink)}
+  .stat .lbl{font-size:13px;color:var(--muted);margin-top:8px}
+
+  .table-wrap{margin:16px 0;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);
+    background:var(--surface);border:var(--border-w) solid var(--border);
+    -webkit-backdrop-filter:var(--backdrop);backdrop-filter:var(--backdrop)}
+  .table-scroll{overflow-x:auto}
+  table{border-collapse:collapse;width:100%;min-width:560px;font-size:14.5px}
+  th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--hair);vertical-align:top}
+  thead th{background:var(--surface-2);font-weight:600;color:var(--ink)}
+  tbody tr:last-child td{border-bottom:none}
+  td .yes{color:var(--sage-ink);font-weight:600}
+  td .no{color:var(--rose-ink);font-weight:600}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:var(--pill-radius);white-space:nowrap}
+  .badge.v{background:var(--sage-soft);color:var(--sage-ink)}
+  .badge.c{background:var(--sky-soft);color:var(--sky-ink)}
+  .badge.i{background:var(--pill-bg);color:var(--muted)}
+  .badge.med{background:var(--amber-soft);color:var(--amber-ink)}
+  .badge.low{background:var(--sky-soft);color:var(--sky-ink)}
+  .badge.fixed{background:var(--sage-soft);color:var(--sage-ink)}
+  .badge.open{background:var(--amber-soft);color:var(--amber-ink)}
+
+  .callout{display:flex;gap:14px;padding:17px 19px;border-radius:var(--radius-sm);margin:16px 0;
+    background:var(--amber-soft);border:var(--border-w) solid transparent}
+  [data-theme="brutal"] .callout{border-color:var(--border)}
+  .callout .ic{font-size:20px;line-height:1.4}
+  .callout p{margin:0;color:var(--ink)}
+  .callout.info{background:var(--sky-soft)}
+  .callout.risk{background:var(--rose-soft)}
+  .callout.good{background:var(--sage-soft)}
+
+  ol.steps{counter-reset:s;list-style:none;margin:0;padding:0}
+  ol.steps li{position:relative;padding:15px 0 15px 54px;border-bottom:1px solid var(--hair)}
+  ol.steps li:last-child{border-bottom:none}
+  ol.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:13px;
+    width:36px;height:36px;border-radius:var(--radius-sm);background:var(--accent-soft);color:var(--accent-ink);
+    font-family:var(--font-mono);font-weight:600;display:flex;align-items:center;justify-content:center;
+    border:var(--border-w) solid transparent}
+  [data-theme="brutal"] ol.steps li::before{border-color:var(--border)}
+
+  .swatchrow{display:inline-flex;gap:5px;vertical-align:middle;margin:0 2px}
+  .swatchrow i{width:15px;height:15px;border-radius:5px;display:inline-block;border:1px solid var(--hair)}
+  .arrow{color:var(--muted);font-weight:700;padding:0 4px}
+
+  footer.doc{margin-top:48px;padding-top:26px;border-top:1px solid var(--hair);font-size:13px;color:var(--muted)}
+
+  @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{animation:rise .65s cubic-bezier(.2,.7,.2,1) both}
+
+  @media (max-width:640px){
+    body{font-size:16px}
+    header.doc{padding:64px 0 30px}
+    .page{padding:0 18px 84px}
+    nav.jump{width:auto}
+    .panel{width:220px}
+  }
+  @media (prefers-reduced-motion:reduce){.reveal,body::before{animation:none}.ctrl-btn:hover{transform:none}}
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <button class="ctrl-btn" id="modeBtn" aria-label="สลับ Light / Dark" title="Light / Dark">
+    <span class="sun">☀</span><span class="moon">☾</span>
+  </button>
+  <button class="ctrl-btn" id="paletteBtn" aria-label="เลือก Theme และ Font" title="Theme &amp; Font" aria-expanded="false" aria-controls="panel">✦</button>
+  <div class="panel" id="panel" hidden>
+    <div class="panel-grp">
+      <div class="panel-lbl">Theme</div>
+      <div class="opts" id="themeOpts">
+        <button data-set-theme="pastel"><i style="background:#F2A48E"></i>Pastel Editorial</button>
+        <button data-set-theme="glass"><i style="background:linear-gradient(120deg,#5E83F2,#F2978A)"></i>Glass · Gradient</button>
+        <button data-set-theme="brutal"><i style="background:#FF5277"></i>Neo-Brutalism</button>
+        <button data-set-theme="bento"><i style="background:#5B5FE0"></i>Bento · SaaS</button>
+        <button data-set-theme="minimal"><i style="background:#E4002B"></i>Minimal · Swiss</button>
+        <button data-set-theme="kkpam"><i style="background:#019CCA"></i>KKPAM · Cyan</button>
+      </div>
+    </div>
+    <div class="panel-grp">
+      <div class="panel-lbl">Font</div>
+      <div class="opts row" id="fontOpts">
+        <button data-set-font="serif" style="font-family:Fraunces,Georgia,serif">Editorial Serif</button>
+        <button data-set-font="grotesque" style="font-family:'Bricolage Grotesque',sans-serif">Modern Grotesque</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <header class="doc reveal">
+    <span class="eyebrow"><span class="dot"></span> Content Verification Audit</span>
+    <h1 class="title">MooDee — ตรวจสอบความถูกต้องของเนื้อหา</h1>
+    <p class="lede">ตรวจข้อมูลที่แอปแสดงทั้งหมดทุกฟีเจอร์ เทียบกับแหล่งที่เชื่อถือได้ แยกเป็น <strong>A · ตรวจได้จริง</strong> (ดาราศาสตร์ ปฏิทิน พิกัด ตำราจีน) และ <strong>B · คติ</strong> (สีมงคล เลขศาสตร์ ฝัน) ที่ตัดสินได้เฉพาะ "ตรงเวอร์ชันนิยม + ไม่ขัดกันเอง + ไม่พังเชิงข้อเท็จจริง"</p>
+    <div class="meta">
+      <span class="pill accent">22 features · 8 domains</span>
+      <span class="pill sage">5 issues fixed</span>
+      <span class="pill">~55 data units verified</span>
+      <span class="pill rose">0 data errors remaining</span>
+      <span class="pill">2026-06-19</span>
+    </div>
+  </header>
+
+  <nav class="jump reveal">
+    <a href="#verdict">Verdict</a>
+    <a href="#fixed">Fixed</a>
+    <a href="#open">Open</a>
+    <a href="#refuted">Refuted</a>
+    <a href="#coverage">Coverage</a>
+    <a href="#method">Method</a>
+    <a href="#sources">Sources</a>
+  </nav>
+
+  <section id="verdict">
+    <h2><span class="idx">01</span>Verdict</h2>
+    <p class="sub">สรุปภาพรวม — เนื้อหาถูกต้องเกือบทั้งหมด</p>
+    <p>หลังตรวจ <strong>ทุกฟีเจอร์</strong> เทียบแหล่งอ้างอิงอิสระ ผลคือ <strong>ข้อมูลที่แสดงถูกต้องเกือบทั้งหมด</strong> โดยเฉพาะส่วน A (ตรวจได้จริง) ทั้งหมด — ตำแหน่งดาว, เรือนชะตา (Placidus), อายนางศะ Lahiri, ปฏิทินจีน (干支/藏干/納音/神煞/三合), กาลโยค, 立春, พิกัดเมือง — ผ่านการเทียบแหล่งอิสระและตรงหมด พบ <strong>ข้อมูลผิดจริงเพียง 3 จุด</strong> (ทั้งหมดเป็นเรื่องสีมงคล/ทิศ และเป็นความขัดแย้งภายในแอปเอง) ซึ่ง <strong>แก้แล้วทั้ง 3</strong> รายการ ที่เหลือเป็นข้อเสนอแนะระดับ low (ช่องว่างเทสต์ + ถ้อยคำ) และ 1 รายการที่ตรวจแล้ว <strong>ไม่ใช่ error</strong> (ความต่างระหว่างสำนัก)</p>
+
+    <div class="grid cols-3" style="margin:22px 0">
+      <div class="card stat"><div class="num good">8/8</div><div class="lbl">domain ตรวจครบ</div></div>
+      <div class="card stat"><div class="num good">5</div><div class="lbl">จุดที่แก้ (3 ข้อมูล + 2 ถ้อยคำ)</div></div>
+      <div class="card stat"><div class="num warn">5</div><div class="lbl">ข้อเสนอแนะ (low)</div></div>
+      <div class="card stat"><div class="num">690</div><div class="lbl">tests ผ่าน (หลังแก้)</div></div>
+    </div>
+
+    <div class="callout good"><span class="ic">✓</span><p><strong>ส่วน A (ตรวจได้จริง) ถูกต้อง 100%:</strong> ตำแหน่งดาว 7 ดวงเทียบดวง Einstein ตรง ~0.01°, เรือน Placidus ตรงทั้ง 12, ปฏิทินจีน + 神煞 ตรง canon, กาลโยค จ.ศ.1387/1388 ตรงโหรรัตนโกสินทร์/PRD, พิกัด 21 เมืองโลก + จังหวัดตรง Wikipedia, สูตรเลขกัว + ตาราง 八宅 64 ทิศตรงทุกช่อง</p></div>
+    <div class="callout"><span class="ic">⚠</span><p><strong>ข้อจำกัดที่ซื่อตรง:</strong> "ทุกตัวอักษร" ตรวจให้ถูก 100% เป็นไปไม่ได้ — คำบรรยายนิสัย/คำแนะนำเป็น <strong>interpretive</strong> (เขียนขึ้น ไม่มีแหล่งให้เทียบ) ส่วนคติ B ตัดสินได้แค่ "ตรงเวอร์ชันนิยม + ไม่ขัดกันเอง" ไม่ใช่ "จริงสัมบูรณ์" — ดู <a href="#method">Method</a> และ Coverage manifest ที่จัด verdict ให้ทุก data unit</p></div>
+    <div class="callout info"><span class="ic">◎</span><p><strong>ขอบเขตที่ตรวจ:</strong> รายงานนี้ตรวจ <strong>ข้อมูลดูดวง</strong> ที่คำนวณ/แสดง (ดาว ปฏิทิน พิกัด ตำราจีน สีมงคล เลขศาสตร์ ฝัน ฮวงจุ้ย) อย่างละเอียด · <strong>ยังไม่ได้</strong> source-check ถ้อยคำฝั่ง product/UI/SEO (ชื่อ-คำโปรยฟีเจอร์ใน meta, sitemap/JSON-LD, README, label/hint ของฟอร์ม) ซึ่งส่วนใหญ่เป็น copy เชิงการตลาด/interpretive — ถ้าต้องการให้ตรวจ "ทุกสตริง" รวมส่วนนี้ด้วย แจ้งได้</p></div>
+  </section>
+
+  <section id="fixed">
+    <h2><span class="idx">02</span>Fixed</h2>
+    <p class="sub">บั๊กข้อมูลจริง 3 จุด — แก้แล้วใน working tree (ยังไม่ commit)</p>
+    <p>ทั้ง 3 จุดเป็น <strong>ความขัดแย้งภายในแอปเอง</strong> (objective — ไม่ใช่ "คนละสำนัก") ผ่าน adversarial verify แล้วว่าเป็น error จริง แก้ระดับ 1 token + ไม่กระทบ test เดิม</p>
+
+    <div class="table-wrap"><div class="table-scroll">
+    <table>
+      <thead><tr><th>ID</th><th>ไฟล์ · จุด</th><th>ก่อน → หลัง</th><th>เหตุผล (หลักฐาน)</th><th>severity</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="mono">DIR-01</td>
+          <td><span class="mono">src/content/th.json:21</span><br>elInfo.ดิน.dir</td>
+          <td>กลาง (อีสาน-<span class="no">พายัพ</span>)<br><span class="arrow">→</span> กลาง (อีสาน-<span class="yes">หรดี</span>)</td>
+          <td>พายัพ = ตะวันตกเฉียงเหนือ = ธาตุ<strong>ทอง</strong> (Qian) ไม่ใช่ดิน · ขัดตาราง EL_LUCK ของแอปเอง (ให้ ตะวันตกเฉียงใต้) และขัดหลัก bagua — ดินคือ NE(艮)+SW(坤)+กลาง</td>
+          <td><span class="badge med">med</span></td>
+        </tr>
+        <tr>
+          <td class="mono">THAI-01</td>
+          <td><span class="mono">_shared/thaiAstro.ts:89</span><br>DAY_LORD["พุธ"].avoid</td>
+          <td>ชมพู, <span class="no">แดงสด</span><br><span class="arrow">→</span> ชมพู, <span class="yes">แดง</span></td>
+          <td>"แดงสด" ไม่มีใน COLOR_HEX → swatch() คืน <span class="mono">#888</span> เทา แสดงผิดสีในหน้า "สีกาลกิณี" ของ luckycolor · เปลี่ยนเป็น "แดง" (สีของอังคาร = ดาวกาลกิณีของพุธ มีใน palette)</td>
+          <td><span class="badge med">med</span></td>
+        </tr>
+        <tr>
+          <td class="mono">THAI-02</td>
+          <td><span class="mono">_shared/thaiAstro.ts:92</span><br>DAY_LORD["เสาร์"].avoid</td>
+          <td><span class="no">เหลือง, ทอง</span><br><span class="arrow">→</span> <span class="yes">เขียว, เขียวขี้ม้า</span></td>
+          <td>กฎ "สีกาลกิณี = สีดาวกาลกิณีของวันนั้น" ใช้ตรง <strong>7/8 วัน</strong> มีแต่เสาร์หลุด · เสาร์ กาลกิณี = พุธ = เขียว · ตำรานิยม (Thairath) ก็ว่าเสาร์ = เขียวเข้ม · เหลือง/ทองไม่ตรงสำนักใด</td>
+          <td><span class="badge med">med</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div></div>
+
+    <h3>THAI-02 — ทำไมชี้ขาดได้ (กฎ ทักษา ของแอปเอง)</h3>
+    <p>ในวงล้อ อัฐเคราะห์ ที่แอปใช้ สีกาลกิณีของแต่ละวัน = สีของดาวที่อยู่ก่อนหน้าดาวเจ้าวันในวงล้อ ตรวจครบ 8 แถวพบว่าตรงกฎทุกแถว <strong>ยกเว้นเสาร์</strong>:</p>
+    <div class="table-wrap"><div class="table-scroll">
+    <table>
+      <thead><tr><th>วันเกิด</th><th>ดาวกาลกิณี (ตามวงล้อ)</th><th>สีของดาวนั้น</th><th>avoid ในแอป</th><th>ตรงกฎ?</th></tr></thead>
+      <tbody>
+        <tr><td>อาทิตย์</td><td>ศุกร์</td><td>ฟ้า/น้ำเงิน</td><td>ฟ้า, น้ำเงิน</td><td><span class="yes">✓</span></td></tr>
+        <tr><td>จันทร์</td><td>อาทิตย์</td><td>แดง</td><td>แดง, ชมพูเข้ม</td><td><span class="yes">✓</span></td></tr>
+        <tr><td>อังคาร</td><td>จันทร์</td><td>ขาว/เหลือง</td><td>ขาว, เหลืองนวล</td><td><span class="yes">✓</span></td></tr>
+        <tr><td>พุธ</td><td>อังคาร</td><td>ชมพู/แดง</td><td>ชมพู, แดง*</td><td><span class="yes">✓</span></td></tr>
+        <tr><td>พฤหัสบดี</td><td>เสาร์</td><td>ดำ/ม่วง</td><td>ดำ, ม่วงเข้ม</td><td><span class="yes">✓</span></td></tr>
+        <tr><td>ศุกร์</td><td>ราหู</td><td>ดำ/เทา</td><td>ดำ, เทาเข้ม</td><td><span class="yes">✓</span></td></tr>
+        <tr><td>ราหู</td><td>พฤหัส</td><td>ส้ม/เหลือง</td><td>ส้ม, เหลือง</td><td><span class="yes">✓</span></td></tr>
+        <tr style="background:var(--rose-soft)"><td><strong>เสาร์</strong></td><td><strong>พุธ</strong></td><td><strong>เขียว</strong></td><td><span class="no">เหลือง, ทอง</span> → แก้เป็น เขียว, เขียวขี้ม้า</td><td><span class="no">✗</span></td></tr>
+      </tbody>
+    </table>
+    </div></div>
+    <p style="font-size:13.5px;color:var(--muted)">* แถวพุธคือ THAI-01 (แดงสด→แดง) ที่แก้ควบคู่</p>
+
+    <div class="callout info"><span class="ic">✦</span><p><strong>เพิ่ม regression test:</strong> <span class="mono">thaiAstro.test.ts</span> — assert ว่าทุกชื่อสีใน DAY_LORD (ครบ 6 แกน × 8 วัน) ต้องมี hex จริง ไม่ตก <span class="mono">#888</span> เพื่อกัน THAI-01 เกิดซ้ำ</p></div>
+
+    <h3>ถ้อยคำที่แก้ควบคู่ (kua)</h3>
+    <ul class="clean">
+      <li><strong>KUA-01</strong> — <span class="mono">kua/engine.ts</span> + <span class="mono">fields.ts</span>: ข้อความเดิมเขียน "ตรุษจีน" แต่ระบบเปลี่ยนรอบปีจริงราว <strong>4 ก.พ.</strong> (ต่างจากตรุษจีนได้ถึง ~2 สัปดาห์) → แก้เป็น "เปลี่ยนรอบปีราว 4 ก.พ. (ไม่ใช่ 1 ม.ค.)" ภาษาเข้าใจง่าย เลี่ยงศัพท์เฉพาะ</li>
+      <li><strong>KUA-02</strong> — คำแนะนำ "ลองคำนวณปีก่อนหน้า" เติมเงื่อนไข "หากไม่ได้กรอกวันเกิด" (ระบบ roll ปีให้อัตโนมัติเมื่อกรอกวันที่อยู่แล้ว)</li>
+    </ul>
+  </section>
+
+  <section id="open">
+    <h2><span class="idx">03</span>Open</h2>
+    <p class="sub">ข้อเสนอแนะ — ไม่ใช่ข้อมูลผิด (ค่าถูกอยู่) แต่ควรเก็บงาน ระดับ low ทั้งหมด</p>
+    <div class="table-wrap"><div class="table-scroll">
+    <table>
+      <thead><tr><th>ID</th><th>เรื่อง</th><th>ปัญหา</th><th>ข้อเสนอ</th><th>ระดับ</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="mono">ASTRO-01</td><td>ดาว 5 ดวงไม่มี test ล็อกค่า</td>
+          <td>เทสต์ value-assert แค่ อาทิตย์/จันทร์ — พุธ/ศุกร์/อังคาร/พฤหัส/เสาร์ ใช้ code path แยก (GeoVector) ถ้า regress จะผ่าน test หมด (ค่า <em>ตอนนี้ถูก</em>)</td>
+          <td>เพิ่ม vector 1 ค่า/ดาว เทียบ ephemeris (เช่นดวง Einstein)</td>
+          <td><span class="badge low">low</span></td>
+        </tr>
+        <tr>
+          <td class="mono">ASTRO-02</td><td>Placidus cusp ไม่มี test ล็อกองศา</td>
+          <td>เทสต์เช็คแค่ invariant เชิงโครงสร้าง ไม่เทียบองศากับแหล่งจริง — ความผิดใน placidusIntermediate อาจเลื่อนเรือนได้โดย test ไม่จับ (ค่า <em>ตอนนี้ถูก</em>)</td>
+          <td>เพิ่ม assert องศา cusp เทียบตารางที่เผยแพร่</td>
+          <td><span class="badge low">low</span></td>
+        </tr>
+        <tr>
+          <td class="mono">COORD-COV-01</td><td>พิกัดเมือง 94/98 ไม่มี test ล็อกค่า</td>
+          <td>value-assert แค่ ~4 เมือง · 76 จังหวัดเช็คแค่ bounding-box · 17 เมืองโลกไม่เช็ค offset (typo ในกรอบ/offset ผิด จะหลุด — ค่าที่ spot-check ทั้งหมด <em>ถูก</em>)</td>
+          <td>เพิ่ม snapshot/value-assert ครอบ offset เมืองโลก + พิกัดจังหวัดสุดขอบ</td>
+          <td><span class="badge low">low</span></td>
+        </tr>
+        <tr>
+          <td class="mono">THAI-03</td><td>ป้าย en ราศี = "tropical ที่ตรงกัน"</td>
+          <td>มังกร (15 ม.ค.–12 ก.พ.) โชว์ "(Capricorn)" + note ว่าเป็น "ราศีสากลที่ตรงกัน" — แต่ช่วงปลาย (ก.พ.) tropical จริงคือ Aquarius (มี disclaimer อยู่แล้ว จึงกระทบน้อย)</td>
+          <td>เปลี่ยนเป็น "ชื่อสากลของราศีไทยนี้" แทน "ราศีสากลที่ตรงกัน"</td>
+          <td><span class="badge low">low</span></td>
+        </tr>
+        <tr>
+          <td class="mono">DOC-01</td><td>audit doc ภายในระบุ kua vector ผิด</td>
+          <td><span class="mono">moodee-completeness.md</span> เขียน "1984♂→6, 1990♀→6" แต่ค่าจริง (engine + test) คือ <strong>7 และ 8</strong> — เอกสารภายใน ไม่กระทบหน้าจอ</td>
+          <td>แก้ตัวเลขในเอกสารให้ตรง test</td>
+          <td><span class="badge low">low</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div></div>
+  </section>
+
+  <section id="refuted">
+    <h2><span class="idx">04</span>Refuted</h2>
+    <p class="sub">ตรวจแล้วไม่ใช่ error — กันไว้ไม่ให้รายงานเกินจริง</p>
+    <div class="card">
+      <span class="tag">NUM-01 · คู่เลข 16/61</span>
+      <h3>คู่เลข 16/61 ทำเครื่องหมาย "ควรระวัง" (warn)</h3>
+      <p>finder เสนอว่าตำรานิยมมองว่าเป็นมงคล (เก็บทรัพย์) แต่ adversarial verify <strong>ปัดตก</strong>: การอ่านเชิงลบด้านความรักของ 16/61 เป็นคติเก่าที่แพร่หลายจริง (berded เองระบุว่า "ถูกฝังหัวมาแต่อดีต") + แอป disclose ว่าแต่ละสำนักต่างกัน + ภายในสอดคล้อง (คู่ที่มี 6 = เสน่ห์ ทุกคู่มีโทนเตือนเรื่องรัก) → เข้าข่าย "คนละสำนัก" ซึ่งตามกติกา <strong>ไม่นับเป็น error</strong></p>
+      <div class="tradeoff">บทเรียน: คติ B จะ flag ก็ต่อเมื่อขัด "เวอร์ชันนิยม" ชัด + มี citation, ขัดกันเอง, หรือพังเชิงข้อเท็จจริง — ความต่างระหว่างสำนักไม่ใช่บั๊ก</div>
+    </div>
+  </section>
+
+  <section id="coverage">
+    <h2><span class="idx">05</span>Coverage Manifest</h2>
+    <p class="sub">ทุก data unit ได้ 1 ใน 3 verdict — ไม่มี blind spot</p>
+    <p>
+      <span class="badge v">verified</span> เทียบแหล่งอิสระแล้วตรง ·
+      <span class="badge c">consistency-checked</span> ตรวจความสอดคล้องภายใน/ตรงสำนักนิยม (ไม่มีคำตอบเดียว) ·
+      <span class="badge i">interpretive</span> เขียนขึ้น ตรวจกับแหล่งไม่ได้
+    </p>
+
+    <div class="table-wrap"><div class="table-scroll">
+    <table>
+      <thead><tr><th>Domain</th><th>data units (ตัวอย่าง)</th><th>verdict หลัก</th><th>วิธี/แหล่ง</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>BaZi canon</strong></td>
+          <td>干支×22, 藏干×12, 納音×30, 長生, 空亡, 神煞×8, 三合/三會/五合/六合/相冲/相刑/相害, STEM_EL, EL_LUCK</td>
+          <td><span class="badge v">verified</span> ส่วนใหญ่ + <span class="badge c">cc</span> (神煞 สำนัก)</td>
+          <td>baike/zhihu/sohu/163 + <span class="mono">masterdata.test</span></td>
+        </tr>
+        <tr>
+          <td><strong>Astronomy</strong></td>
+          <td>ดาว 7 ดวง, signFromLon, GMST/obliquity (Meeus), Asc/MC, Placidus×12, Lahiri ayanamsa, aspect orbs, JDN</td>
+          <td><span class="badge v">verified</span> ทั้งหมด</td>
+          <td>ดวง Einstein (astrotheme/astro-seek) ตรง ~0.01°</td>
+        </tr>
+        <tr>
+          <td><strong>Calendar</strong></td>
+          <td>gregorianToJDN, จ.ศ.=ค.ศ.−638, กาลโยค×4, ดิถี (synodic), 立春 cut</td>
+          <td><span class="badge v">verified</span> + <span class="badge c">cc</span> (ดิถี ±1 วัน)</td>
+          <td>th.wikipedia + kapook โหรรัตนโกสินทร์ + PRD</td>
+        </tr>
+        <tr>
+          <td><strong>Geography</strong></td>
+          <td>77 จังหวัด (พิกัด/tz) + 21 เมืองโลก (พิกัด/offset) + alias map</td>
+          <td><span class="badge v">verified</span> ค่าที่ spot-check + <span class="badge c">cc</span> (จังหวัดที่เหลือ)</td>
+          <td>Wikipedia infobox · ครบ 77 จังหวัด ไม่ขาด/ซ้ำ</td>
+        </tr>
+        <tr>
+          <td><strong>Thai-astro</strong></td>
+          <td>สีมงคล/กาลกิณี 8 วัน, ทักษา wheel + 8 ภูมิ, ราศี sidereal×12, COLOR_HEX, ดาวเจ้าเรือน</td>
+          <td><span class="badge v">verified</span> (พบ+แก้ 2 บั๊ก) + <span class="badge i">interp</span> (คำบรรยาย)</td>
+          <td>thairath สีกาลกิณี + กฎ ทักษา ภายใน</td>
+        </tr>
+        <tr>
+          <td><strong>Numerology</strong></td>
+          <td>PAIRS×62, SUM_GOOD/BAD, license letter×46, name letter table, score/grade</td>
+          <td><span class="badge c">consistency-checked</span> (คติ B + system-defined)</td>
+          <td>berded/chokdeetabien/พูลหลวง · ภายในสอดคล้อง</td>
+        </tr>
+        <tr>
+          <td><strong>Dream/zodiac-text</strong></td>
+          <td>ฝัน 48 รายการ→เลข+ความหมาย, num7 grid, zodiaccompat 144 คู่, นักษัตร↔干支</td>
+          <td><span class="badge v">verified</span> (num7/นักษัตร/consistency) + <span class="badge c">cc</span> (เลขฝัน)</td>
+          <td>7dara/myhora · zodiaccompat ตรง relations</td>
+        </tr>
+        <tr>
+          <td><strong>Feng-shui Kua</strong></td>
+          <td>สูตรเลขกัว (2 branch), center-5, 八宅 64 ทิศ, East/West group</td>
+          <td><span class="badge v">verified</span> ทั้งหมด</td>
+          <td>prokerala/calculator.academy/masterseanchan</td>
+        </tr>
+      </tbody>
+    </table>
+    </div></div>
+    <p style="font-size:13.5px;color:var(--muted)">manifest แบบเต็มต่อ data unit (~55 แถว) อยู่ในผล workflow — ตารางนี้ย่อตาม domain โดยคงครบทุกกลุ่มข้อมูล</p>
+  </section>
+
+  <section id="method">
+    <h2><span class="idx">06</span>Method</h2>
+    <p class="sub">เกณฑ์ตัดสินและขั้นตอน</p>
+    <h3>แยกประเภทความถูกต้อง</h3>
+    <ul class="clean">
+      <li><strong>A · objective</strong> — มีคำตอบเดียว (ดาราศาสตร์ ปฏิทิน พิกัด ตำราจีน 八宅 ayanamsa) → เทียบแหล่ง authoritative + ดูว่า test ล็อกค่าที่ <em>แสดง</em> จริงและคลุมครบ</li>
+      <li><strong>B · canonical</strong> — คติ ไม่มีคำตอบเดียว (สีมงคล เลขศาสตร์ ฝัน) → เป็น defect เฉพาะเมื่อ (1) ขัดเวอร์ชันนิยม+มี citation, (2) ขัดกันเอง, (3) พังเชิงข้อเท็จจริง · default = ไม่ใช่บั๊ก</li>
+      <li><strong>interpretive</strong> — คำบรรยาย/คำแนะนำที่เขียนขึ้น → ตรวจกับแหล่งไม่ได้ ไม่นับเป็น discrepancy เว้นแต่ระบุข้อเท็จจริงที่ผิด</li>
+    </ul>
+    <h3>ขั้นตอน</h3>
+    <ol class="steps">
+      <li><strong>Baseline</strong> — รัน typecheck + test ทั้งชุด (689 ผ่าน) เป็นฐานว่าค่าคำนวณรันเขียว → verify: exit 0</li>
+      <li><strong>Fan-out 8 domain</strong> — แบ่งตามแหล่งข้อมูล (ไม่ใช่ตามฟีเจอร์) กัน verify ตารางซ้ำ · แต่ละ finder ดึง claim ที่ <em>แสดงจริง</em> + จัดประเภท + เทียบแหล่ง (WebSearch/WebFetch) + ทำ coverage manifest</li>
+      <li><strong>Adversarial verify</strong> — ทุก discrepancy ถูก skeptic พยายาม <em>ล้ม</em> ("error จริง หรือคนละสำนัก/ปัดเศษ/documented?") → กัน false positive (ผลคือ NUM-01 ถูกปัดตก)</li>
+      <li><strong>Independent cross-check</strong> — ผู้ตรวจหลักยืนยันเอง: 八宅 64 ทิศ, BaZi relations, สูตร kua, กฎ ทักษา 7/8 — เพื่อ break tie</li>
+      <li><strong>Fix + re-verify</strong> — แก้ 3 บั๊กที่ชัด + เพิ่ม regression test → รัน typecheck + test ใหม่ ยืนยันเขียว</li>
+    </ol>
+    <div class="callout info"><span class="ic">✦</span><p><strong>หมายเหตุการรัน:</strong> finder 2 domain (thai-astro, fengshui-kua) timeout รอบแรก จึงรันซ้ำแยก — ครบทั้ง 8 domain</p></div>
+  </section>
+
+  <section id="sources">
+    <h2><span class="idx">07</span>Sources</h2>
+    <p class="sub">แหล่งอ้างอิงหลักที่ใช้เทียบ (เลือกบางส่วน)</p>
+    <div class="grid cols-auto">
+      <div class="card"><h3>ดาราศาสตร์</h3><p>astrotheme.com / astro-seek.com (ดวง Einstein), jagannathhora (Lahiri J2000 23°51′11″), NOAA (EoT)</p></div>
+      <div class="card"><h3>ตำราจีน</h3><p>baike.baidu (納音/旬空/六十甲子), zhihu/sohu/163 (藏干/長生/神煞/五行方位)</p></div>
+      <div class="card"><h3>ปฏิทินไทย</h3><p>th.wikipedia กาลโยค, kapook โหรรัตนโกสินทร์ (จ.ศ.1387), PRD/PPTV (จ.ศ.1388)</p></div>
+      <div class="card"><h3>สีมงคล/ทักษา</h3><p>thairath.co.th/horoscope/belief/2764460 (สีกาลกิณีประจำวัน) + กฎ ทักษา ภายในแอป</p></div>
+      <div class="card"><h3>เลขศาสตร์</h3><p>berded.in.th, chokdeetabien.com (ค่าพยัญชนะทะเบียน), พูลหลวง/theluckyname (เลขชื่อ)</p></div>
+      <div class="card"><h3>ฮวงจุ้ย/Kua</h3><p>prokerala.com, calculator.academy, masterseanchan.com (八宅 chart)</p></div>
+    </div>
+  </section>
+
+  <footer class="doc">
+    MooDee content verification · 8 domains × ~55 data units · 5 fixed (3 data + 2 text), 5 low recommendations, 1 refuted · scope: divination data (product/SEO copy not source-checked) · methodology: A/B/interpretive + adversarial verify · 2026-06-19
+  </footer>
+</div>
+
+<script>
+  var root=document.documentElement;
+  function persist(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  function mark(){
+    document.querySelectorAll('[data-set-theme]').forEach(function(b){var on=b.getAttribute('data-set-theme')===root.getAttribute('data-theme');b.classList.toggle('active',on);b.setAttribute('aria-pressed',on)});
+    document.querySelectorAll('[data-set-font]').forEach(function(b){var on=b.getAttribute('data-set-font')===root.getAttribute('data-font');b.classList.toggle('active',on);b.setAttribute('aria-pressed',on)});
+  }
+  document.getElementById('modeBtn').addEventListener('click',function(){
+    var n=root.getAttribute('data-mode')==='dark'?'light':'dark';
+    root.setAttribute('data-mode',n);persist('hs-mode',n);
+  });
+  var panel=document.getElementById('panel');
+  document.getElementById('paletteBtn').addEventListener('click',function(e){
+    e.stopPropagation();panel.hidden=!panel.hidden;this.setAttribute('aria-expanded',!panel.hidden);
+  });
+  document.getElementById('themeOpts').addEventListener('click',function(e){
+    var b=e.target.closest('[data-set-theme]');if(!b)return;
+    root.setAttribute('data-theme',b.getAttribute('data-set-theme'));persist('hs-skin',root.getAttribute('data-theme'));mark();
+  });
+  document.getElementById('fontOpts').addEventListener('click',function(e){
+    var b=e.target.closest('[data-set-font]');if(!b)return;
+    root.setAttribute('data-font',b.getAttribute('data-set-font'));persist('hs-font',root.getAttribute('data-font'));mark();
+  });
+  document.addEventListener('click',function(e){
+    if(!panel.hidden && !e.target.closest('.controls')){panel.hidden=true;document.getElementById('paletteBtn').setAttribute('aria-expanded','false');}
+  });
+  document.querySelectorAll('section,nav.jump').forEach(function(el,i){el.classList.add('reveal');el.style.animationDelay=(0.05*i)+'s'});
+  mark();
+</script>
+</body>
+</html>
