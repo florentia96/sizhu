@@ -1,0 +1,108 @@
+import type { CSSProperties, MouseEvent } from "react";
+import type { Field } from "../../app/feature";
+
+type FieldNode =
+  | HTMLInputElement
+  | HTMLSelectElement
+  | HTMLTextAreaElement
+  | null;
+
+const labelStyle: CSSProperties = {
+  display: "block",
+  fontSize: ".83rem",
+  fontWeight: 500,
+  color: "var(--text-muted, #b9b2a0)",
+  marginBottom: "7px",
+};
+
+const controlStyle: CSSProperties = {
+  fontSize: "16px",
+  width: "100%",
+  minWidth: "0px",
+  colorScheme: "dark",
+  border: "1px solid var(--border-gold, rgba(216,166,74,.22))",
+  background: "var(--surface-inset, rgba(255,255,255,.04))",
+  borderRadius: "var(--radius-input, 4px)",
+  padding: "11px 12px",
+  color: "var(--text, #e7dcc2)",
+  outline: "none",
+};
+
+function openPicker(e: MouseEvent<HTMLInputElement>): void {
+  const el = e.currentTarget as HTMLInputElement & {
+    showPicker?: () => void;
+  };
+  if (typeof el.showPicker === "function") el.showPicker();
+}
+
+export function FieldRenderer({
+  field,
+  index,
+  refFor,
+}: {
+  field: Field;
+  index: number;
+  refFor: (i: number) => (node: FieldNode) => void;
+}) {
+  const id = `mf-${index}`;
+  const ref = refFor(index);
+
+  let control;
+  if (field.type === "select") {
+    control = (
+      <select
+        id={id}
+        ref={ref}
+        style={{ ...controlStyle, appearance: "none" }}
+        defaultValue={field.options[0]}
+      >
+        {field.options.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+      </select>
+    );
+  } else if (field.type === "textarea") {
+    control = (
+      <textarea
+        id={id}
+        ref={ref}
+        rows={3}
+        placeholder={field.placeholder}
+        style={{ ...controlStyle, resize: "vertical" }}
+      />
+    );
+  } else if (field.type === "city") {
+    control = (
+      <input
+        id={id}
+        ref={ref}
+        type="text"
+        placeholder="พิมพ์ชื่อเมืองเกิด"
+        style={controlStyle}
+      />
+    );
+  } else {
+    const isPicker = field.type === "date" || field.type === "time";
+    control = (
+      <input
+        id={id}
+        ref={ref}
+        type={field.type}
+        placeholder={field.placeholder}
+        onClick={isPicker ? openPicker : undefined}
+        style={controlStyle}
+      />
+    );
+  }
+
+  return (
+    <div style={{ marginBottom: "15px" }}>
+      <label htmlFor={id} style={labelStyle}>
+        {field.label}
+      </label>
+      {control}
+    </div>
+  );
+}

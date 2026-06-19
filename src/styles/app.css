@@ -4,7 +4,7 @@
 }
 
 /* ============================================================
-   โลกกระดาษ — ฟอร์มกรอกวันเกิด
+   โลกราตรีมงคล — ฟอร์มกรอกวันเกิด (MooDee dark, tokens only)
    ============================================================ */
 .paper-screen {
   min-height: 100vh;
@@ -12,14 +12,9 @@
   align-items: center;
   justify-content: center;
   padding: clamp(22px, 5vw, 52px) 16px;
-  background: var(--paper);
-  background-image: radial-gradient(
-      circle at 22% 12%,
-      rgba(255, 250, 235, 0.55) 0 38%,
-      transparent 40%
-    ),
-    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.018) 0 2px, transparent 2px 4px);
-  color: var(--ink);
+  background:
+    radial-gradient(circle at 50% -8%, var(--bg-grad-top) 0, var(--bg) 52%);
+  color: var(--text);
 }
 .paper-wrap {
   width: 100%;
@@ -33,7 +28,7 @@
   font-size: 0.74rem;
   letter-spacing: 0.4em;
   text-transform: uppercase;
-  color: var(--cinnabar);
+  color: var(--primary-bright);
   font-weight: 600;
   margin-bottom: 10px;
 }
@@ -42,40 +37,38 @@
   font-size: clamp(3.4rem, 13vw, 5.4rem);
   font-weight: 700;
   line-height: 0.9;
-  color: var(--ink);
+  color: var(--text-strong);
   letter-spacing: 0.05em;
 }
 .brand-cn span {
-  color: var(--cinnabar);
+  color: var(--primary-bright);
 }
 .brand-sub {
   font-family: "Noto Serif Thai", serif;
   font-size: clamp(1.15rem, 4vw, 1.4rem);
   font-weight: 600;
   margin-top: 10px;
-  color: var(--ink-soft);
+  color: var(--text);
 }
 .brand-row {
   font-size: 0.85rem;
-  color: var(--ink-faint);
+  color: var(--text-dim);
   margin-top: 6px;
   letter-spacing: 0.04em;
 }
 
 .form-card {
-  background: var(--panel);
-  border: 1px solid var(--edge);
-  border-radius: var(--radius);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.4) inset,
-    0 12px 34px rgba(38, 34, 24, 0.14);
+  background: var(--surface);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
   padding: clamp(18px, 4vw, 28px);
 }
 .form-head {
   font-family: "Noto Serif Thai", serif;
   font-weight: 600;
   font-size: 1.05rem;
-  color: var(--ink);
+  color: var(--text-strong);
   margin-bottom: 16px;
   display: flex;
   align-items: center;
@@ -83,7 +76,7 @@
 }
 .form-head .mk {
   font-family: "Noto Serif SC", serif;
-  color: var(--cinnabar);
+  color: var(--primary-bright);
   font-size: 1.2rem;
 }
 .grid2 {
@@ -99,11 +92,11 @@
 }
 .field label {
   font-size: 0.82rem;
-  color: var(--ink-soft);
+  color: var(--text-muted);
   font-weight: 500;
 }
 .field .hint {
-  color: var(--ink-faint);
+  color: var(--text-dim);
   font-weight: 400;
 }
 input[type="date"],
@@ -111,14 +104,15 @@ input[type="time"],
 input[type="number"] {
   font-family: inherit;
   font-size: 16px; /* กัน iOS ซูมตอนแตะ */
-  color: var(--ink);
-  background: var(--field-bg);
-  border: 1px solid var(--edge);
-  border-radius: var(--radius-sm);
+  color: var(--text);
+  background: var(--surface-inset);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-input);
   padding: 10px;
   width: 100%;
   min-width: 0;
   display: block;
+  color-scheme: dark;
 }
 .input-wrap {
   position: relative;
@@ -147,18 +141,23 @@ input[type="number"] {
   right: 11px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--ink-faint);
+  color: var(--text-dim);
   pointer-events: none;
 }
 .field-sex {
   margin-top: 14px;
 }
+.field-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
 .seg {
   display: flex;
-  border: 1px solid var(--edge);
-  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-input);
   overflow: hidden;
-  background: var(--field-bg);
+  background: var(--surface-inset);
 }
 .seg button {
   flex: 1;
@@ -167,19 +166,19 @@ input[type="number"] {
   padding: 11px 4px;
   border: 0;
   background: transparent;
-  color: var(--ink-soft);
+  color: var(--text-muted);
   cursor: pointer;
   transition: 0.15s;
 }
 .seg button[aria-pressed="true"] {
-  background: var(--cinnabar);
-  color: #fff;
+  background: var(--primary);
+  color: var(--text-strong);
   font-weight: 600;
 }
 .adv-toggle {
   margin-top: 16px;
   font-size: 0.82rem;
-  color: var(--cinnabar);
+  color: var(--primary-bright);
   background: none;
   border: 0;
   cursor: pointer;
@@ -190,7 +189,7 @@ input[type="number"] {
 .adv {
   margin-top: 14px;
   padding-top: 15px;
-  border-top: 1px dashed var(--edge);
+  border-top: 1px dashed var(--border-gold);
 }
 .check {
   display: flex;
@@ -202,28 +201,28 @@ input[type="number"] {
   cursor: pointer;
   font-family: inherit;
   font-size: 0.85rem;
-  color: var(--ink-soft);
+  color: var(--text-muted);
   padding: 0;
 }
 .check-box {
   width: 18px;
   height: 18px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--cinnabar);
+  border-radius: var(--radius-input);
+  border: 1px solid var(--primary-bright);
   display: flex;
   align-items: center;
   justify-content: center;
   background: transparent;
-  color: #fff;
+  color: var(--text-strong);
   font-size: 0.7rem;
   flex: 0 0 auto;
 }
 .check[aria-checked="true"] .check-box {
-  background: var(--cinnabar);
+  background: var(--primary);
 }
 .form-note {
   font-size: 0.76rem;
-  color: var(--ink-faint);
+  color: var(--text-dim);
   margin-top: 9px;
 }
 .go {
@@ -232,31 +231,31 @@ input[type="number"] {
   font-family: "Noto Serif Thai", serif;
   font-weight: 600;
   font-size: 1.1rem;
-  color: #fff;
-  background: var(--cinnabar);
+  color: var(--text-strong);
+  background: var(--primary);
   border: 0;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-input);
   padding: 14px;
   cursor: pointer;
   letter-spacing: 0.02em;
-  box-shadow: 0 2px 0 var(--cinnabar-deep);
+  box-shadow: 0 2px 0 var(--primary-shadow);
   transition:
     background 0.2s ease,
     transform 0.12s ease,
     box-shadow 0.12s ease;
 }
 .go:hover {
-  background: var(--cinnabar-bright);
+  background: var(--primary-bright);
   box-shadow:
-    0 4px 14px rgba(177, 53, 42, 0.5),
-    0 2px 0 var(--cinnabar-deep);
+    0 4px 14px var(--primary-shadow),
+    0 2px 0 var(--primary-shadow);
 }
 .go:active {
   transform: translateY(1px);
-  box-shadow: 0 1px 0 var(--cinnabar-deep);
+  box-shadow: 0 1px 0 var(--primary-shadow);
 }
 .form-err {
-  color: var(--cinnabar);
+  color: var(--primary-bright);
   font-size: 0.85rem;
   margin-top: 10px;
   min-height: 1em;
@@ -265,7 +264,7 @@ input[type="number"] {
 .paper-foot {
   text-align: center;
   font-size: 0.78rem;
-  color: var(--ink-faint);
+  color: var(--text-dim);
   margin-top: 18px;
   line-height: 1.7;
 }
@@ -277,7 +276,7 @@ input[type="number"] {
   position: fixed;
   inset: 0;
   z-index: 60;
-  background: radial-gradient(circle at 50% 45%, #1c2433, #0a0d12 70%);
+  background: radial-gradient(circle at 50% 45%, var(--bg-grad-top), var(--bg) 70%);
   display: flex;
   flex-direction: column;
   align-items: center;
