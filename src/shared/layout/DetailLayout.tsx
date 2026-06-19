@@ -6,6 +6,8 @@ import { useFormRefs } from "../forms/useFormRefs";
 import { FieldRenderer } from "../forms/FieldRenderer";
 import { CityField } from "../forms/CityField";
 import { SectionRenderer } from "../sections/SectionRenderer";
+import { ShareBar } from "../share/ShareBar";
+import { ResultHero } from "../share/ResultHero";
 import {
   loadProfile,
   patchProfile,
@@ -258,7 +260,24 @@ export function DetailLayout({
 
       <div>
         {sections ? (
-          <SectionRenderer sections={sections} accent={accent} />
+          <>
+            <ResultHero
+              featureName={def.meta.name}
+              glyph={def.meta.cn}
+              sections={sections}
+              accent={accent}
+            />
+            <ShareBar
+              featureName={def.meta.name}
+              sections={sections}
+              url={
+                typeof window !== "undefined"
+                  ? `${window.location.origin}${window.location.pathname}#/f/${id}`
+                  : `#/f/${id}`
+              }
+            />
+            <SectionRenderer sections={sections} accent={accent} />
+          </>
         ) : (
           <div
             style={{
