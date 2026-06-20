@@ -83,6 +83,7 @@ export function FieldRenderer({
         rows={3}
         placeholder={field.placeholder}
         defaultValue={defaultValue}
+        maxLength={field.maxLength}
         style={{ ...controlStyle, resize: "vertical" }}
       />
     );

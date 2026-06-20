@@ -57,3 +57,51 @@ describe("compat engine — deterministic score (port of moodee-lib 871-902)", (
     expect(blocks.length).toBe(0);
   });
 });
+
+describe("compat engine — result completeness", () => {
+  const datesOnly = compatEngine.build(["1990-01-15", "1992-07-20"]);
+
+  it("includes a sign love-reading prose for both parties", () => {
+    const love = datesOnly.find((s) => s.kind === "prose" && s.title === "ราศีกับการครองคู่");
+    expect(love).toBeTruthy();
+    if (love && love.kind === "prose") {
+      expect(love.paras.length).toBe(3);
+      for (const p of love.paras) expect(p.t.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("includes per-couple advice prose", () => {
+    const advice = datesOnly.find((s) => s.kind === "prose" && s.title === "คำแนะนำสำหรับคู่นี้");
+    expect(advice).toBeTruthy();
+  });
+
+  it("date-only path adds an unlock-guidance prose (graceful, not thin)", () => {
+    const unlock = datesOnly.find((s) => s.kind === "prose" && s.title.includes("ลึกขึ้น"));
+    expect(unlock).toBeTruthy();
+    // every section has real content — no empty paras / cells
+    for (const s of datesOnly) {
+      if (s.kind === "prose") for (const p of s.paras) expect(p.t.length).toBeGreaterThan(0);
+      if (s.kind === "grid") for (const c of s.cells) expect(c.value.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("element point text varies by element relationship", () => {
+    // harmonious (ไฟ×ลม) vs same-element (ดิน×ดิน) must differ
+    const harm = compatEngine.build(["1990-04-20", "1990-06-20"])[0];
+    const same = compatEngine.build(["1990-01-15", "1991-01-20"])[0];
+    if (harm.kind === "compat" && same.kind === "compat") {
+      expect(harm.points[0].meaning).not.toBe(same.points[0].meaning);
+    }
+  });
+
+  it("tone: no ครับ/ค่ะ and no 3+ item ' · ' stacking inside sentences", () => {
+    const text = JSON.stringify(datesOnly);
+    expect(text).not.toMatch(/ครับ|ค่ะ/);
+    // a sentence-level ' · ' run joining 3+ items would show as two+ ' · '
+    // in one string; section text fields must not contain ' · ' at all here
+    for (const s of datesOnly) {
+      if (s.kind === "note") expect(s.text).not.toContain(" · ");
+      if (s.kind === "prose") for (const p of s.paras) expect(p.t).not.toContain(" · ");
+    }
+  });
+});

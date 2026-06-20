@@ -1,10 +1,10 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { act, render, screen, fireEvent } from "@testing-library/react";
 import { App } from "./App";
 import { hrefFor, type Route } from "./routes";
 
-// Real DetailLayout + BaziApp are rendered here (no mocks) — this is render-level
-// proof that the routing → form → engine → SectionRenderer seam works end-to-end.
+// Real FeatureFlow + BaziApp are rendered here (no mocks) — this is render-level
+// proof that the routing → form → casting → engine → SectionRenderer seam works end-to-end.
 
 function go(route: Route): void {
   window.history.pushState(null, "", hrefFor(route));
@@ -19,6 +19,7 @@ function navigate(route: Route): void {
 
 describe("App integration — real screens", () => {
   beforeEach(() => {
+    localStorage.clear();
     go({ name: "hub" });
   });
   afterEach(() => {
@@ -34,21 +35,31 @@ describe("App integration — real screens", () => {
     expect(screen.getByRole("heading", { name: "ดวงประจำวัน & ความเชื่อไทย" })).toBeInTheDocument();
   });
 
-  it("phone feature: fill input, submit, and a result appears", () => {
-    render(<App />);
-    navigate({ name: "feature", id: "phone" });
+  it("phone feature: fill input, casting, then a result appears", () => {
+    vi.useFakeTimers();
+    try {
+      render(<App />);
+      navigate({ name: "feature", id: "phone" });
 
-    // The phone feature has a single tel input.
-    const input = document.getElementById("mf-0") as HTMLInputElement;
-    expect(input).toBeTruthy();
-    fireEvent.change(input, { target: { value: "0812345678" } });
+      // The phone feature has a single tel input (no birth data needed).
+      const input = document.getElementById("mf-0") as HTMLInputElement;
+      expect(input).toBeTruthy();
+      fireEvent.change(input, { target: { value: "0812345678" } });
 
-    fireEvent.click(screen.getByText("เปิดดูผลทำนาย"));
+      fireEvent.click(screen.getByText("ดูผลทำนาย"));
 
-    // VerdictCard for 0812345678 → score 78, grade A ("ดีมาก").
-    expect(screen.getByText("ผลวิเคราะห์")).toBeInTheDocument();
-    expect(screen.getAllByText(/ดีมาก/).length).toBeGreaterThan(0);
-    expect(screen.getByText("78")).toBeInTheDocument();
+      // พิธีเปิดดวงคั่นก่อน → เลื่อนเวลาให้ถึงหน้าผล
+      act(() => {
+        vi.advanceTimersByTime(1500);
+      });
+
+      // VerdictCard for 0812345678 → score 78, grade A ("ดีมาก").
+      expect(screen.getByText("ผลวิเคราะห์")).toBeInTheDocument();
+      expect(screen.getAllByText(/ดีมาก/).length).toBeGreaterThan(0);
+      expect(screen.getByText("78")).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("/bazi renders the full BaZi screen", () => {

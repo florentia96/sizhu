@@ -47,4 +47,53 @@ describe("nameanalyze engine — taksa core", () => {
     expect(verdict.score).toBeLessThanOrEqual(96);
     expect(verdict.gradeLabel).not.toBe("มีอักษรกาลกิณี");
   });
+
+  it("per-letter breakdown lists every mapped letter with its ภูมิ", () => {
+    // 'สม' for Sunday: ส=กาลกิณี (ศุกร์ group), ม∈พฤหัสบดี=WHEEL[5]→BHUMI[5]=อุตสาหะ (good)
+    const out = nameanalyzeEngine.build(["สม", "", "อาทิตย์"]);
+    const rows = out.find(
+      (s) => s.kind === "rows" && s.title === "อักษรแต่ละตัวในชื่ออยู่ภูมิใด",
+    ) as Extract<typeof out[number], { kind: "rows" }>;
+    expect(rows).toBeDefined();
+    expect(rows.items.map((i) => i.n)).toEqual(["ส", "ม"]);
+    const so = rows.items.find((i) => i.n === "ส")!;
+    expect(so.title).toBe("กาลกิณี");
+    expect(so.fg).toBe("#e0584b"); // bad tone
+    const mo = rows.items.find((i) => i.n === "ม")!;
+    expect(mo.fg).toBe("#6cc18a"); // good tone (มนตรี)
+  });
+
+  it("includes a keep/change guidance prose with a clear verdict heading", () => {
+    const bad = nameanalyzeEngine.build(["สม", "", "อาทิตย์"]);
+    const gBad = bad.find(
+      (s) => s.kind === "prose" && s.title === "คำแนะนำ: เก็บชื่อเดิมหรือเปลี่ยน",
+    ) as Extract<typeof bad[number], { kind: "prose" }>;
+    expect(gBad).toBeDefined();
+    expect(gBad.accent).toBe("#e0584b");
+    expect(gBad.paras[0].h).toContain("ควรพิจารณาปรับชื่อ");
+
+    const ok = nameanalyzeEngine.build(["ธนกฤต", "", "อาทิตย์"]);
+    const gOk = ok.find(
+      (s) => s.kind === "prose" && s.title === "คำแนะนำ: เก็บชื่อเดิมหรือเปลี่ยน",
+    ) as Extract<typeof ok[number], { kind: "prose" }>;
+    expect(gOk.accent).toBe("#6cc18a");
+    expect(gOk.paras[0].h).toContain("ใช้ได้ตามหลักทักษา");
+  });
+
+  it("result is substantial (multiple sections incl numerology meaning)", () => {
+    const out = nameanalyzeEngine.build(["ธนกฤต", "ใจดี", "อาทิตย์"]);
+    expect(out.length).toBeGreaterThanOrEqual(6);
+    const numMeaning = out.find(
+      (s) => s.kind === "prose" && s.title === "ความหมายเลขศาสตร์ของชื่อ",
+    );
+    expect(numMeaning).toBeDefined();
+  });
+
+  it("polite-neutral tone: no gendered particles anywhere in output", () => {
+    const out = nameanalyzeEngine.build(["สมหญิง", "ศรีสุข", "ศุกร์"]);
+    const blob = JSON.stringify(out);
+    // ครับ/ค่ะ are unambiguous gendered finals; bare คะ collides with คะแนน (a noun), so excluded
+    expect(blob).not.toMatch(/ครับ/);
+    expect(blob).not.toMatch(/ค่ะ/);
+  });
 });

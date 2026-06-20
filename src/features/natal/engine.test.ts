@@ -50,10 +50,15 @@ describe("natal engine", () => {
     if (grid && grid.kind === "grid") expect(grid.cells.length).toBeGreaterThanOrEqual(7);
   });
 
-  it("invalid input → single note", () => {
-    expect(natalEngine.build([""])).toEqual([
-      { kind: "note", text: "กรอกวันเกิด เวลาเกิด และเมืองเกิด ให้ครบ แล้วลองใหม่" },
-    ]);
+  it("invalid input → targeted note (ขาดวันเกิด / ขาดเวลาเกิดเฉพาะเจาะจง)", () => {
+    expect(natalEngine.build([""])[0]).toEqual({
+      kind: "note",
+      text: "กรอกวันเกิดให้ครบ แล้วลองใหม่",
+    });
+    // มีวันเกิดแล้วแต่ขาดเวลา → note ทวงเฉพาะเวลาเกิด ไม่ทวงช่องที่กรอกครบแล้ว
+    const noTime = natalEngine.build(["1990-01-15", "", "กรุงเทพมหานคร"]);
+    expect(noTime).toHaveLength(1);
+    expect(noTime[0].kind === "note" && noTime[0].text.includes("เวลาเกิด")).toBe(true);
   });
 
   it("unknown city → note, not a silent Bangkok chart (regression: H6)", () => {
@@ -69,5 +74,67 @@ describe("natal engine", () => {
       const sunCell = grid.cells.find((c) => c.name.includes("อาทิตย์"));
       expect(sunCell?.value).toContain("มังกร");
     }
+  });
+
+  it("grid includes the four primary points: 7 planets + Asc + MC = 9 cells", () => {
+    const r = natalEngine.build(VALS);
+    const grid = r.find((s) => s.kind === "grid");
+    expect(grid?.kind).toBe("grid");
+    if (grid && grid.kind === "grid") {
+      expect(grid.cells.length).toBe(9);
+      expect(grid.cells.some((c) => c.name.includes("ลัคนา"))).toBe(true);
+      expect(grid.cells.some((c) => c.name.includes("กลางฟ้า"))).toBe(true);
+    }
+  });
+
+  it("renders all 12 house cusps as a cards section", () => {
+    const r = natalEngine.build(VALS);
+    const houses = r.find((s) => s.kind === "cards" && s.title.includes("เรือน"));
+    expect(houses?.kind).toBe("cards");
+    if (houses && houses.kind === "cards") {
+      expect(houses.items).toHaveLength(12);
+      expect(houses.items[0].value).toContain("เรือน 1");
+      expect(houses.items[11].value).toContain("เรือน 12");
+    }
+  });
+
+  it("element balance sums to 8 (7 planets + ascendant) and marks the dominant", () => {
+    const r = natalEngine.build(VALS);
+    const el = r.find((s) => s.kind === "cards" && s.title.includes("สมดุลธาตุ"));
+    expect(el?.kind).toBe("cards");
+    if (el && el.kind === "cards") {
+      expect(el.items).toHaveLength(4);
+      const total = el.items.reduce((sum, it) => {
+        const m = it.value.match(/(\d+)\/8/);
+        return sum + (m ? Number(m[1]) : 0);
+      }, 0);
+      expect(total).toBe(8);
+      expect(el.items.some((it) => it.badge === "เด่นที่สุด")).toBe(true);
+    }
+  });
+
+  it("MC and IC (cusp 10 vs cusp 4) are 180° apart in the house-cusps display", () => {
+    const r = natalEngine.build(VALS);
+    const houses = r.find((s) => s.kind === "cards" && s.title.includes("เรือน"));
+    if (houses && houses.kind === "cards") {
+      const c10 = houses.items[9].value;
+      const c4 = houses.items[3].value;
+      // cusp 10 = MC; its opposite IC sits in the sign 6 places along (Aqu↔Leo here)
+      expect(c10).toContain("กุมภ์");
+      expect(c4).toContain("สิงห์");
+    }
+  });
+
+  it("provides a practical-guidance prose section", () => {
+    const r = natalEngine.build(VALS);
+    const guide = r.find((s) => s.kind === "prose" && s.title.includes("คำแนะนำ"));
+    expect(guide?.kind).toBe("prose");
+    if (guide && guide.kind === "prose") expect(guide.paras.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it("user-facing text uses polite-neutral Thai (no gendered particles)", () => {
+    const r = natalEngine.build(VALS);
+    const text = JSON.stringify(r);
+    expect(text).not.toMatch(/ครับ|ค่ะ|จ้ะ|จ้า/);
   });
 });

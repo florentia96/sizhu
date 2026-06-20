@@ -100,7 +100,7 @@ export function Header({ query, onQueryChange, onLogo }: HeaderProps) {
                 letterSpacing: ".02em",
               }}
             >
-              มูดี
+              มูดีย์
             </div>
             <div style={{ fontSize: 9.5, color: "var(--text-dim)", letterSpacing: 3, fontWeight: 500 }}>
               MOODEE · 神算
@@ -124,7 +124,7 @@ export function Header({ query, onQueryChange, onLogo }: HeaderProps) {
           <input
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
-            placeholder="ค้นหาศาสตร์ เช่น เบอร์ · ฝัน · ราศี"
+            placeholder="ค้นหาศาสตร์ เช่น เบอร์ ฝัน ราศี"
             aria-label="ค้นหาศาสตร์"
             style={SEARCH_INPUT}
           />

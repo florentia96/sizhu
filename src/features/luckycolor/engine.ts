@@ -24,10 +24,21 @@ export function luckyColorReport(dayLabel: string, aspect: string): Section[] {
   const asp = aspMap[aspect] || info.luck;
   const secs: Section[] = [];
   secs.push({
+    kind: "prose",
+    title: "ดวงประจำวันเกิด",
+    glyph: "命",
+    paras: [
+      { h: "ดาวประจำวัน: " + info.lord, t: "คนเกิดวัน" + dayLabel + " มีบุคลิกเด่นคือ " + info.tr },
+      {
+        t: "การเลือกสีให้ตรงกับวันเกิดช่วยเสริมพลังของดาวประจำวัน ส่วนสีกาลกิณีคือสีที่บั่นทอนดวง จึงควรหลีกเลี่ยงในวันสำคัญ",
+      },
+    ],
+  });
+  secs.push({
     kind: "swatches",
     title: "สีมงคลประจำวัน" + dayLabel,
     glyph: "彩",
-    tag: "ใส่แล้วรุ่ง",
+    tag: "ใส่แล้วเสริมดวง",
     accent: JADE,
     text:
       "สีพื้นฐานที่เสริมดวงชะตาของคนเกิดวัน" +
@@ -59,12 +70,12 @@ export function luckyColorReport(dayLabel: string, aspect: string): Section[] {
     title: "สีเสริมแยกตามด้าน",
     glyph: "色",
     cells: [
-      { name: "การงาน", value: info.work.join(" · "), note: "หน้าที่ ตำแหน่ง" },
-      { name: "การเงิน", value: info.money.join(" · "), note: "โชคลาภ รายได้" },
-      { name: "ความรัก", value: info.love.join(" · "), note: "เสน่ห์ คู่ครอง" },
+      { name: "การงาน", value: info.work.join(", "), note: "หน้าที่ ตำแหน่ง" },
+      { name: "การเงิน", value: info.money.join(", "), note: "โชคลาภ รายได้" },
+      { name: "ความรัก", value: info.love.join(", "), note: "เสน่ห์ คู่ครอง" },
       {
         name: "เมตตามหานิยม",
-        value: info.luck.join(" · "),
+        value: info.luck.join(", "),
         note: "คนรักใคร่ อุปถัมภ์",
       },
     ],

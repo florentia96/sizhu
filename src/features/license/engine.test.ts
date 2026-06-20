@@ -21,6 +21,17 @@ describe("license meta + fields", () => {
       PROVINCES.forEach((p) => expect(provField.options).toContain(p));
     }
   });
+  it("plate field has plate-shaped input guards (maxLength 8, text inputMode, hint)", () => {
+    const f = licenseFields[0];
+    expect(f.type).toBe("text");
+    if (f.type === "text") {
+      expect(f.maxLength).toBe(8);
+      // plates contain Thai letters → must NOT be numeric
+      expect(f.inputMode).toBe("text");
+      expect(f.placeholder).toBe("1กก2345");
+      expect(f.hint).toBeTruthy();
+    }
+  });
 });
 
 describe("license engine", () => {
@@ -66,5 +77,54 @@ describe("license deepened engine", () => {
   });
   it("is deterministic after deepening", () => {
     expect(licenseEngine.build(["1กก234", "ชลบุรี"])).toEqual(licenseEngine.build(["1กก234", "ชลบุรี"]));
+  });
+});
+
+describe("license enriched result", () => {
+  it("emits a per-letter rows breakdown (each plate consonant + its value)", () => {
+    const out = licenseEngine.build(["1กก2345", "ภูเก็ต"]);
+    const rows = out.find(
+      (s) => s.kind === "rows" && s.title.includes("ค่าพยัญชนะบนป้าย"),
+    );
+    expect(rows).toBeDefined();
+    if (rows && rows.kind === "rows") {
+      expect(rows.items).toHaveLength(2);
+      expect(rows.items.every((i) => i.n === "ก" && i.title.includes("1"))).toBe(true);
+    }
+  });
+
+  it("includes a license-specific guidance prose tying letters + digits together", () => {
+    const out = licenseEngine.build(["1กก2345", "เชียงใหม่"]);
+    const prose = out.find((s) => s.kind === "prose" && s.title === "อ่านป้ายทะเบียนนี้");
+    expect(prose).toBeDefined();
+    if (prose && prose.kind === "prose") {
+      const joined = prose.paras.map((p) => p.t).join(" ");
+      // mentions both the combined-sum derivation and that หมวดอักษร carries no direct meaning
+      expect(joined.includes("ผลรวมรวม")).toBe(true);
+      expect(joined.includes("หมวดอักษร")).toBe(true);
+    }
+  });
+
+  it("output still satisfies ReportSchema after enrichment", () => {
+    expect(() => ReportSchema.parse(licenseEngine.build(["1กก2345", "ชลบุรี"]))).not.toThrow();
+  });
+
+  it("verdict stays first, source note stays last (splice order preserved)", () => {
+    const out = licenseEngine.build(["1กก2345", "ชลบุรี"]);
+    expect(out[0].kind).toBe("verdict");
+    expect(out[out.length - 1].kind).toBe("note");
+  });
+
+  it("plate with no table consonants still produces a grid + guidance (no crash)", () => {
+    const out = licenseEngine.build(["1234", "ชลบุรี"]);
+    const grid = out.find((s) => s.kind === "grid" && s.title.includes("ผลรวมรวม"));
+    expect(grid).toBeDefined();
+    const prose = out.find((s) => s.kind === "prose" && s.title === "อ่านป้ายทะเบียนนี้");
+    expect(prose).toBeDefined();
+    // no per-letter rows when there are no table consonants
+    const letterRows = out.find(
+      (s) => s.kind === "rows" && s.title.includes("ค่าพยัญชนะบนป้าย"),
+    );
+    expect(letterRows).toBeUndefined();
   });
 });

@@ -17,6 +17,26 @@ describe("grader meta + fields", () => {
     expect(graderFields[0].type).toBe("text");
     expect(graderFields[0].label).toBe("เลขที่ต้องการตรวจ");
   });
+  it("enforces the numeric input contract (maxLength 15, numeric, hint+placeholder)", () => {
+    const f = graderFields[0];
+    if (f.type !== "text") throw new Error("grader field must be type text");
+    expect(f.maxLength).toBe(15);
+    expect(f.inputMode).toBe("numeric");
+    expect(f.placeholder).toBe("เช่น 0812345678 หรือ 1234");
+    expect(f.hint).toBe("กรอกเฉพาะตัวเลข เช่น เบอร์โทร เลขบัญชี หรือเลขเด็ด");
+  });
+  it("keeps user-facing copy polite-neutral (no ครับ/ค่ะ/slang particles)", () => {
+    const f = graderFields[0];
+    const copy = [
+      graderMeta.name,
+      graderMeta.desc,
+      graderMeta.long,
+      f.label,
+      f.type === "text" ? f.placeholder : "",
+      "hint" in f ? f.hint : "",
+    ].join(" ");
+    expect(copy).not.toMatch(/ครับ|ค่ะ|นะคะ|จ้า|จ๊ะ/);
+  });
 });
 
 describe("grader engine", () => {
@@ -41,5 +61,27 @@ describe("grader engine", () => {
       expect(verdict.score).toBeLessThanOrEqual(98);
       expect(verdict.grade).toBeTruthy();
     }
+  });
+  it("result is complete (not thin): verdict + rows + grid + prose + note all present", () => {
+    const out = graderEngine.build(["0812345678"]);
+    const kinds = out.map((s) => s.kind);
+    expect(kinds).toContain("verdict");
+    expect(kinds).toContain("rows");
+    expect(kinds).toContain("grid");
+    expect(kinds).toContain("prose");
+    expect(kinds).toContain("note");
+  });
+  it("passes a sensible label+glyph into the report (verdict summary starts with the label)", () => {
+    const out = graderEngine.build(["1424"]);
+    const verdict = out.find((s) => s.kind === "verdict");
+    expect(verdict && verdict.kind === "verdict" && verdict.summary.startsWith("เลข")).toBe(true);
+    const rows = out.find((s) => s.kind === "rows");
+    expect(rows && rows.kind === "rows" && rows.glyph).toBe("數");
+  });
+  it("never returns an empty rows section: at least one analysis row always shown", () => {
+    // a digit string with no table pairs (e.g. 11 not in PAIRS) still yields a placeholder row
+    const out = graderEngine.build(["11"]);
+    const rows = out.find((s) => s.kind === "rows");
+    expect(rows && rows.kind === "rows" && rows.items.length).toBeGreaterThanOrEqual(1);
   });
 });

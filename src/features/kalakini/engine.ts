@@ -1,73 +1,148 @@
-import type { Section } from "../../shared/sections/types";
+import type { Section, Tone } from "../../shared/sections/types";
 import type { FeatureEngine } from "../../app/feature";
 import { taksaForDay } from "../../features/_shared/taksa";
+import type { BhumiCell } from "../../features/_shared/taksa";
 import { TONE } from "./content";
+
+const TONE_BY_KEY: Record<Tone, string> = {
+  good: TONE.good,
+  warn: TONE.warn,
+  bad: TONE.bad,
+  info: TONE.info,
+};
+
+// ป้ายกำกับสั้น ๆ ต่อภูมิ ใช้บนแท็กของ block (อังกฤษ-ไทยตามตำแหน่งบทบาท)
+const BHUMI_TAG: Record<string, string> = {
+  บริวาร: "ผู้สนับสนุน",
+  อายุ: "สุขภาพ",
+  เดช: "อำนาจ",
+  ศรี: "เสน่ห์-ทรัพย์",
+  มูละ: "รากฐาน",
+  อุตสาหะ: "ความเพียร",
+  มนตรี: "ผู้อุปถัมภ์",
+  กาลกิณี: "หลีกเลี่ยง",
+};
+
+function blockFor(cell: BhumiCell): {
+  title: string;
+  tag: string;
+  accent: string;
+  text: string;
+  chips: string[];
+} {
+  const isKala = cell.bhumi === "กาลกิณี";
+  const title = "อักษร" + cell.bhumi + " (ดาว" + cell.planet + ")";
+  const text = isKala
+    ? cell.desc + " — เป็นกาลกิณีของคนเกิดวันนี้ ไม่ควรใช้เป็นพยัญชนะหรือตัวสะกดในชื่อ"
+    : cell.desc;
+  return {
+    title,
+    tag: BHUMI_TAG[cell.bhumi] ?? cell.bhumi,
+    accent: TONE_BY_KEY[cell.k],
+    text,
+    chips: cell.letters.slice(),
+  };
+}
 
 function buildKalakini(dayLabel: string): Section[] {
   const day = dayLabel || "อาทิตย์";
   const t = taksaForDay(day); // t[0]=บริวาร ... t[7]=กาลกิณี
   const kala = t[7];
-  const dech = t[2];
-  const sri = t[3];
-  const montri = t[6];
-
-  const blocks: { title: string; tag: string; accent: string; text: string; chips: string[] }[] = [
-    {
-      title: "อักษรกาลกิณี (ห้ามใช้ในชื่อ)",
-      tag: "หลีกเลี่ยง",
-      accent: TONE.bad,
-      text:
-        "พยัญชนะ/สระกลุ่ม " +
-        kala.planet +
-        " เป็นกาลกิณีของคนเกิดวัน" +
-        day +
-        " ควรเลี่ยงใช้เป็นตัวสะกดหรือพยัญชนะในชื่อ",
-      chips: kala.letters.slice(),
-    },
-    {
-      title: "อักษรเดช (เสริมอำนาจบารมี)",
-      tag: "เสริมดวง",
-      accent: TONE.good,
-      text: dech.desc,
-      chips: dech.letters.slice(),
-    },
-    {
-      title: "อักษรศรี (เสริมเสน่ห์-ทรัพย์)",
-      tag: "เสริมดวง",
-      accent: TONE.warn,
-      text: sri.desc,
-      chips: sri.letters.slice(),
-    },
-    {
-      title: "อักษรมนตรี (ผู้ใหญ่อุปถัมภ์)",
-      tag: "เสริมดวง",
-      accent: TONE.info,
-      text: montri.desc,
-      chips: montri.letters.slice(),
-    },
-  ];
+  const auspicious = t.filter((x) => x.k === "good"); // เดช ศรี มูละ อุตสาหะ มนตรี
+  const kalaLetters = kala.letters.join(" ");
 
   const secs: Section[] = [];
+
+  // 1) บทสรุปเด่น — เน้นอักษรกาลกิณีที่ต้องเลี่ยงเป็นอันดับแรก
+  secs.push({
+    kind: "verdict",
+    score: 0,
+    grade: "忌",
+    gradeLabel: "อักษรกาลกิณี",
+    accent: TONE.bad,
+    hideRing: true,
+    summary:
+      "คนเกิดวัน" +
+      day +
+      " มีกาลกิณีตกที่หมู่อักษรของดาว" +
+      kala.planet +
+      " คือ " +
+      kalaLetters +
+      " ตามตำราทักษาควรเลี่ยงใช้พยัญชนะกลุ่มนี้เป็นตัวต้นชื่อหรือตัวสะกด",
+    meta: "ทักษาประจำวัน" + day + " · เริ่มนับบริวารที่ดาว" + t[0].planet,
+  });
+
+  // 2) ที่มา/หลักการ
   secs.push({
     kind: "prose",
-    title: "ทักษาประจำวัน" + day,
+    title: "หลักทักษาประจำวัน" + day,
     glyph: "忌",
     paras: [
       {
-        t: "ตามหลักทักษาปกรณ์ หมู่อักษรทั้ง 8 จะวางบนวงล้อ โดยเริ่มนับ \"บริวาร\" ที่ดาวประจำวันเกิด แล้วไล่ไปจนถึง \"กาลกิณี\" ซึ่งเป็นอักษรอัปมงคลที่ควรเลี่ยง",
+        t:
+          "ตามหลักทักษาปกรณ์ หมู่อักษรทั้ง 8 วางบนวงล้ออัฐเคราะห์ โดยเริ่มนับภูมิแรก “บริวาร” ที่ดาวประจำวันเกิด แล้วไล่ตามวงล้อไปจนถึงภูมิที่ 8 “กาลกิณี” ซึ่งเป็นหมู่อักษรอัปมงคลที่ควรเลี่ยงเมื่อนำไปตั้งชื่อ",
+      },
+      {
+        h: "ลำดับ 8 ภูมิ",
+        t: "บริวาร อายุ เดช ศรี มูละ อุตสาหะ มนตรี กาลกิณี (เรียงตามวงล้อจากดาวประจำวันเกิด)",
       },
     ],
   });
-  secs.push({ kind: "blocks", title: "อักษรเสริม & อักษรต้องห้าม", glyph: "字", items: blocks });
+
+  // 3) ครบทั้ง 8 ภูมิ พร้อมอักษร + ความหมาย (ระบายสีตามคุณภาพภูมิ)
+  secs.push({
+    kind: "blocks",
+    title: "หมู่อักษรครบทั้ง 8 ภูมิ",
+    glyph: "字",
+    items: t.map(blockFor),
+  });
+
+  // 4) คำแนะนำปฏิบัติเมื่อนำไปตั้งชื่อ
+  const auspiciousNames = auspicious.map((x) => x.bhumi).join(" ");
+  secs.push({
+    kind: "prose",
+    title: "แนวทางใช้ตั้งชื่อ",
+    glyph: "名",
+    paras: [
+      {
+        h: "อักษรที่ควรเลี่ยง",
+        t:
+          "เลี่ยงพยัญชนะกาลกิณีกลุ่มดาว" +
+          kala.planet +
+          " (" +
+          kalaLetters +
+          ") โดยเฉพาะตำแหน่งพยัญชนะต้นและตัวสะกด ส่วนสระและวรรณยุกต์มักไม่นับเป็นกาลกิณี ยกเว้นกรณีกาลกิณีตกที่หมู่สระของดาวอาทิตย์",
+      },
+      {
+        h: "อักษรที่ควรเสริม",
+        t:
+          "เลือกพยัญชนะจากหมู่มงคล " +
+          auspiciousNames +
+          " เพื่อหนุนด้านที่ต้องการ เช่น เดชเสริมอำนาจบารมี ศรีเสริมเสน่ห์และทรัพย์ มนตรีเสริมผู้ใหญ่อุปถัมภ์",
+      },
+      {
+        t:
+          "หลักทักษาเป็นเกณฑ์เรื่องหมู่อักษรตามวันเกิด สามารถใช้ร่วมกับการตรวจเลขศาสตร์ของชื่อเพื่อพิจารณาประกอบกันได้",
+      },
+    ],
+  });
+
+  // 5) ตารางอ้างอิงแบบกระชับ
   secs.push({
     kind: "grid",
-    title: "ครบทั้ง 8 ภูมิทักษา",
+    title: "ตารางอ้างอิง 8 ภูมิ",
     glyph: "宮",
-    cells: t.map((x) => ({ name: x.bhumi + " · " + x.planet, value: x.letters.join(" "), note: x.desc })),
+    cells: t.map((x) => ({
+      name: x.bhumi + " · " + x.planet,
+      value: x.letters.join(" "),
+      note: x.desc,
+    })),
   });
+
   secs.push({
     kind: "note",
-    text: "คำนวณตามวงล้อทักษาปกรณ์ (อัฐเคราะห์) แบบมาตรฐาน · ผู้ที่เกิดวันพุธกลางคืนให้ใช้ฐานราหู",
+    text:
+      "คำนวณตามวงล้อทักษาปกรณ์ (อัฐเคราะห์) แบบมาตรฐาน ผู้ที่เกิดวันพุธหลัง 18:00 (พุธกลางคืน) ให้ใช้ฐานราหู ตำราบางสำนักอาจกำหนดรายละเอียดต่างกันเล็กน้อย",
   });
   return secs;
 }

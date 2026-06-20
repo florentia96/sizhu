@@ -16,6 +16,13 @@ export const PROVINCES: string[] = [
 ];
 
 export const licenseFields: Field[] = [
-  { label: "ทะเบียน", type: "text", placeholder: "เช่น 1กก234" },
+  {
+    label: "ทะเบียน",
+    type: "text",
+    placeholder: "1กก2345",
+    inputMode: "text",
+    maxLength: 8,
+    hint: "กรุณาใส่ตามที่เห็นบนป้าย เช่น 1กก2345 หรือ กก1234 — พิมพ์ได้ทั้งตัวเลขและพยัญชนะไทย ระบบจะคิดค่าพยัญชนะ (เช่น ก=1) บวกกับตัวเลขให้เอง",
+  },
   { label: "จังหวัด", type: "select", options: PROVINCES },
 ];

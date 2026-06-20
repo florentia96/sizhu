@@ -3,6 +3,9 @@ import { numberReport } from "../_shared/numerology";
 
 export const graderEngine: FeatureEngine = {
   build(vals: string[]) {
-    return numberReport(vals[0] || "", "เลข", "數");
+    const raw = vals[0] || "";
+    if (raw.replace(/\D/g, "").length > 15)
+      return [{ kind: "note", text: "เลขรองรับสูงสุด 15 หลัก กรุณาตรวจสอบอีกครั้ง" }];
+    return numberReport(raw, "เลข", "數");
   },
 };

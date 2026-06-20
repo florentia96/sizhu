@@ -1,7 +1,9 @@
 import type { Section } from "../../shared/sections/types";
 import type { FeatureEngine } from "../../app/feature";
 import { toCE, lichunCE } from "../zodiacyear/engine";
-import { KUA_DIR, GOOD_NAME, BAD_NAME, DIR_TH, JADE, GOLD } from "./content";
+import {
+  KUA_DIR, GOOD_NAME, BAD_NAME, DIR_TH, GROUP_INFO, JADE, GOLD, RED,
+} from "./content";
 
 export function sumDigits(s: string): number {
   return (s.match(/\d/g) ?? []).reduce((a, d) => a + Number(d), 0);
@@ -14,9 +16,8 @@ export function reduceSingle(n: number): number {
 }
 
 export function kuaNumber(ce: number, gender: string): number {
-  // สูตร Eight Mansions (โป๊ยแถ่ว) มาตรฐาน ใช้ "2 หลักท้าย" ของปี ค.ศ. — ไม่ใช่รวมทั้ง 4 หลัก
-  // ค่าคงที่ที่สลับตอนปี 2000 (10−s vs 9−s) ออกแบบมาเพื่อ 2 หลักท้ายโดยเฉพาะ
-  // ที่มา: prokerala.com/feng-shui/kua-number.php (1978 ชาย=4), calculator.academy/kua-number-calculator, lovetoknow.com
+  // สูตร Eight Mansions มาตรฐาน ใช้ 2 หลักท้ายของปี ค.ศ.
+  // ค่าคงที่สลับตอนปี 2000 (10−s vs 9−s / s+5 vs s+6) ออกแบบมาเพื่อ 2 หลักท้ายโดยเฉพาะ
   const s = reduceSingle(sumDigits(String(ce).slice(-2)));
   const male = gender === "ชาย";
   let k: number;
@@ -32,23 +33,35 @@ export function kuaNumber(ce: number, gender: string): number {
   return k;
 }
 
+export function isEastGroup(k: number): boolean {
+  return [1, 3, 4, 9].indexOf(k) >= 0;
+}
+
 export function kuaReport(ce: number, gender: string): Section[] {
   const k = kuaNumber(ce, gender);
   const dirs = KUA_DIR[k];
-  const group = [1, 3, 4, 9].indexOf(k) >= 0
-    ? "กลุ่มทิศตะวันออก (East Group)"
-    : "กลุ่มทิศตะวันตก (West Group)";
+  const east = isEastGroup(k);
+  const group = GROUP_INFO[east ? "east" : "west"];
+
+  // ชื่อทิศ (ไทย) ของแต่ละตำแหน่งตามลำดับ KUA_DIR
+  const D = (i: number) => DIR_TH[dirs[i]];
+  const shengQi = D(0);
+  const tianYi = D(1);
+  const yanNian = D(2);
+  const jueMing = D(7);
+
   const goodItems = GOOD_NAME.map((g, i) => ({
-    title: g.th,
+    title: g.th + " (" + g.cn + ") — " + g.short,
     tag: DIR_TH[dirs[i]],
     accent: i === 0 ? JADE : GOLD,
-    text: g.d,
+    text: g.d + " วิธีใช้: " + g.use,
     chips: [DIR_TH[dirs[i]]],
   }));
+
   const badItems = BAD_NAME.map((g, i) => ({
-    name: g.th,
-    value: DIR_TH[dirs[i + 4]],
-    note: g.d,
+    name: g.th + " (" + g.cn + ")",
+    value: DIR_TH[dirs[i + 4]] + " — " + g.short,
+    note: g.d + " วิธีรับมือ: " + g.use,
   }));
 
   const secs: Section[] = [];
@@ -57,25 +70,83 @@ export function kuaReport(ce: number, gender: string): Section[] {
     score: 0,
     hideRing: true,
     grade: "กัว " + k,
-    gradeLabel: group,
+    gradeLabel: group.name,
     accent: JADE,
-    summary: "เลขกัว " + k + " — " + group + " · จัดบ้าน/โต๊ะทำงาน/หัวเตียงให้หันทิศมงคลเพื่อเสริมดวง",
-    meta: "คำนวณจากปีเกิด ค.ศ. " + ce + " + เพศ ตามสูตรเลขกัวฮวงจุ้ย",
+    summary:
+      "เลขกัว " + k + " อยู่ใน" + group.name +
+      " ทิศมงคลของคุณคือ " + group.dirs +
+      " ใช้จัดทิศโต๊ะทำงาน หัวเตียง และประตูหลักเพื่อเสริมดวง",
+    meta: "คำนวณจากปีเกิด ค.ศ. " + ce + " และเพศ ตามวิชาฮวงจุ้ยแปดทิศ (Eight Mansions)",
   });
-  secs.push({ kind: "blocks", title: "4 ทิศมงคล (เรียงจากดีสุด)", glyph: "吉", items: goodItems });
-  secs.push({ kind: "grid", title: "4 ทิศที่ควรเลี่ยง", glyph: "凶", cells: badItems });
+
   secs.push({
     kind: "prose",
-    title: "นำไปใช้จริงอย่างไร",
+    title: "กลุ่มทิศของคุณ",
+    glyph: east ? "東" : "西",
+    accent: JADE,
+    paras: [
+      {
+        h: group.name,
+        t: group.meaning + " ทิศมงคลทั้งสี่ของกลุ่มนี้คือ " + group.dirs,
+      },
+      {
+        h: "หลักการใช้งาน",
+        t: "ทิศมงคลใช้กับสิ่งที่ต้องการพลังดี เช่น หันหน้าขณะทำงาน หันหัวเตียง และทางเข้าหลัก " +
+          "ส่วนทิศที่ควรเลี่ยงให้จัดเป็นพื้นที่ที่ไม่ได้อยู่ประจำ เช่น ห้องเก็บของหรือห้องน้ำ",
+      },
+    ],
+  });
+
+  secs.push({
+    kind: "blocks",
+    title: "4 ทิศมงคล (เรียงจากดีสุด)",
+    glyph: "吉",
+    items: goodItems,
+  });
+
+  secs.push({
+    kind: "grid",
+    title: "4 ทิศที่ควรเลี่ยง (เรียงจากเบาไปหนัก)",
+    glyph: "凶",
+    accent: RED,
+    cells: badItems,
+  });
+
+  secs.push({
+    kind: "prose",
+    title: "นำไปใช้จริงในบ้าน",
     glyph: "宅",
     accent: JADE,
     paras: [
-      { h: "โต๊ะทำงาน", t: "หันหน้า (ทิศที่หน้าหันไปขณะนั่ง) ไปทาง " + DIR_TH[dirs[0]] + " (เซิงชี่) เพื่อเสริมการงานและโชคลาภ" },
-      { h: "หัวเตียงนอน", t: "หันหัวเตียงไปทาง " + DIR_TH[dirs[1]] + " (เทียนอี) เสริมสุขภาพ หรือ " + DIR_TH[dirs[2]] + " (เหยียนเหนียน) เสริมความรัก" },
-      { h: "ประตูหลัก/ทางเข้า", t: "ให้รับพลังจากทิศมงคลข้างต้น และเลี่ยงให้ประตู/เตียงหันไปทาง " + DIR_TH[dirs[7]] + " (เจวี๋ยมิ่ง) ซึ่งเป็นทิศร้ายที่สุด" },
+      {
+        h: "โต๊ะทำงาน",
+        t: "หันหน้า (ทิศที่หน้าหันไปขณะนั่ง) ไปทาง" + shengQi +
+          " ซึ่งเป็นทิศเซิงชี่ เพื่อเสริมการงานและโชคลาภ",
+      },
+      {
+        h: "หัวเตียงนอน",
+        t: "หันหัวเตียงไปทาง" + tianYi + " ซึ่งเป็นทิศเทียนอีเพื่อเสริมสุขภาพ " +
+          "หรือทาง" + yanNian + " ซึ่งเป็นทิศเหยียนเหนียนเพื่อเสริมความรัก",
+      },
+      {
+        h: "เตาไฟและครัว",
+        t: "ในวิชาฮวงจุ้ยแปดทิศ เตาควรตั้งอยู่ในโซนทิศที่ควรเลี่ยง แต่หันหน้าเตา " +
+          "(ด้านที่จุดไฟหรือปุ่มเปิด) ไปทางทิศมงคล เพื่อเปลี่ยนพลังร้ายให้เป็นดี",
+      },
+      {
+        h: "ประตูหลักและสิ่งที่ควรเลี่ยง",
+        t: "ให้ประตูหลักรับพลังจากทิศมงคลข้างต้น และอย่าหันหัวเตียงหรือประตูหลักไปทาง" +
+          jueMing + " ซึ่งเป็นทิศเจวี๋ยมิ่ง อันเป็นทิศร้ายที่สุด",
+      },
     ],
   });
-  secs.push({ kind: "note", text: "คำนวณตามวิชาฮวงจุ้ยสายโป๊ยแถ่ว (Eight Mansions) · เปลี่ยนรอบปีราววันที่ 4 กุมภาพันธ์ของทุกปี (ไม่ใช่ 1 มกราคม) — หากไม่ได้กรอกวันเกิด และเกิดช่วงต้นปีก่อน 4 ก.พ. ให้ลองคำนวณปีก่อนหน้าเทียบด้วย" });
+
+  secs.push({
+    kind: "note",
+    text:
+      "คำนวณตามวิชาฮวงจุ้ยแปดทิศ (Eight Mansions) ซึ่งเปลี่ยนรอบปีราววันที่ 4 กุมภาพันธ์ของทุกปี ไม่ใช่ 1 มกราคม " +
+      "หากเกิดช่วงต้นปีก่อน 4 กุมภาพันธ์และไม่ได้กรอกวันเกิด ให้ลองคำนวณโดยใช้ปีก่อนหน้าเทียบดูด้วย",
+  });
   return secs;
 }
 

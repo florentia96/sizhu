@@ -1,4 +1,4 @@
-import type { FeatureEngine } from "../../app/feature";
+import type { FeatureEngine, Section } from "../../app/feature";
 import { numberReport } from "../_shared/numerology";
 
 // ประเภทเลข → ป้ายผล + ความยาวบังคับ (บัตรประชาชนไทย = 13 หลัก)
@@ -17,7 +17,24 @@ export const idcardEngine: FeatureEngine = {
     if (digits.length < 2)
       return [{ kind: "note", text: "กรุณากรอกตัวเลขอย่างน้อย 2 หลักเพื่อวิเคราะห์" }];
     if (m.len && digits.length !== m.len)
-      return [{ kind: "note", text: `${m.label}ต้องมี ${m.len} หลัก (กรอกมา ${digits.length} หลัก)` }];
-    return numberReport(raw, m.label, "證");
+      return [
+        {
+          kind: "note",
+          text: `${m.label}ต้องมี ${m.len} หลักพอดี ตอนนี้กรอกมา ${digits.length} หลัก กรุณาตรวจสอบอีกครั้ง`,
+        },
+      ];
+    if (!m.len && digits.length > 15)
+      return [
+        {
+          kind: "note",
+          text: `${m.label}รองรับสูงสุด 15 หลัก ตอนนี้กรอกมา ${digits.length} หลัก กรุณาตรวจสอบอีกครั้ง`,
+        },
+      ];
+    const sections = numberReport(raw, m.label, "證");
+    const typeNote: Section = {
+      kind: "note",
+      text: `ผลนี้วิเคราะห์จาก "${m.label}" ที่คุณเลือก โดยใช้หลักเลขศาสตร์เดียวกันทุกประเภทเลข หากต้องการตรวจเลขประเภทอื่น สามารถเปลี่ยนประเภทแล้ววิเคราะห์ใหม่ได้`,
+    };
+    return [typeNote, ...sections];
   },
 };

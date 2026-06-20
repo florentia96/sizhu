@@ -1,10 +1,24 @@
 import type { Section } from "../../shared/sections/types";
 import { rasiFromDate, dayFromDate, DAY_LORD, rasiAll } from "../_shared/thaiAstro";
-import { RULER, EL_COMPAT, EL_LOVE, EL_NOTE } from "./content";
+import {
+  RULER,
+  EL_COMPAT,
+  EL_CLASH,
+  EL_LOVE,
+  EL_NOTE,
+  EL_SHORT,
+  EL_GUIDE,
+} from "./content";
 import { siderealCell } from "./sidereal";
 
 const JADE = "#6cc18a";
 const GOLD = "#d8a64a";
+const RED = "#e0584b";
+
+function elNoteTail(el: string): string {
+  const parts = (EL_NOTE[el] || "").split("—");
+  return (parts[1] || parts[0] || "").trim();
+}
 
 function normYear(y: number): number {
   return y > 2300 ? y - 543 : y;
@@ -24,8 +38,12 @@ export function rasiReport(y: number, m: number, d: number): Section[] {
   const compEl = all
     .filter((x) => x.el === EL_COMPAT[r.el])
     .map((x) => "ราศี" + x.s);
+  const clashEl = all
+    .filter((x) => x.el === EL_CLASH[r.el])
+    .map((x) => "ราศี" + x.s);
   const ruler = RULER[r.s] || "";
   const lo = EL_LOVE[r.el] || EL_LOVE["ไฟ"];
+  const guide = EL_GUIDE[r.el] || EL_GUIDE["ไฟ"];
 
   const grid: Section = {
     kind: "grid",
@@ -36,7 +54,7 @@ export function rasiReport(y: number, m: number, d: number): Section[] {
       {
         name: "ธาตุประจำราศี",
         value: r.el,
-        note: (EL_NOTE[r.el].split("—")[1] || "").trim(),
+        note: elNoteTail(r.el),
       },
       { name: "ดาวเจ้าเรือน", value: ruler, note: "ผู้ปกครองราศี" },
       {
@@ -47,7 +65,8 @@ export function rasiReport(y: number, m: number, d: number): Section[] {
     ],
   };
   try {
-    grid.cells.push(siderealCell(Y, m, d));
+    // ส่งปีดิบ (y) — siderealCell/siderealSunSign เป็นเจ้าของการ normalize พ.ศ.→ค.ศ. เอง (กัน normYear ซ้ำสองชั้น)
+    grid.cells.push(siderealCell(y, m, d));
   } catch {
     /* ephemeris unavailable -> keep tropical-only grid */
   }
@@ -77,29 +96,57 @@ export function rasiReport(y: number, m: number, d: number): Section[] {
       ],
     },
     {
+      kind: "prose",
+      title: "จุดเด่น จุดที่ควรระวัง และแนวทาง",
+      glyph: "導",
+      paras: [
+        { h: "จุดเด่น", t: guide.strength },
+        { h: "จุดที่ควรระวัง", t: guide.watch },
+        { h: "แนวทางพัฒนาตัวเอง", t: guide.advice },
+      ],
+    },
+    {
       kind: "blocks",
-      title: "ราศีที่เข้ากัน",
+      title: "ราศีที่เข้ากันและที่ต้องปรับเข้าหากัน",
       glyph: "合",
       items: [
         {
           title: "ธาตุเดียวกัน (เข้าใจกันง่าย)",
           tag: "ธาตุ" + r.el,
           accent: JADE,
-          text: "มีมุมมองและจังหวะชีวิตคล้ายกัน คบหาแล้วสบายใจ",
+          text:
+            "ราศีธาตุ" + r.el + "ด้วยกัน มีมุมมองและจังหวะชีวิตคล้ายกัน เน้น" +
+            (EL_SHORT[r.el] || "") + "เหมือนกัน คบหาแล้วสบายใจ",
           chips: sameEl.length ? sameEl : ["—"],
         },
         {
           title: "ธาตุส่งเสริม (เติมเต็มกัน)",
           tag: "ธาตุ" + EL_COMPAT[r.el],
           accent: GOLD,
-          text: "ธาตุที่ช่วยเสริมและสมดุลกัน เป็นคู่ที่เติบโตไปด้วยกันได้ดี",
-          chips: compEl,
+          text:
+            "ราศีธาตุ" + EL_COMPAT[r.el] + "ช่วยเสริมและสมดุลกัน เติม" +
+            (EL_SHORT[EL_COMPAT[r.el]] || "") + "ให้กัน เป็นคู่ที่เติบโตไปด้วยกันได้ดี",
+          chips: compEl.length ? compEl : ["—"],
+        },
+        {
+          title: "ธาตุที่ต้องปรับเข้าหากัน (ต่างจังหวะ)",
+          tag: "ธาตุ" + EL_CLASH[r.el],
+          accent: RED,
+          text:
+            "ราศีธาตุ" + EL_CLASH[r.el] + "มีจังหวะและความต้องการต่างกันมาก หากเข้าใจและเปิดใจรับความต่าง จะกลายเป็นแรงเติมเต็มที่ดีได้",
+          chips: clashEl.length ? clashEl : ["—"],
         },
       ],
     },
     {
       kind: "note",
-      text: "อิงราศีจักรแบบไทย (นิรายนะ/sidereal) ช่วงวันจึงต่างจากราศีสากล (tropical) ที่อิงฤดู — ชื่ออังกฤษในวงเล็บคือราศีสากลที่ตรงกัน · ช่วงวันอาจคลาด ±1 วันตามปี · ดาวเจ้าเรือนและความเข้ากันของธาตุเป็นหลักโหราศาสตร์สากล",
+      text:
+        "อิงราศีจักรแบบไทย (นิรายนะ/sidereal) ที่คำนวณจากตำแหน่งดาวจริง ช่วงวันจึงต่างจากราศีสากล (tropical) ที่อิงฤดูกาล โดยชื่ออังกฤษในวงเล็บคือราศีสากลที่ตรงกัน",
+    },
+    {
+      kind: "note",
+      text:
+        "ช่วงวันในตารางเป็นค่าโดยประมาณ อาจคลาดเคลื่อนได้ราว ±1 วันในแต่ละปี ให้ยึดช่อง “ราศีตามดาวจริง (sidereal)” เป็นคำตอบที่แม่นยำที่สุด ส่วนดาวเจ้าเรือนและความเข้ากันของธาตุอ้างอิงหลักโหราศาสตร์สากล",
     },
   ];
 }

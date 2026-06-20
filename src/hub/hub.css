@@ -149,6 +149,204 @@
   line-height: 1;
 }
 
+/* ---------- registration: ลงทะเบียนดวง (กรอกวันเกิดครั้งเดียว = หัวใจของหน้าแรก) ---------- */
+.hub-reg {
+  position: relative;
+  margin-top: 20px;
+  padding: clamp(20px, 3.2vw, 30px) clamp(18px, 3vw, 32px);
+  border: 1px solid rgba(216, 166, 74, 0.4);
+  border-radius: 14px;
+  overflow: hidden;
+  background:
+    radial-gradient(130% 130% at 100% 0%, rgba(177, 53, 42, 0.14), transparent 46%),
+    var(--surface);
+  box-shadow: var(--shadow);
+}
+/* hairline ด้านในแบบหน้ากระดาษปฏิทิน (echo ตราชาดของ masthead) */
+.hub-reg::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(216, 166, 74, 0.12);
+  border-radius: 9px;
+  pointer-events: none;
+}
+.hub-reg-inner {
+  position: relative;
+}
+.hub-reg-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--primary-bright);
+  font-weight: 600;
+}
+.hub-reg-title {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: clamp(1.12rem, 2.6vw, 1.4rem);
+  color: var(--text-strong);
+  line-height: 1.25;
+  margin: 7px 0 3px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hub-reg-title .cn {
+  color: var(--gold);
+  font-size: 1.35em;
+  line-height: 1;
+  text-shadow: 0 0 14px rgba(216, 166, 74, 0.45);
+}
+.hub-reg-sub {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.hub-reg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+.hub-reg-field {
+  display: flex;
+  flex-direction: column;
+}
+.hub-reg-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 7px;
+}
+.hub-reg-ctrl {
+  font-size: 16px;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--tap-min);
+  color-scheme: dark;
+  border: 1px solid var(--border-gold);
+  background: var(--surface-inset);
+  border-radius: var(--radius-input);
+  padding: 11px 12px;
+  color: var(--text);
+  outline: none;
+}
+.hub-reg-note {
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  margin-top: 5px;
+}
+.hub-seg {
+  display: flex;
+  gap: 8px;
+}
+.hub-seg button {
+  flex: 1;
+  min-height: var(--tap-min);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  border: 1px solid var(--border-gold);
+  background: var(--surface-inset);
+  color: var(--text);
+  border-radius: var(--radius-input);
+  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+}
+.hub-seg button[aria-pressed="true"] {
+  background: var(--primary);
+  border-color: var(--primary-bright);
+  color: #fff;
+}
+.hub-reg-err {
+  color: var(--primary-bright);
+  font-size: 0.82rem;
+  margin-top: 12px;
+}
+.hub-reg-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+.hub-reg-save {
+  min-height: var(--tap-min);
+  border: none;
+  border-radius: var(--radius-input);
+  padding: 12px 26px;
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 1rem;
+  color: #fff;
+  cursor: pointer;
+  background: var(--primary);
+  box-shadow: 0 2px 0 var(--primary-shadow);
+  transition: transform 0.12s ease;
+}
+.hub-reg-save:active {
+  transform: translateY(1px);
+}
+.hub-reg-foot {
+  font-size: 0.74rem;
+  color: var(--text-faint);
+  line-height: 1.6;
+}
+/* สรุปเมื่อกรอกแล้ว */
+.hub-reg-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.hub-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 9px;
+}
+.hub-chip {
+  font-size: 0.85rem;
+  color: var(--text);
+  background: var(--surface-inset);
+  border: 1px solid var(--border-gold);
+  border-radius: 20px;
+  padding: 5px 14px;
+}
+.hub-chip b {
+  color: var(--gold);
+  font-weight: 600;
+}
+.hub-reg-tools {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.hub-reg-edit {
+  min-height: var(--tap-min);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.88rem;
+  border: 1px solid rgba(216, 166, 74, 0.4);
+  background: var(--surface-inset);
+  color: var(--text);
+  border-radius: var(--radius-input);
+  padding: 9px 18px;
+}
+.hub-reg-clear {
+  min-height: var(--tap-min);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  text-decoration: underline dotted;
+}
+
 /* ---------- chapter (กลุ่มศาสตร์) ---------- */
 .hub-ch {
   margin-top: 44px;

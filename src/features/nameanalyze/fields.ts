@@ -1,8 +1,8 @@
 import type { Field } from "../../app/feature";
 
 export const nameanalyzeFields: Field[] = [
-  { label: "ชื่อจริง", type: "text", placeholder: "เช่น ธนกฤต" },
-  { label: "นามสกุล", type: "text", placeholder: "เช่น ใจดี (ไม่บังคับ)" },
+  { label: "ชื่อจริง", type: "text", placeholder: "เช่น ธนกฤต", maxLength: 40, hint: "ชื่อจริงภาษาไทย (พิมพ์ได้สูงสุด 40 ตัวอักษร)" },
+  { label: "นามสกุล", type: "text", placeholder: "เช่น ใจดี", maxLength: 40, hint: "นามสกุลภาษาไทย ไม่บังคับ — กรอกเพื่อดูค่าเลขศาสตร์รวม" },
   {
     label: "วันเกิด",
     type: "select",

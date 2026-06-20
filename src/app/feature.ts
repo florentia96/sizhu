@@ -10,7 +10,7 @@ export type Field =
       maxLength?: number;
     }
   | { label: string; type: "select"; options: string[]; hint?: string }
-  | { label: string; type: "textarea"; placeholder?: string; hint?: string }
+  | { label: string; type: "textarea"; placeholder?: string; hint?: string; maxLength?: number }
   | { label: string; type: "city"; hint?: string };
 
 export type GroupId = "numbers" | "names" | "astro" | "chinese" | "daily";

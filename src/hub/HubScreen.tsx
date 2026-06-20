@@ -1,10 +1,13 @@
-import { useState, type CSSProperties } from "react";
+import { useState, useRef, useCallback, type CSSProperties } from "react";
 import "./hub.css";
 import { FEATURES } from "../app/registry";
 import type { FeatureDef, GroupId } from "../app/feature";
 import { GROUPS, type GroupMeta } from "./groups";
 import { TodayCard } from "./TodayCard";
 import { CategoryNav, type GroupFilter } from "./CategoryNav";
+import { HomeProfileCard } from "./HomeProfileCard";
+import { hasCoreProfile } from "../shared/profile/profile";
+import { featureUsesCore } from "../shared/profile/resolveCore";
 
 export interface HubProps {
   query: string;
@@ -65,7 +68,7 @@ function Masthead({ flat, onOpen }: { flat: FlatFeature[]; onOpen: (id: string) 
   const popular = POP_IDS.filter((id) => known.has(id)).map((id) => ({ id, ...POP_META[id] }));
 
   return (
-    <section className="hub-mast" aria-label="ภาพรวมมูดี">
+    <section className="hub-mast" aria-label="ภาพรวมมูดีย์">
       <div className="hub-mast-water" aria-hidden="true">通</div>
       <div className="hub-mast-inner">
         <div className="hub-mast-top">
@@ -76,8 +79,8 @@ function Masthead({ flat, onOpen }: { flat: FlatFeature[]; onOpen: (id: string) 
           </div>
         </div>
         <p className="hub-mast-sub">
-          เลขศาสตร์ · นามศาสตร์ · โหราศาสตร์ · ศาสตร์จีน และความเชื่อไทย รวมไว้ที่เดียว —
-          เลือกศาสตร์ที่อยากเปิดได้เลย
+          รวมเลขศาสตร์ นามศาสตร์ โหราศาสตร์ ศาสตร์จีน และความเชื่อไทยไว้ในที่เดียว —
+          เลือกศาสตร์ที่สนใจได้เลย
         </p>
         <div className="hub-arts" aria-hidden="true">
           {GROUPS.map((g) => (
@@ -164,18 +167,51 @@ export function HubScreen({ query, onOpen, features = FEATURES }: HubProps) {
     {} as Record<GroupId, number>,
   );
 
+  // กดศาสตร์ก่อนกรอกวันเกิด → เด้งไปฟอร์มกรอก แล้วเปิดศาสตร์นั้นให้อัตโนมัติเมื่อบันทึก
+  const pendingId = useRef<string | null>(null);
+  const profileCardRef = useRef<HTMLDivElement>(null);
+  const handleOpen = useCallback(
+    (id: string) => {
+      const def = features[id];
+      const needsCore = def ? def.fullRoute || featureUsesCore(def.fields) : false;
+      if (needsCore && !hasCoreProfile()) {
+        pendingId.current = id;
+        profileCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+      onOpen(id);
+    },
+    [features, onOpen],
+  );
+  const onCoreSaved = useCallback(() => {
+    const id = pendingId.current;
+    pendingId.current = null;
+    if (id) onOpen(id);
+  }, [onOpen]);
+  const onCoreCleared = useCallback(() => {
+    pendingId.current = null;
+  }, []);
+
+  const profileCard = (
+    <div ref={profileCardRef}>
+      <HomeProfileCard onSaved={onCoreSaved} onCleared={onCoreCleared} />
+    </div>
+  );
+
   if (searching) {
     return (
       <div className="hub">
-        <SearchResults results={results} onOpen={onOpen} />
+        {profileCard}
+        <SearchResults results={results} onOpen={handleOpen} />
       </div>
     );
   }
 
   return (
     <div className="hub">
-      <Masthead flat={flat} onOpen={onOpen} />
-      <TodayCard onOpen={onOpen} />
+      <Masthead flat={flat} onOpen={handleOpen} />
+      {profileCard}
+      <TodayCard onOpen={handleOpen} />
       <CategoryNav active={activeGroup} onPick={setActiveGroup} counts={counts} />
 
       {GROUPS.map((g) => {
@@ -195,7 +231,7 @@ export function HubScreen({ query, onOpen, features = FEATURES }: HubProps) {
             </div>
             <div className="hub-grid">
               {items.map((f) => (
-                <FeatureCard key={f.id} f={f} onOpen={onOpen} />
+                <FeatureCard key={f.id} f={f} onOpen={handleOpen} />
               ))}
             </div>
           </section>
@@ -203,7 +239,7 @@ export function HubScreen({ query, onOpen, features = FEATURES }: HubProps) {
       })}
 
       <p className="hub-foot">
-        มูดี · ผลทำนายเป็นกรอบอ้างอิงเชิงสัญลักษณ์ตามตำรา ใช้เพื่อความบันเทิง โปรดใช้วิจารณญาณ
+        มูดีย์ · ผลทำนายเป็นกรอบอ้างอิงเชิงสัญลักษณ์ตามตำรา ใช้เพื่อความบันเทิง โปรดใช้วิจารณญาณ
       </p>
     </div>
   );

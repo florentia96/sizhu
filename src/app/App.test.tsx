@@ -3,8 +3,8 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { App } from "./App";
 import { hrefFor, type Route } from "./routes";
 
-vi.mock("../shared/layout/DetailLayout", () => ({
-  DetailLayout: ({ id }: { id: string }) => <div data-testid="detail">detail:{id}</div>,
+vi.mock("../shared/layout/FeatureFlow", () => ({
+  FeatureFlow: ({ id }: { id: string }) => <div data-testid="detail">detail:{id}</div>,
 }));
 vi.mock("../screens/BaziApp", () => ({
   BaziApp: ({ prefill }: { prefill?: { date?: string } }) => (
@@ -29,7 +29,7 @@ describe("App route switch", () => {
     expect(screen.getByRole("heading", { name: "ตัวเลขมงคล" })).toBeInTheDocument();
   });
 
-  it("renders DetailLayout for a feature route", () => {
+  it("renders FeatureFlow for a feature route", () => {
     go({ name: "feature", id: "phone" });
     render(<App />);
     expect(screen.getByTestId("detail")).toHaveTextContent("detail:phone");

@@ -1,12 +1,12 @@
 import type { FeatureEngine } from "../../app/feature";
 import type { Section } from "../../shared/sections/types";
-import { dayFromDate, rasiFromDate, lifePathFromDate, DAY_LORD } from "../_shared/thaiAstro";
+import { dayFromDate, rasiFromDate, lifePathFromDate, DAY_LORD, LIFEPATH } from "../_shared/thaiAstro";
 import { julianDay } from "../../engine/astro";
 import { parseCityValue } from "../../shared/forms/CityField";
 import { bodyPositions } from "../../astro/ephemeris";
 import { aspectsBetween } from "../../astro/aspects";
 import { toUT } from "../natal/engine";
-import { EL_HARMONY, SYNASTRY_NOTE, PLANET_TH } from "./content";
+import { EL_HARMONY, SYNASTRY_NOTE, PLANET_TH, elementPair, SIGN_LOVE_TH } from "./content";
 
 const JADE = "#6cc18a";
 const GOLD = "#d8a64a";
@@ -100,20 +100,19 @@ export const compatEngine: FeatureEngine = {
     }
     const ca = dparts(s0);
     const cb = dparts(s1);
-    const { score, label, ra, rb, lpa, lpb, elSame, elHarmony } = scoreDeterministic(ca, cb);
+    const { score, label, ra, rb, lpa, lpb } = scoreDeterministic(ca, cb);
     const da = dayFromDate(ca.y, ca.m, ca.d);
     const db = dayFromDate(cb.y, cb.m, cb.d);
+    const enA = rasiFromDate(ca.m, ca.d).en;
+    const enB = rasiFromDate(cb.m, cb.d).en;
+    const elPair = elementPair(ra.el, rb.el);
 
     const accent = score >= 72 ? JADE : GOLD;
     const pts = [
       {
         title: `ธาตุราศี: ${ra.el} × ${rb.el}`,
-        meaning: elSame
-          ? "ธาตุเดียวกัน เข้าใจกันลึกซึ้ง แต่ต้องระวังการกระทบแบบเดียวกัน"
-          : elHarmony
-            ? "ธาตุส่งเสริมกัน เป็นคู่ที่ช่วยให้กันและกันเติบโต"
-            : "ธาตุต่างกัน มองโลกคนละมุม หากเปิดใจจะเติมเต็มกันได้",
-        fg: elHarmony || elSame ? JADE : GOLD,
+        meaning: elPair.th,
+        fg: elPair.kind === "challenge" ? GOLD : JADE,
       },
       {
         title: `วันเกิด: ${da} × ${db}`,
@@ -122,7 +121,10 @@ export const compatEngine: FeatureEngine = {
       },
       {
         title: `เลขชีวิต: ${lpa} × ${lpb}`,
-        meaning: "บอกแนวทางชีวิตของแต่ละฝ่าย ยิ่งใกล้กันยิ่งเดินไปทางเดียวกันง่าย",
+        meaning:
+          Math.abs(reduceSingle(lpa) - reduceSingle(lpb)) <= 1
+            ? "แนวทางชีวิตใกล้เคียงกัน เดินไปในทิศทางเดียวกันได้ไม่ยาก"
+            : "แนวทางชีวิตต่างกัน ต้องหาเป้าหมายร่วมเพื่อก้าวไปด้วยกัน",
         fg: GOLD,
       },
     ];
@@ -146,17 +148,39 @@ export const compatEngine: FeatureEngine = {
           { name: "ฝ่าย 2 · ราศี", value: `ราศี${rb.s}`, note: `ธาตุ${rb.el}` },
           { name: "ฝ่าย 1 · วันเกิด", value: `วัน${da}`, note: DAY_LORD[da].lord },
           { name: "ฝ่าย 2 · วันเกิด", value: `วัน${db}`, note: DAY_LORD[db].lord },
-          { name: "ฝ่าย 1 · เลขชีวิต", value: `${lpa}`, note: "แนวทางชีวิต" },
-          { name: "ฝ่าย 2 · เลขชีวิต", value: `${lpb}`, note: "แนวทางชีวิต" },
+          { name: "ฝ่าย 1 · เลขชีวิต", value: `${lpa}`, note: LIFEPATH[lpa]?.k ?? "แนวทางชีวิต" },
+          { name: "ฝ่าย 2 · เลขชีวิต", value: `${lpb}`, note: LIFEPATH[lpb]?.k ?? "แนวทางชีวิต" },
+        ],
+      },
+      {
+        kind: "prose",
+        title: "ราศีกับการครองคู่",
+        glyph: "緣",
+        accent: STAR,
+        paras: [
+          { h: `ฝ่าย 1 · ราศี${ra.s} (ธาตุ${ra.el})`, t: SIGN_LOVE_TH[enA] ?? "" },
+          { h: `ฝ่าย 2 · ราศี${rb.s} (ธาตุ${rb.el})`, t: SIGN_LOVE_TH[enB] ?? "" },
+          { h: "ธาตุของทั้งคู่", t: elPair.th },
         ],
       },
       { kind: "prose", title: "คำแนะนำสำหรับคู่นี้", glyph: "心", accent, paras: [{ t: advice }] },
     ];
-    const trailingNote: Section = {
-      kind: "note",
-      text: "คะแนนหลักประเมินจากธาตุราศีไทย (นิรายนะ/sidereal) + ผู้ครองวันเกิด + เลขชีวิต — เป็นคนละระบบกับชั้นดวงสมพงษ์ (synastry) ที่ใช้ดาวจริงแบบสากล (tropical) · สองชั้นนี้คำนวณแยกกัน ไม่ได้นำมารวมเป็นคะแนนเดียว · deterministic · ใส่เวลาและเมืองเกิดครบทั้งสองฝ่ายเพื่อปลดล็อกชั้น synastry",
-    };
     const syn = synastryBlock(s0, s1, (vals[2] || "").trim(), (vals[3] || "").trim(), (vals[4] || "").trim(), (vals[5] || "").trim());
-    return syn ? [...base, syn, trailingNote] : [...base, trailingNote];
+    const methodNote: Section = {
+      kind: "note",
+      text: "คะแนนหลักประเมินจากธาตุราศีไทย (นิรายนะ/sidereal) ร่วมกับผู้ครองวันเกิดและเลขชีวิต ให้ผลคงที่ทุกครั้งที่กรอกข้อมูลเดิม (deterministic) ส่วนชั้นดวงสมพงษ์ (synastry) ใช้ตำแหน่งดาวจริงแบบสากล (tropical) ซึ่งเป็นคนละระบบกับคะแนนหลัก สองชั้นคำนวณแยกกันและไม่ได้รวมเป็นคะแนนเดียว",
+    };
+    if (syn) return [...base, syn, methodNote];
+    const unlockNote: Section = {
+      kind: "prose",
+      title: "อยากได้ผลที่ลึกขึ้น",
+      glyph: "鎖",
+      accent: GOLD,
+      paras: [
+        { t: "ขณะนี้แสดงเฉพาะชั้นธาตุราศี ผู้ครองวัน และเลขชีวิต ซึ่งใช้เพียงวันเกิดของทั้งสองฝ่าย" },
+        { t: "หากใส่เวลาเกิดและเมืองเกิดครบทั้งสองฝ่าย จะปลดล็อกชั้นดวงสมพงษ์ (synastry) ที่อ่านมุมสัมพันธ์ระหว่างดาวจริงของทั้งคู่เพิ่มอีกหนึ่งชั้น" },
+      ],
+    };
+    return [...base, unlockNote, methodNote];
   },
 };

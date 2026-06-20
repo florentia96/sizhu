@@ -4,9 +4,10 @@ import { Header } from "./Header";
 import { Starfield } from "./Starfield";
 import { DesignSystem } from "./DesignSystem";
 import { HubScreen } from "../hub/HubScreen";
-import { DetailLayout } from "../shared/layout/DetailLayout";
+import { FeatureFlow } from "../shared/layout/FeatureFlow";
 import { BaziApp } from "../screens/BaziApp";
-import { parseBaziParams } from "../screens/baziParams";
+import { parseBaziParams, baziPrefillFromProfile } from "../screens/baziParams";
+import { loadProfile } from "../shared/profile/profile";
 import { FEATURES } from "./registry";
 
 const MAIN: React.CSSProperties = {
@@ -17,7 +18,7 @@ const MAIN: React.CSSProperties = {
   padding: "0 22px 90px",
 };
 
-const BRAND_TITLE = "MooDee · มูดี — ดูดวงครบ จบในที่เดียว 22 บริการ";
+const BRAND_TITLE = "MooDee · มูดีย์ — ดูดวงครบ จบในที่เดียว 22 บริการ";
 const BRAND_DESC =
   "รวมศาสตร์มงคล 22 บริการ — เบอร์มงคล ทำนายฝัน ดวงคู่ สีมงคล ราศี ปาจื้อ · คำนวณในเครื่อง 100% ไม่ส่งข้อมูลออก";
 
@@ -56,16 +57,25 @@ export function App() {
     if (q.trim() && route.name !== "hub") navigate({ name: "hub" });
   };
 
-  // ปาจื้อใช้หน้าเต็ม (/bazi) — ไม่มี Header/chrome ตาม spec §5.1
+  // ปาจื้อใช้เลย์เอาต์เต็ม แต่ยังคงแถบบน (ชื่อเว็บ + กดกลับหน้าแรก) เหมือนทุกหน้า
+  // เปิดจากหน้าแรก (มีโปรไฟล์แกน) → autocast ข้ามฟอร์ม; ลิงก์ ?bd= ใช้ค่าจาก URL; ไม่มีทั้งคู่ → ฟอร์มปาจื้อเดิม
   if (route.name === "bazi") {
     const q = route.params ? new URLSearchParams(route.params).toString() : "";
-    return <BaziApp prefill={parseBaziParams(q)} onHome={goHome} />;
+    const urlPrefill = parseBaziParams(q);
+    const prefill = urlPrefill.autocast ? urlPrefill : baziPrefillFromProfile(loadProfile());
+    return (
+      <div style={{ position: "relative", minHeight: "100vh" }}>
+        <Starfield />
+        <Header query={query} onQueryChange={onQueryChange} onLogo={goHome} />
+        <BaziApp prefill={prefill} onHome={goHome} />
+      </div>
+    );
   }
 
   let body: React.ReactNode;
   switch (route.name) {
     case "feature":
-      body = <DetailLayout id={route.id ?? ""} onHome={goHome} />;
+      body = <FeatureFlow id={route.id ?? ""} onHome={goHome} />;
       break;
     case "ds":
       body = <DesignSystem onHome={goHome} />;

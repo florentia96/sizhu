@@ -3,8 +3,8 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { App } from "./App";
 import { hrefFor, type Route } from "./routes";
 
-vi.mock("../shared/layout/DetailLayout", () => ({
-  DetailLayout: ({ id }: { id: string }) => <div data-testid="detail">detail:{id}</div>,
+vi.mock("../shared/layout/FeatureFlow", () => ({
+  FeatureFlow: ({ id }: { id: string }) => <div data-testid="detail">detail:{id}</div>,
 }));
 vi.mock("../screens/BaziApp", () => ({
   BaziApp: () => <div data-testid="bazi">bazi</div>,

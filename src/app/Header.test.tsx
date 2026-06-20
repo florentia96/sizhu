@@ -12,7 +12,7 @@ describe("Header", () => {
   it("renders the 卜 logo and the brand", () => {
     render(<Header {...base} />);
     expect(screen.getByText("卜")).toBeInTheDocument();
-    expect(screen.getByText("มูดี")).toBeInTheDocument();
+    expect(screen.getByText("มูดีย์")).toBeInTheDocument();
   });
 
   it("fires onLogo when the logo is clicked", () => {

@@ -1,8 +1,18 @@
 import { describe, it, expect } from "vitest";
-import { ReportSchema } from "../../shared/sections/types";
+import { ReportSchema, type Section } from "../../shared/sections/types";
 import { engine } from "./engine";
 
 const sample = ["ขึ้นบ้านใหม่", "2025-05"];
+
+function cardsByTitle(out: Section[], title: string) {
+  const s = out.find((x) => x.kind === "cards" && x.title === title);
+  if (s && s.kind === "cards") return s;
+  return null;
+}
+
+function dow(iso: string): number {
+  return new Date(iso + "T00:00:00Z").getUTCDay();
+}
 
 describe("timing engine — ฤกษ์ยาม", () => {
   it("output ผ่าน ReportSchema", () => {
@@ -21,32 +31,104 @@ describe("timing engine — ฤกษ์ยาม", () => {
     expect(out[0].kind).toBe("note");
   });
 
-  it("มี cards ของวันมงคล + prose แนวทาง + note disclaimer", () => {
+  it("ครบองค์ประกอบ: verdict + prose แนวทาง + กาลโยค grid + note disclaimer", () => {
     const out = engine.build(sample);
-    expect(out.find((s) => s.kind === "cards")).toBeTruthy();
+    expect(out.find((s) => s.kind === "verdict")).toBeTruthy();
     expect(out.find((s) => s.kind === "prose")).toBeTruthy();
+    expect(out.find((s) => s.kind === "grid")).toBeTruthy();
     expect(out.find((s) => s.kind === "note")).toBeTruthy();
   });
 
-  it("reference vector: พ.ค.2025 (จ.ศ.1387) ธงชัย=ศุกร์ → วันมงคลที่เลือกเป็นวันศุกร์ ข้างขึ้น", () => {
+  it("มีทั้งวันแนะนำ และวันที่ควรเลี่ยง เป็น cards แยกกัน", () => {
     const out = engine.build(sample);
-    const cards = out.find((s) => s.kind === "cards");
-    if (cards?.kind !== "cards") throw new Error("no cards");
-    expect(cards.items.length).toBeGreaterThan(0);
-    for (const it of cards.items) {
-      const d = new Date(it.value + "T00:00:00Z");
-      expect([5]).toContain(d.getUTCDay()); // 5 = ศุกร์
+    expect(cardsByTitle(out, "วันเด่นที่แนะนำ")).toBeTruthy();
+    expect(cardsByTitle(out, "วันที่ควรเลี่ยง")).toBeTruthy();
+  });
+
+  it("reference vector: พ.ค.2025 (จ.ศ.1387) — วันแนะนำเป็นวันธงชัย/อธิบดี (ศุกร์) ทั้งหมด", () => {
+    const out = engine.build(sample);
+    const best = cardsByTitle(out, "วันเด่นที่แนะนำ");
+    expect(best).toBeTruthy();
+    expect(best!.items.length).toBeGreaterThan(0);
+    for (const it of best!.items) {
+      expect(dow(it.value)).toBe(5); // ธงชัย=อธิบดี=ศุกร์ ในปีนี้
     }
   });
 
-  it("ไม่แนะนำวันอุบาทว์/โลกาวินาศ (พฤหัส/อาทิตย์ ปี 2568)", () => {
+  it("วันแนะนำต้องไม่ตรงวันอุบาทว์(พฤหัส)/โลกาวินาศ(อาทิตย์) ปี 2568", () => {
     const out = engine.build(sample);
-    const cards = out.find((s) => s.kind === "cards");
-    if (cards?.kind !== "cards") throw new Error("no cards");
-    for (const it of cards.items) {
-      const d = new Date(it.value + "T00:00:00Z").getUTCDay();
-      expect(d).not.toBe(4); // อุบาทว์
-      expect(d).not.toBe(0); // โลกาวินาศ
+    for (const title of ["วันเด่นที่แนะนำ", "วันมงคลอื่นที่ใช้ได้"]) {
+      const c = cardsByTitle(out, title);
+      if (!c) continue;
+      for (const it of c.items) {
+        expect(dow(it.value)).not.toBe(4); // อุบาทว์
+        expect(dow(it.value)).not.toBe(0); // โลกาวินาศ
+      }
+    }
+  });
+
+  it("วันที่ควรเลี่ยง = อุบาทว์(พฤหัส)+โลกาวินาศ(อาทิตย์) เท่านั้น", () => {
+    const out = engine.build(sample);
+    const avoid = cardsByTitle(out, "วันที่ควรเลี่ยง");
+    expect(avoid).toBeTruthy();
+    expect(avoid!.items.length).toBeGreaterThan(0);
+    for (const it of avoid!.items) {
+      expect([0, 4]).toContain(dow(it.value));
+    }
+  });
+
+  it("ปรับตามประเภทงาน: ออกรถเลี่ยงวันเสาร์ → ไม่มีวันเสาร์ในวันแนะนำ", () => {
+    // ใช้เดือนที่กาลโยคดีอาจตรงเสาร์: ลองหลายเดือนแล้วยืนยันว่าวันแนะนำไม่เคยเป็นเสาร์
+    for (const m of ["2024-01", "2024-06", "2025-03", "2026-09"]) {
+      const out = engine.build(["ออกรถ", m]);
+      for (const title of ["วันเด่นที่แนะนำ", "วันมงคลอื่นที่ใช้ได้"]) {
+        const c = cardsByTitle(out, title);
+        if (!c) continue;
+        for (const it of c.items) {
+          expect(dow(it.value)).not.toBe(6); // เสาร์ = avoidDow ของออกรถ
+        }
+      }
+    }
+  });
+
+  it("งานต่างลำดับวันนิยม → ผลต่างกันจริง (favorDow มีน้ำหนัก ไม่ใช่ set เฉย ๆ)", () => {
+    // แต่งงาน favorDow=[ศุกร์,พฤหัส,พุธ] vs ออกรถ favorDow=[พฤหัส,ศุกร์,พุธ] — set เท่ากันแต่ลำดับต่าง
+    // โค้ดเดิม (อ่านเป็น Set) ให้ผลเหมือนกันทุกเดือน; โค้ดใหม่ต้องต่างกันอย่างน้อยหนึ่งเดือน
+    const dayList = (activity: string, m: string): string =>
+      ["วันเด่นที่แนะนำ", "วันมงคลอื่นที่ใช้ได้"]
+        .map((tt) => cardsByTitle(engine.build([activity, m]), tt)?.items.map((i) => i.value).join(",") ?? "")
+        .join("|");
+    let differs = false;
+    for (let yr = 2024; yr <= 2027 && !differs; yr++) {
+      for (let mo = 1; mo <= 12; mo++) {
+        const m = `${yr}-${String(mo).padStart(2, "0")}`;
+        if (dayList("แต่งงาน", m) !== dayList("ออกรถ", m)) differs = true;
+      }
+    }
+    expect(differs).toBe(true);
+  });
+
+  it("prose แสดงหลักเฉพาะของงานที่เลือก (แต่งงาน → กล่าวถึงวันศุกร์)", () => {
+    const out = engine.build(["แต่งงาน", "2025-05"]);
+    const prose = out.find((s) => s.kind === "prose");
+    expect(prose).toBeTruthy();
+    if (prose?.kind !== "prose") throw new Error("no prose");
+    const joined = prose.paras.map((p) => p.t).join(" ");
+    expect(joined).toContain("ศุกร์");
+  });
+
+  it("ไม่มีการต่อ 3 รายการขึ้นไปด้วย ' · ' ในประโยค prose/note/verdict", () => {
+    const out = engine.build(sample);
+    for (const s of out) {
+      const texts: string[] = [];
+      if (s.kind === "note") texts.push(s.text);
+      if (s.kind === "verdict") texts.push(s.summary);
+      if (s.kind === "prose") texts.push(...s.paras.map((p) => p.t));
+      for (const t of texts) {
+        // นับจำนวนตัวคั่น ' · ' — ถ้ามากกว่า 1 แปลว่าต่อ 3 รายการขึ้นไป
+        const count = t.split(" · ").length - 1;
+        expect(count).toBeLessThanOrEqual(1);
+      }
     }
   });
 });

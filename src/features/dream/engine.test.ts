@@ -54,10 +54,48 @@ describe("dream engine", () => {
     expect(() => ReportSchema.parse(secs)).not.toThrow();
   });
 
+  it("expanded dictionary covers common new symbols (มังกร, อุจจาระ)", () => {
+    expect(dreamReport("ฝันเห็นมังกร").find((s) => s.kind === "cards")).toBeDefined();
+    expect(dreamReport("ฝันเห็นอุจจาระ").find((s) => s.kind === "cards")).toBeDefined();
+  });
+
+  it("short keywords match whole words only — 'มด' must not match inside 'หมด'", () => {
+    const secs = dreamReport("ฝันว่าของหมด");
+    expect(secs.find((s) => s.kind === "cards")).toBeUndefined();
+    expect(secs[secs.length - 1].kind).toBe("note");
+  });
+
   it("is deterministic + satisfies ReportSchema", () => {
     const a = dreamReport("ฝันเห็นช้างและทอง");
     const b = dreamReport("ฝันเห็นช้างและทอง");
     expect(JSON.stringify(a)).toBe(JSON.stringify(b));
     expect(() => ReportSchema.parse(a)).not.toThrow();
+  });
+
+  it("คำยาวไม่ถูกคำสั้นชน — 'พระจันทร์' ไม่ดึงสัญลักษณ์/เลขของ 'พระ'", () => {
+    const secs = dreamReport("ฝันเห็นพระจันทร์");
+    const prose = secs.find((s) => s.kind === "prose");
+    if (prose?.kind !== "prose") throw new Error("no prose");
+    const heads = prose.paras.map((p) => p.h);
+    expect(heads).toContain("พระจันทร์");
+    expect(heads).not.toContain("พระ");
+    const cards = secs.find((s) => s.kind === "cards");
+    if (cards?.kind !== "cards") throw new Error("no cards");
+    const values = cards.items.map((i) => i.value);
+    expect(values).toContain("28"); // เลขของพระจันทร์
+    expect(values).not.toContain("89"); // เลขของพระ ต้องไม่ปนเข้ามา
+  });
+
+  it("คำยาวไม่ถูกคำสั้นชน — 'ทะเลาะ' ไม่ดึงสัญลักษณ์/เลขของ 'น้ำ'", () => {
+    const secs = dreamReport("ฝันว่าทะเลาะกัน");
+    const prose = secs.find((s) => s.kind === "prose");
+    if (prose?.kind !== "prose") throw new Error("no prose");
+    const heads = prose.paras.map((p) => p.h);
+    expect(heads).toContain("ทะเลาะ");
+    expect(heads).not.toContain("น้ำ");
+    const cards = secs.find((s) => s.kind === "cards");
+    if (cards?.kind !== "cards") throw new Error("no cards");
+    const values = cards.items.map((i) => i.value);
+    expect(values).not.toContain("27"); // เลขของน้ำ ต้องไม่ปนเข้ามา
   });
 });

@@ -21,6 +21,16 @@ describe("idcard meta + fields", () => {
     expect(idcardFields[1].type).toBe("text");
     expect(idcardFields[1].label).toBe("เลข");
   });
+  it("number field caps at 15 digits, is numeric, and hints the per-type length", () => {
+    const numField = idcardFields[1];
+    expect(numField.type).toBe("text");
+    if (numField.type === "text") {
+      expect(numField.maxLength).toBe(15);
+      expect(numField.inputMode).toBe("numeric");
+      expect(numField.placeholder).toBe("1234567890123");
+      expect(numField.hint).toContain("13");
+    }
+  });
 });
 
 describe("idcard engine", () => {
@@ -52,5 +62,25 @@ describe("idcard engine", () => {
     const out = idcardEngine.build(["เลขที่บ้าน", "199/24"]);
     const v = out.find((s) => s.kind === "verdict");
     expect(v && v.kind === "verdict" && v.score >= 22 && v.score <= 98).toBe(true);
+  });
+  it("a valid result leads with a note naming the analyzed number type", () => {
+    const out = idcardEngine.build(["เลขบัญชีธนาคาร", "1234567890"]);
+    expect(out[0].kind).toBe("note");
+    expect(out[0].kind === "note" && out[0].text).toContain("เลขบัญชีธนาคาร");
+    expect(out.some((s) => s.kind === "verdict")).toBe(true);
+  });
+  it("accepts a 15-digit bank account (within maxLength cap)", () => {
+    const out = idcardEngine.build(["เลขบัญชีธนาคาร", "123456789012345"]);
+    expect(out.some((s) => s.kind === "verdict")).toBe(true);
+  });
+  it("the wrong-length message for บัตรประชาชน is polite and states both counts", () => {
+    const out = idcardEngine.build(["บัตรประชาชน", "12345"]);
+    expect(out).toHaveLength(1);
+    expect(out[0].kind).toBe("note");
+    if (out[0].kind === "note") {
+      expect(out[0].text).toContain("13");
+      expect(out[0].text).toContain("5");
+      expect(out[0].text).toContain("กรุณา");
+    }
   });
 });

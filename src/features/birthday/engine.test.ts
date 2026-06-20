@@ -9,7 +9,10 @@ describe("birthday engine", () => {
     const secs = ref();
     const prose = secs.find((s) => s.kind === "prose");
     expect(prose && prose.kind === "prose" && prose.title).toContain("อังคาร");
-    const grid = secs.find((s) => s.kind === "grid");
+    // มี grid หลายอัน — เลือกอันที่มี cell "ราศี" (สรุปดวงประจำตัว)
+    const grid = secs.find(
+      (s) => s.kind === "grid" && s.cells.some((c) => c.name === "ราศี"),
+    );
     if (grid && grid.kind === "grid") {
       const rasiCell = grid.cells.find((c) => c.name === "ราศี");
       expect(rasiCell?.value).toBe("ราศีพฤษภ");
@@ -18,8 +21,37 @@ describe("birthday engine", () => {
       const py = grid.cells.find((c) => c.name.includes("ปีส่วนตัว"));
       expect(py?.value).toBe("เลข 3");
     } else {
-      throw new Error("grid section missing");
+      throw new Error("summary grid section missing");
     }
+  });
+
+  it("includes day-lord personality, lucky + กาลกิณี swatches, and life-path guide", () => {
+    const secs = ref();
+    // บุคลิกเชิงลึกของผู้ครองวัน (จุดแข็ง/ข้อควรระวัง/อาชีพ)
+    const persona = secs.find(
+      (s) => s.kind === "prose" && s.title.includes("บุคลิกของคนเกิดวัน"),
+    );
+    expect(persona).toBeDefined();
+    // มี swatches สองชุด: สีมงคล + สีกาลกิณี
+    const swatches = secs.filter((s) => s.kind === "swatches");
+    expect(swatches.length).toBe(2);
+    expect(swatches.some((s) => s.title.includes("กาลกิณี"))).toBe(true);
+    // เลขชีวิตมีย่อหน้า "แนวทางใช้ชีวิต"
+    const lp = secs.find(
+      (s) => s.kind === "prose" && s.title.includes("เลขชีวิต"),
+    );
+    expect(
+      lp &&
+        lp.kind === "prose" &&
+        lp.paras.some((p) => p.h === "แนวทางใช้ชีวิต"),
+    ).toBe(true);
+  });
+
+  it("uses polite-neutral tone (no ครับ/ค่ะ particles)", () => {
+    const text = JSON.stringify(ref());
+    expect(text).not.toMatch(/ครับ/);
+    expect(text).not.toMatch(/ค่ะ/);
+    expect(text).not.toMatch(/คะ/);
   });
 
   it("is deterministic for fixed nowYear", () => {

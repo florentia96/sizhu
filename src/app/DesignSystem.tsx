@@ -60,7 +60,7 @@ export function DesignSystem({ onHome }: { onHome: () => void }) {
           margin: "14px 0 4px",
         }}
       >
-        Design System · มูดี
+        Design System · มูดีย์
       </h1>
       <p style={{ margin: "0 0 30px", color: "var(--text-muted)", fontSize: ".97rem" }}>
         โทนราตรีมงคล — ดำคราม + ทอง + ชาด อักษรจีน-ไทยผสาน ใช้ทั้งเว็บให้เป็นภาษาเดียวกัน

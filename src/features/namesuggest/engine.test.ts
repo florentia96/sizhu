@@ -61,4 +61,67 @@ describe("namesuggest engine — pool filter", () => {
     expect(out.some((s) => s.kind === "cards")).toBe(false);
     expect(out.some((s) => s.kind === "note")).toBe(true);
   });
+
+  it("every weekday + gender yields >= 9 kalakini-free suggestions (no thin result)", () => {
+    // ครอบทุกวัน รวมวันจันทร์ที่กาลกิณีเป็นกลุ่มสระทั้งหมด (เคสบางสุด)
+    const dates: Record<string, string> = {
+      อาทิตย์: "2024-06-16",
+      จันทร์: "2024-06-17",
+      อังคาร: "2024-06-18",
+      พุธ: "2024-06-19",
+      พฤหัสบดี: "2024-06-20",
+      ศุกร์: "2024-06-21",
+      เสาร์: "2024-06-22",
+    };
+    for (const date of Object.values(dates)) {
+      for (const gender of ["หญิง", "ชาย", "ไม่ระบุ"]) {
+        const out = namesuggestEngine.build([date, gender, ""]);
+        const cards = out.find((s) => s.kind === "cards") as Extract<typeof out[number], { kind: "cards" }>;
+        expect(cards).toBeDefined();
+        expect(cards.items.length).toBe(9);
+      }
+    }
+  });
+
+  it("ranks auspicious-lead names first: the top suggestion leads with a เดช/ศรี letter when one exists", () => {
+    const date = "2024-06-19"; // พุธ
+    const day = dayFromDate(2024, 6, 19);
+    const t = taksaForDay(day);
+    const dechSri = new Set(t[2].letters.concat(t[3].letters));
+    for (const gender of ["หญิง", "ชาย", "ไม่ระบุ"]) {
+      const out = namesuggestEngine.build([date, gender, ""]);
+      const cards = out.find((s) => s.kind === "cards") as Extract<typeof out[number], { kind: "cards" }>;
+      // มีชื่อที่อักษรนำเป็นเดช/ศรีอยู่ในคลังที่ปลอดกาลกิณี → ต้องถูกจัดมาเป็นลำดับแรก
+      expect(dechSri.has(cards.items[0].value[0])).toBe(true);
+    }
+  });
+
+  it("auspicious-lead names carry their bhumi group in the note", () => {
+    const out = namesuggestEngine.build(["2024-06-19", "หญิง", ""]);
+    const cards = out.find((s) => s.kind === "cards") as Extract<typeof out[number], { kind: "cards" }>;
+    const day = dayFromDate(2024, 6, 19);
+    const t = taksaForDay(day);
+    // ข้ามสระนำ (เ แ โ ใ ไ) เพื่อจับพยัญชนะต้นจริง ให้ตรงกับ leadBhumi ใน engine
+    const lead = (nm: string) => {
+      const ch = [...nm].find((c) => !"เแโใไ".includes(c)) ?? nm[0];
+      return t.find((c) => c.letters.indexOf(ch) >= 0)?.bhumi ?? "";
+    };
+    for (const item of cards.items) {
+      const b = lead(item.value);
+      if (["เดช", "ศรี", "มนตรี", "มูละ", "อุตสาหะ"].indexOf(b) >= 0) {
+        expect(item.note).toContain("อักษรนำหมู่" + b);
+      }
+    }
+  });
+
+  it("includes a choosing-guidance prose section when results exist", () => {
+    const out = namesuggestEngine.build(["1990-01-07", "หญิง", ""]);
+    expect(out.some((s) => s.kind === "prose")).toBe(true);
+  });
+
+  it("output stays polite-neutral: no ครับ/ค่ะ particles", () => {
+    const out = namesuggestEngine.build(["1990-01-07", "หญิง", ""]);
+    const blob = JSON.stringify(out);
+    expect(blob).not.toMatch(/ครับ|ค่ะ|จ้า|นะคะ/);
+  });
 });

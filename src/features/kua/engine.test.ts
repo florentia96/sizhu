@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { engine, kuaNumber, reduceSingle, sumDigits } from "./engine";
 import { ReportSchema } from "../../shared/sections/types";
+import type { Section } from "../../shared/sections/types";
 
 describe("kua engine", () => {
   it("digit helpers", () => {
@@ -39,5 +40,47 @@ describe("kua engine", () => {
     const b = engine.build(["2535", "ชาย"]);
     expect(a).toEqual(b);
     expect(engine.build(["", ""])[0].kind).toBe("note");
+  });
+
+  // completeness: result must be rich, not thin
+  it("good section: 4 directions, each with meaning + how-to-use", () => {
+    const out = engine.build(["2535", "ชาย"]);
+    const good = out.find((s) => s.kind === "blocks") as Extract<Section, { kind: "blocks" }>;
+    expect(good.items).toHaveLength(4);
+    for (const it of good.items) {
+      expect(it.tag).toMatch(/ทิศ|เฉียง/); // a Thai direction name
+      expect(it.text).toContain("วิธีใช้");
+      expect(it.text.length).toBeGreaterThan(30);
+      expect(it.chips.length).toBeGreaterThan(0);
+    }
+  });
+  it("bad section: 4 directions, each with meaning + how-to-handle", () => {
+    const out = engine.build(["2535", "ชาย"]);
+    const bad = out.find((s) => s.kind === "grid") as Extract<Section, { kind: "grid" }>;
+    expect(bad.cells).toHaveLength(4);
+    for (const c of bad.cells) {
+      expect(c.value).toMatch(/ทิศ|เฉียง/);
+      expect(c.note ?? "").toContain("วิธีรับมือ");
+    }
+  });
+  it("has group explanation + practical guidance covering desk/bed/stove/door", () => {
+    const out = engine.build(["2535", "ชาย"]);
+    const proses = out.filter((s) => s.kind === "prose") as Extract<Section, { kind: "prose" }>[];
+    expect(proses.length).toBeGreaterThanOrEqual(2);
+    const titles = proses.map((p) => p.title);
+    expect(titles).toContain("กลุ่มทิศของคุณ");
+    const usage = proses.find((p) => p.title === "นำไปใช้จริงในบ้าน")!;
+    const heads = usage.paras.map((p) => p.h ?? "");
+    expect(heads).toContain("โต๊ะทำงาน");
+    expect(heads).toContain("หัวเตียงนอน");
+    expect(heads).toContain("เตาไฟและครัว");
+    expect(heads.some((h) => h.includes("ประตูหลัก"))).toBe(true);
+  });
+
+  // tone: polite-neutral, no gendered particles, no obscure jargon without gloss
+  it("no gendered particles or slang anywhere in output text", () => {
+    const blob = JSON.stringify(engine.build(["2535", "หญิง"]));
+    expect(blob).not.toMatch(/ครับ|ค่ะ|คะ|นะคะ|จ้า|จ้ะ|เด้อ/);
+    expect(blob).not.toContain("โป๊ยแถ่ว"); // niche Chinese reading -> use ฮวงจุ้ยแปดทิศ
   });
 });

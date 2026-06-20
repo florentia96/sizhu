@@ -92,6 +92,31 @@ export const HARM: Record<number, number> = {
   10: 9,
 };
 
+// 相刑 (เซียงสิง — โทษทัณฑ์) ดัชนีนักษัตร 0-based — สะท้อน XING ใน src/engine/constants.ts (Zhi-keyed)
+//   三刑: 寅巳申 เสือ-งู-ลิง (2-5-8) · 丑戌未 วัว-หมา-แพะ (1-10-7) · 互刑: 子卯 หนู-กระต่าย (0-3)
+//   自刑: 辰午酉亥 มังกร·ม้า·ไก่·หมู เมื่อเป็นนักษัตรเดียวกัน
+export const XING_PAIRS: ReadonlyArray<readonly [number, number]> = [
+  [2, 5], [5, 8], [2, 8],
+  [1, 10], [10, 7], [1, 7],
+  [0, 3],
+];
+export const SELF_XING: ReadonlySet<number> = new Set([4, 6, 9, 11]);
+
+export function isXing(a: number, b: number): boolean {
+  if (a === b) return SELF_XING.has(a);
+  return XING_PAIRS.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
+}
+
+/** ดัชนีนักษัตรที่เป็นคู่ 相刑 กับ zi (ไม่รวมตัวเอง) — ใช้แสดงรายการความเข้ากัน */
+export function xingPartners(zi: number): number[] {
+  const out: number[] = [];
+  for (const [x, y] of XING_PAIRS) {
+    if (x === zi && out.indexOf(y) < 0) out.push(y);
+    if (y === zi && out.indexOf(x) < 0) out.push(x);
+  }
+  return out;
+}
+
 export const EL_LUCK: Record<string, ElLuckEntry> = {
   "ไม้": { colors: ["เขียว", "ฟ้า", "น้ำเงิน"], dir: ["ตะวันออก", "ตะวันออกเฉียงใต้"], num: ["3", "4"], boost: "น้ำ (หล่อเลี้ยง)", drain: "ทอง (ตัดไม้)" },
   "ไฟ": { colors: ["แดง", "ส้ม", "ม่วง"], dir: ["ใต้"], num: ["9"], boost: "ไม้ (เชื้อไฟ)", drain: "น้ำ (ดับไฟ)" },

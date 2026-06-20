@@ -71,7 +71,7 @@ export function BaziApp({ prefill, onHome }: { prefill?: BaziPrefill; onHome?: (
     handleSubmit({
       date: prefill.date,
       time: prefill.time ?? "12:00",
-      sex: "M",
+      sex: prefill.sex ?? "M",
       tz: "7",
       lon: "100.5",
       useSolar: true,

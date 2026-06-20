@@ -4,6 +4,7 @@ export interface Profile {
   birthDate?: string; // yyyy-mm-dd จาก input[type=date]
   birthTime?: string; // hh:mm
   city?: string; // ค่า CityField ("ชื่อ|lat|lon|tz" หรือชื่อเมือง)
+  gender?: string; // "ชาย" | "หญิง" — เก็บเป็นไทยให้ตรง option ของ select เพศ (kua/namesuggest)
 }
 
 export type ProfileSlot = keyof Profile;
@@ -63,7 +64,15 @@ export function clearProfile(): void {
 
 /** มีข้อมูลที่ autofill ได้อย่างน้อยหนึ่งช่องไหม */
 export function hasProfile(p: Profile = loadProfile()): boolean {
-  return Boolean(p.birthDate || p.birthTime || p.city);
+  return Boolean(p.birthDate || p.birthTime || p.city || p.gender);
+}
+
+/**
+ * ข้อมูลแกนครบพอเปิดศาสตร์แบบ one-tap ไหม — ต้องมีวันเกิด + เพศ
+ * (เวลาเกิด optional: ถ้าไม่ระบุ ศาสตร์ที่ต้องใช้เวลาจะถามเพิ่มในหน้า feature)
+ */
+export function hasCoreProfile(p: Profile = loadProfile()): boolean {
+  return Boolean(p.birthDate && p.gender);
 }
 
 /**

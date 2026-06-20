@@ -7,9 +7,11 @@ import {
   lifePathFromDate,
   personalYear,
 } from "../_shared/thaiAstro";
-import { EL_NOTE, LIFEPATH, PY_THEME } from "./content";
+import { EL_NOTE, LIFEPATH, PY_THEME, DAY_DETAIL, RULER } from "./content";
 
 const JADE = "#6cc18a";
+const GOLD = "#d8a64a";
+const RED = "#e0584b";
 const STAR = "#7da6d8";
 
 function normYear(y: number): number {
@@ -28,37 +30,113 @@ export function birthdayReport(
   const Y = normYear(y);
   const day = dayFromDate(Y, m, d);
   const info = DAY_LORD[day];
+  const detail = DAY_DETAIL[day];
   const r = rasiFromDate(m, d);
+  const ruler = RULER[r.s] || "";
   const lifePath = lifePathFromDate(Y, m, d);
   const py = personalYear(Y, m, d, nowYear);
 
   const secs: Section[] = [];
+
+  // 1) ภาพรวม: วันเกิด + ผู้ครองวัน + ราศี
   secs.push({
     kind: "prose",
     title: "เกิดวัน" + day + " · " + d + "/" + m + "/" + Y,
     glyph: "日",
     paras: [
-      { h: "ผู้ครองวัน: " + info.lord, t: "นิสัยตามวันเกิด — " + info.tr },
+      { h: "ผู้ครองวัน: " + info.lord, t: "บุคลิกตามวันเกิด — " + info.tr },
       { h: "ราศี" + r.s + " (" + r.en + ") · " + EL_NOTE[r.el], t: r.tr },
     ],
   });
+
+  // 2) ผู้ครองวัน — บุคลิกเชิงลึก + จุดแข็ง/ข้อควรระวัง/แนวอาชีพ
+  if (detail) {
+    secs.push({
+      kind: "prose",
+      title: "บุคลิกของคนเกิดวัน" + day,
+      glyph: "性",
+      accent: STAR,
+      paras: [
+        { h: "จุดแข็ง", t: detail.strength },
+        { h: "ข้อควรระวัง", t: detail.caution },
+        { h: "แนวทางอาชีพที่เหมาะ", t: detail.career },
+      ],
+    });
+  }
+
+  // 3) ราศี — บุคลิก + ธาตุ + ดาวเจ้าเรือน
+  secs.push({
+    kind: "prose",
+    title: "บุคลิกตามราศี" + r.s,
+    glyph: "座",
+    paras: [
+      { h: EL_NOTE[r.el], t: r.tr },
+      ruler
+        ? {
+            h: "ดาวเจ้าเรือน: " + ruler,
+            t:
+              "ราศี" +
+              r.s +
+              "มีดาว" +
+              ruler +
+              "เป็นผู้ปกครอง จึงได้รับอิทธิพลด้านบุคลิกและจังหวะชีวิตจากดาวดวงนี้",
+          }
+        : { t: "ราศี" + r.s + "อยู่ในกลุ่มธาตุ" + r.el },
+    ],
+  });
+
+  // 4) สีมงคลพื้นฐาน
   secs.push({
     kind: "swatches",
     title: "สีมงคลประจำวัน" + day,
     glyph: "彩",
-    tag: "ใส่แล้วรุ่ง",
+    tag: "ใส่แล้วเสริมดวง",
     accent: JADE,
-    text: "สีพื้นฐานที่เสริมดวงของคนเกิดวัน" + day,
+    text:
+      "สีพื้นฐานที่เสริมดวงของคนเกิดวัน" +
+      day +
+      " ตามหลักทักษา ใช้เป็นเสื้อผ้า เครื่องประดับ หรือของใช้ประจำวัน",
     items: swatch(info.color),
   });
+
+  // 5) สีกาลกิณี
+  secs.push({
+    kind: "swatches",
+    title: "สีกาลกิณี (ควรเลี่ยง)",
+    glyph: "凶",
+    tag: "หลีกเลี่ยง",
+    accent: RED,
+    text:
+      "สีที่ถือว่าบั่นทอนดวงของคนเกิดวัน" +
+      day +
+      " ตามหลักทักษา ควรเลี่ยงในวันสำคัญหรือวันที่ต้องการความมั่นใจ",
+    items: swatch(info.avoid),
+  });
+
+  // 6) สีเสริมแยกตามด้าน (อิงอักษร/สีทักษา การงาน-การเงิน-ความรัก-เมตตา)
+  secs.push({
+    kind: "grid",
+    title: "สีเสริมแยกตามด้าน",
+    glyph: "色",
+    cells: [
+      { name: "การงาน", value: info.work.join(" · "), note: "หน้าที่ ตำแหน่ง" },
+      { name: "การเงิน", value: info.money.join(" · "), note: "โชคลาภ รายได้" },
+      { name: "ความรัก", value: info.love.join(" · "), note: "เสน่ห์ คู่ครอง" },
+      { name: "เมตตามหานิยม", value: info.luck.join(" · "), note: "คนรักใคร่ อุปถัมภ์" },
+    ],
+  });
+
+  // 7) สรุปดวงประจำตัว
   secs.push({
     kind: "grid",
     title: "สรุปดวงประจำตัว",
     glyph: "吉",
+    accent: GOLD,
     cells: [
+      { name: "ผู้ครองวัน", value: info.lord, note: "เทพประจำวันเกิด" },
+      { name: "ราศี", value: "ราศี" + r.s, note: "ธาตุ" + r.el },
       { name: "สีมงคลประจำวัน", value: info.color.join(" · "), note: "เสริมดวงพื้นฐาน" },
       { name: "สีกาลกิณี", value: info.avoid.join(" · "), note: "ควรเลี่ยง" },
-      { name: "ราศี", value: "ราศี" + r.s, note: "ธาตุ" + r.el },
       {
         name: "เลขชีวิต (Life Path)",
         value: "" + lifePath,
@@ -67,14 +145,25 @@ export function birthdayReport(
       { name: "ปีส่วนตัว " + nowYear, value: "เลข " + py, note: "รอบ 9 ปีของคุณ" },
     ],
   });
+
+  // 8) เลขชีวิต — ความหมาย + แนวทาง
   if (LIFEPATH[lifePath]) {
     secs.push({
       kind: "prose",
       title: "เลขชีวิต " + lifePath + " — " + LIFEPATH[lifePath].k,
       glyph: "命",
-      paras: [{ t: LIFEPATH[lifePath].d }],
+      accent: STAR,
+      paras: [
+        { h: "ความหมาย", t: LIFEPATH[lifePath].d },
+        { h: "แนวทางใช้ชีวิต", t: LIFEPATH[lifePath].guide },
+        {
+          t: "เลขชีวิตคำนวณจากผลรวมเลขทุกหลักของวันเดือนปีเกิด (ค.ศ.) บอกแก่นนิสัยและเส้นทางหลักของชีวิต",
+        },
+      ],
     });
   }
+
+  // 9) ดวงปีปัจจุบัน — ปีส่วนตัว
   if (PY_THEME[py]) {
     secs.push({
       kind: "prose",
@@ -84,14 +173,17 @@ export function birthdayReport(
       paras: [
         { t: PY_THEME[py] },
         {
-          t: "ปีส่วนตัวคำนวณจากเดือน+วันเกิดของคุณบวกกับปีปัจจุบัน บอกธีมหลักของปีนี้ว่าควรโฟกัสเรื่องใด",
+          t: "ปีส่วนตัวคำนวณจากเดือนและวันเกิดของคุณบวกกับปีปัจจุบัน บอกธีมหลักของปีนี้ว่าควรโฟกัสเรื่องใด และจะเปลี่ยนไปทุกปีตามรอบ 9 ปี",
         },
       ],
     });
   }
+
+  // 10) ที่มา/หมายเหตุ
   secs.push({
     kind: "note",
-    text: "นิสัยตามวันเกิดและผู้ครองวันเป็นหลักโหราศาสตร์ไทย · ราศีอิงจักรราศีแบบไทย (นิรายนะ/sidereal) ชื่ออังกฤษในวงเล็บคือราศีสากล (tropical) ที่ตรงกัน ช่วงวันจึงต่างจากราศีฝรั่ง · เลขชีวิต/ปีส่วนตัวคำนวณแบบเลขศาสตร์สากลจากวันเดือนปีเกิด",
+    text: "บุคลิกตามวันเกิดและผู้ครองวันเป็นหลักโหราศาสตร์ไทย สีมงคลและสีกาลกิณีอิงตำราทักษา (ตำราต่างสำนักอาจกำหนดต่างกันได้เล็กน้อย) · ราศีอิงจักรราศีแบบไทย (นิรายนะ/sidereal) ชื่ออังกฤษในวงเล็บคือราศีสากล (tropical) ที่ตรงกัน ช่วงวันจึงต่างจากราศีฝรั่ง · เลขชีวิตและปีส่วนตัวคำนวณแบบเลขศาสตร์สากลจากวันเดือนปีเกิด",
   });
+
   return secs;
 }
