@@ -7,11 +7,11 @@ export const EL_HARMONY: Record<string, string> = {
 };
 
 export const SYNASTRY_NOTE: Record<string, { th: string; tone: "good" | "warn" | "info" }> = {
-  conjunction: { th: "ดาวร่วม (Conjunction)", tone: "info" },
-  sextile: { th: "ส่งเสริม 60° (Sextile)", tone: "good" },
-  square: { th: "ท้าทาย 90° (Square)", tone: "warn" },
-  trine: { th: "เกื้อหนุน 120° (Trine)", tone: "good" },
-  opposition: { th: "ดึงดูด/ตึงเครียด 180° (Opposition)", tone: "warn" },
+  conjunction: { th: "ดาวร่วม", tone: "info" },
+  sextile: { th: "ส่งเสริม 60°", tone: "good" },
+  square: { th: "ท้าทาย 90°", tone: "warn" },
+  trine: { th: "เกื้อหนุน 120°", tone: "good" },
+  opposition: { th: "ดึงดูด/ตึงเครียด 180°", tone: "warn" },
 };
 
 export const PLANET_TH: Record<string, string> = {

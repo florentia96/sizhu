@@ -86,7 +86,7 @@ describe("lifePathFromDate / personalYear", () => {
   });
   it("LIFEPATH and PY_THEME tables are present", () => {
     expect(LIFEPATH[1].k).toBe("ผู้นำ");
-    expect(LIFEPATH[22].k).toContain("เลขมาสเตอร์");
+    expect(LIFEPATH[22].k).toContain("เลขพลังพิเศษ");
     expect(typeof PY_THEME[1]).toBe("string");
   });
 });

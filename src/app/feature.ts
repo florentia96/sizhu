@@ -1,17 +1,25 @@
 import type { Section } from "../shared/sections/types";
 
-export type Field =
-  | {
-      label: string;
-      type: "text" | "tel" | "date" | "time" | "month";
-      placeholder?: string;
-      hint?: string;
-      inputMode?: "numeric" | "tel" | "text";
-      maxLength?: number;
-    }
-  | { label: string; type: "select"; options: string[]; hint?: string }
-  | { label: string; type: "textarea"; placeholder?: string; hint?: string; maxLength?: number }
-  | { label: string; type: "city"; hint?: string };
+type FieldBase = {
+  label: string;
+  hint?: string;
+  optional?: boolean;
+  // ข้อมูลของอีกฝ่าย (เช่น คู่ในดวงสมพงษ์) — ห้ามเติมค่าอัตโนมัติจากโปรไฟล์ผู้ใช้
+  partner?: boolean;
+};
+
+export type Field = FieldBase &
+  (
+    | {
+        type: "text" | "tel" | "date" | "time" | "month";
+        placeholder?: string;
+        inputMode?: "numeric" | "tel" | "text";
+        maxLength?: number;
+      }
+    | { type: "select"; options: string[] }
+    | { type: "textarea"; placeholder?: string; maxLength?: number }
+    | { type: "city" }
+  );
 
 export type GroupId = "numbers" | "names" | "astro" | "chinese" | "daily";
 

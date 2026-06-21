@@ -20,7 +20,7 @@ describe("ascendant engine", () => {
       expect(names).toContain("ลัคนา");
       expect(names).toContain("ราศีอาทิตย์");
       expect(names).toContain("ราศีจันทร์");
-      expect(names).toContain("MC");
+      expect(names).toContain("จุดกลางฟ้า");
       expect(names).toContain("ลัคนาโหราไทย");
     }
   });
@@ -30,7 +30,7 @@ describe("ascendant engine", () => {
     const grid = r.find((s) => s.kind === "grid");
     if (grid && grid.kind === "grid") {
       // 1990-01-15 14:30 Bangkok → tropical Asc = เมถุน (Gemini), ruled by พุธ
-      const ascCell = grid.cells.find((c) => c.name.includes("Asc"));
+      const ascCell = grid.cells.find((c) => c.name.includes("แบบสากล"));
       expect(ascCell?.value).toContain("เมถุน");
       expect(ascCell?.note).toContain("พุธ");
     }
@@ -73,7 +73,7 @@ describe("ascendant engine", () => {
     const late = ascEngine.build(["1990-01-15", "16:30", "กรุงเทพมหานคร"]);
     const ascOf = (r: ReturnType<typeof ascEngine.build>) => {
       const g = r.find((s) => s.kind === "grid");
-      return g && g.kind === "grid" ? g.cells.find((c) => c.name.includes("Asc"))?.value : undefined;
+      return g && g.kind === "grid" ? g.cells.find((c) => c.name.includes("แบบสากล"))?.value : undefined;
     };
     expect(ascOf(early)).toBeTruthy();
     expect(ascOf(late)).toBeTruthy();

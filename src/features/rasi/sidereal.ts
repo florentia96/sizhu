@@ -31,8 +31,8 @@ export function siderealCell(
 ): { name: string; value: string; note: string } {
   const s = siderealSunSign(y, m, d);
   return {
-    name: "ราศีตามดาวจริง (sidereal)",
+    name: "ราศีตามดาวจริง",
     value: "ราศี" + s.rasi,
-    note: "ตำแหน่งอาทิตย์จริง − อายนางศะ Lahiri (คำนวณตามปี ตรงกับหน้าลัคนา)",
+    note: "ตำแหน่งอาทิตย์จริง ลบด้วยค่าอายนางศะ (คำนวณตามปี ตรงกับหน้าลัคนา)",
   };
 }

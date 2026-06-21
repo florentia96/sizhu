@@ -23,6 +23,11 @@ const labelStyle: CSSProperties = {
   marginBottom: "7px",
 };
 
+const optionalStyle: CSSProperties = {
+  color: "var(--text-faint, #6f6a5c)",
+  fontWeight: 400,
+};
+
 export function parseCityValue(
   v: string,
 ): { name: string; lat: number; lon: number; tz: number } | null {
@@ -49,10 +54,14 @@ export function CityField({
   index,
   refFor,
   defaultValue,
+  label = "เมืองเกิด",
+  optional,
 }: {
   index: number;
   refFor: (i: number) => (node: HTMLInputElement | null) => void;
   defaultValue?: string;
+  label?: string;
+  optional?: boolean;
 }) {
   const id = `mf-${index}`;
   const listId = `mf-city-${index}`;
@@ -77,14 +86,15 @@ export function CityField({
   return (
     <div style={{ marginBottom: "15px" }}>
       <label htmlFor={id} style={labelStyle}>
-        เมืองเกิด
+        {label}
+        {optional && <span style={optionalStyle}> (ไม่บังคับ)</span>}
       </label>
       <input
         id={id}
         ref={setRef}
         type="text"
         list={listId}
-        placeholder="พิมพ์ชื่อเมือง หรือ lat,lon"
+        placeholder="พิมพ์ชื่อเมือง หรือพิกัด เช่น 13.75,100.5"
         defaultValue={defaultValue}
         onBlur={normalize}
         style={controlStyle}

@@ -86,7 +86,7 @@ describe("lifegraph engine", () => {
       const blocks = r.find((s) => s.kind === "blocks");
       if (blocks && blocks.kind === "blocks")
         for (const it of blocks.items)
-          if (it.tag.includes("Conjunction")) accents.add(it.accent);
+          if (it.tag.includes("ร่วม")) accents.add(it.accent);
     }
     // a malefic conjunction (Saturn/Mars) must be able to surface as a warn tone, not a flat "info"
     expect(accents.has("#d8a64a")).toBe(true);

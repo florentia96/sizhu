@@ -6,7 +6,7 @@ import { GROUPS, type GroupMeta } from "./groups";
 import { TodayCard } from "./TodayCard";
 import { CategoryNav, type GroupFilter } from "./CategoryNav";
 import { HomeProfileCard } from "./HomeProfileCard";
-import { hasCoreProfile } from "../shared/profile/profile";
+import { hasCoreProfile, loadProfile, type Profile } from "../shared/profile/profile";
 import { featureUsesCore } from "../shared/profile/resolveCore";
 
 export interface HubProps {
@@ -108,10 +108,13 @@ function FeatureCard({ f, onOpen }: { f: FlatFeature; onOpen: (id: string) => vo
     <button type="button" className="hub-card" style={cvar(f.color)} onClick={() => onOpen(f.id)}>
       <span className="hub-card-top">
         <span className="hub-glyph hub-card-seal" aria-hidden="true">{f.cn}</span>
-        <span className="hub-card-arrow" aria-hidden="true">→</span>
       </span>
       <span className="hub-card-name">{f.name}</span>
       <span className="hub-card-desc">{f.desc}</span>
+      <span className="hub-card-cta">
+        <span className="hub-card-cta-text">เปิดดวง</span>
+        <span className="hub-card-arrow" aria-hidden="true">→</span>
+      </span>
     </button>
   );
 }
@@ -167,6 +170,9 @@ export function HubScreen({ query, onOpen, features = FEATURES }: HubProps) {
     {} as Record<GroupId, number>,
   );
 
+  // โปรไฟล์แกนแหล่งเดียว — ส่งลงทั้งการ์ดกรอกและการ์ดดวงวันนี้ให้ sync กันในเซสชันเดียว
+  const [profile, setProfile] = useState<Profile>(loadProfile);
+
   // กดศาสตร์ก่อนกรอกวันเกิด → เด้งไปฟอร์มกรอก แล้วเปิดศาสตร์นั้นให้อัตโนมัติเมื่อบันทึก
   const pendingId = useRef<string | null>(null);
   const profileCardRef = useRef<HTMLDivElement>(null);
@@ -174,21 +180,26 @@ export function HubScreen({ query, onOpen, features = FEATURES }: HubProps) {
     (id: string) => {
       const def = features[id];
       const needsCore = def ? def.fullRoute || featureUsesCore(def.fields) : false;
-      if (needsCore && !hasCoreProfile()) {
+      if (needsCore && !hasCoreProfile(profile)) {
         pendingId.current = id;
         profileCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
         return;
       }
       onOpen(id);
     },
-    [features, onOpen],
+    [features, onOpen, profile],
   );
-  const onCoreSaved = useCallback(() => {
-    const id = pendingId.current;
-    pendingId.current = null;
-    if (id) onOpen(id);
-  }, [onOpen]);
+  const onCoreSaved = useCallback(
+    (p: Profile) => {
+      setProfile(p);
+      const id = pendingId.current;
+      pendingId.current = null;
+      if (id) onOpen(id);
+    },
+    [onOpen],
+  );
   const onCoreCleared = useCallback(() => {
+    setProfile({});
     pendingId.current = null;
   }, []);
 
@@ -211,7 +222,7 @@ export function HubScreen({ query, onOpen, features = FEATURES }: HubProps) {
     <div className="hub">
       <Masthead flat={flat} onOpen={handleOpen} />
       {profileCard}
-      <TodayCard onOpen={handleOpen} />
+      <TodayCard profile={profile} onOpen={handleOpen} />
       <CategoryNav active={activeGroup} onPick={setActiveGroup} counts={counts} />
 
       {GROUPS.map((g) => {

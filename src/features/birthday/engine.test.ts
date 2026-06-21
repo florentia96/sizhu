@@ -16,7 +16,7 @@ describe("birthday engine", () => {
     if (grid && grid.kind === "grid") {
       const rasiCell = grid.cells.find((c) => c.name === "ราศี");
       expect(rasiCell?.value).toBe("ราศีพฤษภ");
-      const lp = grid.cells.find((c) => c.name.includes("Life Path"));
+      const lp = grid.cells.find((c) => c.name.includes("เลขชีวิต"));
       expect(lp?.value).toBe("3");
       const py = grid.cells.find((c) => c.name.includes("ปีส่วนตัว"));
       expect(py?.value).toBe("เลข 3");

@@ -23,25 +23,25 @@ function elementPoint(ai: number, bi: number): { title: string; meaning: string;
   if (GEN[ea] === eb)
     return {
       title: "ธาตุหล่อเลี้ยงกัน (" + ea + " ก่อ " + eb + ")",
-      meaning: "ธาตุของฝ่ายแรกหล่อเลี้ยงฝ่ายที่สอง เป็นพลังเกื้อกูล (เซิง) ผลักดันให้กันเติบโต",
+      meaning: "ธาตุของคุณหล่อเลี้ยงคู่ เป็นพลังเกื้อกูลกัน ผลักดันให้กันเติบโต",
       fg: JADE,
     };
   if (GEN[eb] === ea)
     return {
       title: "ธาตุหล่อเลี้ยงกัน (" + eb + " ก่อ " + ea + ")",
-      meaning: "ธาตุของฝ่ายที่สองหล่อเลี้ยงฝ่ายแรก เป็นพลังเกื้อกูล (เซิง) ผลักดันให้กันเติบโต",
+      meaning: "ธาตุของคู่หล่อเลี้ยงคุณ เป็นพลังเกื้อกูลกัน ผลักดันให้กันเติบโต",
       fg: JADE,
     };
   if (CTRL[ea] === eb)
     return {
       title: "ธาตุข่มกัน (" + ea + " ข่ม " + eb + ")",
-      meaning: "ธาตุของฝ่ายแรกข่มฝ่ายที่สอง (เค่อ) อาจมีจังหวะกดดันกัน ควรแบ่งบทบาทให้ชัดและเคารพพื้นที่ของกัน",
+      meaning: "ธาตุของคุณข่มคู่ อาจมีจังหวะกดดันกัน ควรแบ่งบทบาทให้ชัดและเคารพพื้นที่ของกัน",
       fg: GOLD,
     };
   if (CTRL[eb] === ea)
     return {
       title: "ธาตุข่มกัน (" + eb + " ข่ม " + ea + ")",
-      meaning: "ธาตุของฝ่ายที่สองข่มฝ่ายแรก (เค่อ) อาจมีจังหวะกดดันกัน ควรแบ่งบทบาทให้ชัดและเคารพพื้นที่ของกัน",
+      meaning: "ธาตุของคู่ข่มคุณ อาจมีจังหวะกดดันกัน ควรแบ่งบทบาทให้ชัดและเคารพพื้นที่ของกัน",
       fg: GOLD,
     };
   return {
@@ -96,8 +96,8 @@ export function zodiacCompatReport(aTh: string, bTh: string): Section[] {
 
   points.push(elementPoint(ai, bi));
 
-  const aLabel = "ฝ่าย " + aTh + " (" + ZODIAC[ai].animal + ")";
-  const bLabel = "ฝ่าย " + bTh + " (" + ZODIAC[bi].animal + ")";
+  const aLabel = "คุณ · " + aTh + " (" + ZODIAC[ai].animal + ")";
+  const bLabel = "คู่ของคุณ · " + bTh + " (" + ZODIAC[bi].animal + ")";
 
   const partnership = score >= 85
     ? "ด้านความรักเป็นคู่ที่ประคองกันได้ยาว ด้านการงานเป็นหุ้นส่วนที่ไว้ใจมอบหมายงานสำคัญให้กันได้"

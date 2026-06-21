@@ -18,7 +18,7 @@ export function HomeProfileCard({
   onSaved,
   onCleared,
 }: {
-  onSaved: () => void;
+  onSaved: (p: Profile) => void;
   onCleared: () => void;
 }) {
   const [profile, setProfile] = useState<Profile>(loadProfile);
@@ -37,10 +37,11 @@ export function HomeProfileCard({
       setErr("กรุณาเลือกเพศ");
       return;
     }
-    setProfile(patchProfile({ birthDate: date, birthTime: time, gender }));
+    const next = patchProfile({ birthDate: date, birthTime: time, gender });
+    setProfile(next);
     setErr("");
     setEditing(false);
-    onSaved();
+    onSaved(next);
   };
 
   const clear = (): void => {

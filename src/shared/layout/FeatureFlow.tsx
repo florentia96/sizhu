@@ -130,7 +130,7 @@ export function FeatureFlow({ id, onHome }: { id: string; onHome: () => void }) 
 
         {extra.map(({ f, i }) =>
           f.type === "city" ? (
-            <CityField key={i} index={i} refFor={refFor} defaultValue={draft[i]} />
+            <CityField key={i} index={i} refFor={refFor} defaultValue={draft[i]} label={f.label} optional={f.optional} />
           ) : (
             <FieldRenderer key={i} field={f} index={i} refFor={refFor} defaultValue={draft[i]} />
           ),

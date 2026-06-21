@@ -4,11 +4,6 @@ import type { Profile } from "./profile";
 // อาทิตย์=0 … เสาร์=6 (ตรงกับ Date.getUTCDay)
 const WEEKDAY_TH = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"] as const;
 
-// ป้าย field ของ "บุคคลที่สอง" (compat) — ไม่ดึงจาก profile ของผู้ใช้
-function isSecondPerson(label: string): boolean {
-  return label.includes("คนที่ 2") || label.includes("ที่ 2");
-}
-
 /** ดึงปี ค.ศ. (string) จาก birthDate "YYYY-MM-DD" — toCE ของ engine รองรับ พ.ศ./ค.ศ. อยู่แล้ว */
 export function yearFromBirthDate(birthDate: string): string | null {
   const m = /^(\d{3,4})-\d{2}-\d{2}$/.exec(birthDate);
@@ -38,16 +33,17 @@ export function weekdayFromBirthDate(birthDate: string, birthTime?: string): str
  * รักษา contract เดิม: engine.build(vals) ไม่ต้องแก้ เพียงเติมตำแหน่ง field ให้ครบ
  */
 export function resolveCoreValue(field: Field, profile: Profile): string | null {
+  if (field.partner) return null;
   const label = field.label;
 
   if (field.type === "date" && label.includes("วันเกิด")) {
-    return isSecondPerson(label) ? null : profile.birthDate ?? null;
+    return profile.birthDate ?? null;
   }
   if (field.type === "time" && label.includes("เกิด")) {
-    return isSecondPerson(label) ? null : profile.birthTime ?? null;
+    return profile.birthTime ?? null;
   }
   if (field.type === "city") {
-    return isSecondPerson(label) ? null : profile.city ?? null;
+    return profile.city ?? null;
   }
   if (field.type === "select" && label.includes("เพศ")) {
     return profile.gender ?? null;
@@ -73,8 +69,8 @@ export function extraFieldIndexes(fields: Field[], profile: Profile): number[] {
  * ไม่นับเมืองเกิด (เก็บในหน้า feature) — ใช้ตัดสินว่าควรบังคับกรอกวันเกิดก่อนเปิดศาสตร์หรือไม่
  */
 export function isCoreField(field: Field): boolean {
+  if (field.partner) return false;
   const l = field.label;
-  if (isSecondPerson(l)) return false;
   if (field.type === "date" && l.includes("วันเกิด")) return true;
   if (field.type === "time" && l.includes("เกิด")) return true;
   if (field.type === "select" && l.includes("เพศ")) return true;

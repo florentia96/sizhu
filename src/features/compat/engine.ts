@@ -75,10 +75,10 @@ function synastryBlock(
     const meta = SYNASTRY_NOTE[a.type] ?? { th: a.type, tone: "info" as const };
     const accent = meta.tone === "good" ? JADE : meta.tone === "warn" ? GOLD : STAR;
     return {
-      title: `${PLANET_TH[a.a]} (ฝ่าย 1) × ${PLANET_TH[a.b]} (ฝ่าย 2)`,
+      title: `${PLANET_TH[a.a]} (คุณ) × ${PLANET_TH[a.b]} (คู่ของคุณ)`,
       tag: meta.th,
       accent,
-      text: `ดาว${PLANET_TH[a.a]}ของฝ่าย 1 ทำมุม ${meta.th} กับดาว${PLANET_TH[a.b]}ของฝ่าย 2 (คลาด ${a.orb.toFixed(1)}°) — ${
+      text: `ดาว${PLANET_TH[a.a]}ของคุณ ทำมุม ${meta.th} กับดาว${PLANET_TH[a.b]}ของคู่ (คลาด ${a.orb.toFixed(1)}°) — ${
         meta.tone === "good"
           ? "พลังเกื้อหนุนระหว่างกัน"
           : meta.tone === "warn"
@@ -88,7 +88,7 @@ function synastryBlock(
       chips: [`คลาด ${a.orb.toFixed(1)}°`],
     };
   });
-  return { kind: "blocks", title: "ดวงสมพงษ์จากดาวจริงแบบสากล (Synastry · tropical)", glyph: "合", items };
+  return { kind: "blocks", title: "ดวงสมพงษ์จากดาวจริงแบบสากล", glyph: "合", items };
 }
 
 export const compatEngine: FeatureEngine = {
@@ -141,15 +141,15 @@ export const compatEngine: FeatureEngine = {
       { kind: "compat", score, label, a: `ราศี${ra.s}`, b: `ราศี${rb.s}`, accent, points: pts },
       {
         kind: "grid",
-        title: "เทียบรายละเอียดสองฝ่าย",
+        title: "เทียบรายละเอียดของทั้งคู่",
         glyph: "緣",
         cells: [
-          { name: "ฝ่าย 1 · ราศี", value: `ราศี${ra.s}`, note: `ธาตุ${ra.el}` },
-          { name: "ฝ่าย 2 · ราศี", value: `ราศี${rb.s}`, note: `ธาตุ${rb.el}` },
-          { name: "ฝ่าย 1 · วันเกิด", value: `วัน${da}`, note: DAY_LORD[da].lord },
-          { name: "ฝ่าย 2 · วันเกิด", value: `วัน${db}`, note: DAY_LORD[db].lord },
-          { name: "ฝ่าย 1 · เลขชีวิต", value: `${lpa}`, note: LIFEPATH[lpa]?.k ?? "แนวทางชีวิต" },
-          { name: "ฝ่าย 2 · เลขชีวิต", value: `${lpb}`, note: LIFEPATH[lpb]?.k ?? "แนวทางชีวิต" },
+          { name: "คุณ · ราศี", value: `ราศี${ra.s}`, note: `ธาตุ${ra.el}` },
+          { name: "คู่ของคุณ · ราศี", value: `ราศี${rb.s}`, note: `ธาตุ${rb.el}` },
+          { name: "คุณ · วันเกิด", value: `วัน${da}`, note: DAY_LORD[da].lord },
+          { name: "คู่ของคุณ · วันเกิด", value: `วัน${db}`, note: DAY_LORD[db].lord },
+          { name: "คุณ · เลขชีวิต", value: `${lpa}`, note: LIFEPATH[lpa]?.k ?? "แนวทางชีวิต" },
+          { name: "คู่ของคุณ · เลขชีวิต", value: `${lpb}`, note: LIFEPATH[lpb]?.k ?? "แนวทางชีวิต" },
         ],
       },
       {
@@ -158,8 +158,8 @@ export const compatEngine: FeatureEngine = {
         glyph: "緣",
         accent: STAR,
         paras: [
-          { h: `ฝ่าย 1 · ราศี${ra.s} (ธาตุ${ra.el})`, t: SIGN_LOVE_TH[enA] ?? "" },
-          { h: `ฝ่าย 2 · ราศี${rb.s} (ธาตุ${rb.el})`, t: SIGN_LOVE_TH[enB] ?? "" },
+          { h: `คุณ · ราศี${ra.s} (ธาตุ${ra.el})`, t: SIGN_LOVE_TH[enA] ?? "" },
+          { h: `คู่ของคุณ · ราศี${rb.s} (ธาตุ${rb.el})`, t: SIGN_LOVE_TH[enB] ?? "" },
           { h: "ธาตุของทั้งคู่", t: elPair.th },
         ],
       },
@@ -168,7 +168,7 @@ export const compatEngine: FeatureEngine = {
     const syn = synastryBlock(s0, s1, (vals[2] || "").trim(), (vals[3] || "").trim(), (vals[4] || "").trim(), (vals[5] || "").trim());
     const methodNote: Section = {
       kind: "note",
-      text: "คะแนนหลักประเมินจากธาตุราศีไทย (นิรายนะ/sidereal) ร่วมกับผู้ครองวันเกิดและเลขชีวิต ให้ผลคงที่ทุกครั้งที่กรอกข้อมูลเดิม (deterministic) ส่วนชั้นดวงสมพงษ์ (synastry) ใช้ตำแหน่งดาวจริงแบบสากล (tropical) ซึ่งเป็นคนละระบบกับคะแนนหลัก สองชั้นคำนวณแยกกันและไม่ได้รวมเป็นคะแนนเดียว",
+      text: "คะแนนหลักประเมินจากธาตุราศีไทย (แบบนิรายนะ อิงดาวจริง) ร่วมกับผู้ครองวันเกิดและเลขชีวิต ให้ผลคงที่ทุกครั้งที่กรอกข้อมูลเดิม ส่วนชั้นดวงสมพงษ์ใช้ตำแหน่งดาวจริงแบบสากล ซึ่งเป็นคนละระบบกับคะแนนหลัก สองชั้นคำนวณแยกกันและไม่ได้รวมเป็นคะแนนเดียว",
     };
     if (syn) return [...base, syn, methodNote];
     const unlockNote: Section = {
@@ -177,8 +177,8 @@ export const compatEngine: FeatureEngine = {
       glyph: "鎖",
       accent: GOLD,
       paras: [
-        { t: "ขณะนี้แสดงเฉพาะชั้นธาตุราศี ผู้ครองวัน และเลขชีวิต ซึ่งใช้เพียงวันเกิดของทั้งสองฝ่าย" },
-        { t: "หากใส่เวลาเกิดและเมืองเกิดครบทั้งสองฝ่าย จะปลดล็อกชั้นดวงสมพงษ์ (synastry) ที่อ่านมุมสัมพันธ์ระหว่างดาวจริงของทั้งคู่เพิ่มอีกหนึ่งชั้น" },
+        { t: "ขณะนี้แสดงเฉพาะชั้นธาตุราศี ผู้ครองวัน และเลขชีวิต ซึ่งใช้เพียงวันเกิดของทั้งคุณและคู่" },
+        { t: "หากใส่เวลาเกิดและเมืองเกิดครบทั้งคุณและคู่ จะปลดล็อกชั้นดวงสมพงษ์ที่อ่านมุมสัมพันธ์ระหว่างดาวจริงของทั้งคู่เพิ่มอีกหนึ่งชั้น" },
       ],
     };
     return [...base, unlockNote, methodNote];

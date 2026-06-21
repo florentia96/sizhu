@@ -43,7 +43,7 @@ export function TipsPanel({ reading }: { reading: Reading }) {
             <span style={{ color: t.weakColor, fontWeight: 600 }}>
               {t.weakElCn} {t.weakEl}
             </span>{" "}
-            มีน้อยในดวง ตามคติแพทย์จีนเชื่อมโยงกับ{t.organ} ควรพักผ่อน อาหารสมดุล และออกกำลังสม่ำเสมอ
+            มีน้อยในดวง ตามคติแพทย์จีนเชื่อมโยงกับ{t.organ} ควรพักผ่อนให้เพียงพอ กินอาหารให้สมดุล และออกกำลังกายสม่ำเสมอ
           </div>
         </div>
       </div>

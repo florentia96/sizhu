@@ -15,7 +15,7 @@ describe("birthday content", () => {
       expect(LIFEPATH[n].guide.length).toBeGreaterThan(0);
     });
     expect(LIFEPATH[1].k).toBe("ผู้นำ");
-    expect(LIFEPATH[22].k).toContain("เลขมาสเตอร์");
+    expect(LIFEPATH[22].k).toContain("เลขพลังพิเศษ");
   });
   it("PY_THEME covers personal years 1-9", () => {
     for (let n = 1; n <= 9; n++) expect(typeof PY_THEME[n]).toBe("string");

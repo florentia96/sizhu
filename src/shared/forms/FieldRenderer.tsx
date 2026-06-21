@@ -22,6 +22,11 @@ const hintStyle: CSSProperties = {
   color: "var(--text-faint, #8a8474)",
 };
 
+const optionalStyle: CSSProperties = {
+  color: "var(--text-faint, #6f6a5c)",
+  fontWeight: 400,
+};
+
 const controlStyle: CSSProperties = {
   fontSize: "16px",
   width: "100%",
@@ -119,6 +124,7 @@ export function FieldRenderer({
     <div style={{ marginBottom: "15px" }}>
       <label htmlFor={id} style={labelStyle}>
         {field.label}
+        {field.optional && <span style={optionalStyle}> (ไม่บังคับ)</span>}
       </label>
       {control}
       {field.hint && (

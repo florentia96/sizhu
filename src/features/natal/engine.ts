@@ -108,12 +108,12 @@ export const natalEngine: FeatureEngine = {
       };
     });
     cells.push({
-      name: "ลัคนา (Asc)",
+      name: "ลัคนา",
       value: `ราศี${SIGN_TH[asc.sign]} ${degStr(ascDeg)}`,
       note: ANGLE_MEANING.asc,
     });
     cells.push({
-      name: "กลางฟ้า (MC)",
+      name: "กลางฟ้า",
       value: `ราศี${SIGN_TH[mc.sign]} ${degStr(mcDeg)}`,
       note: ANGLE_MEANING.mc,
     });
@@ -177,24 +177,24 @@ export const natalEngine: FeatureEngine = {
       gradeLabel: `อาทิตย์ราศี${SIGN_TH[sun.sign]} · ลัคนาราศี${SIGN_TH[asc.sign]}`,
       accent: STAR,
       summary: `ดวงกำเนิดสำหรับวันที่ ${dateStr} เวลา ${timeStr} น. ที่ ${city.name} แก่นตัวตน (อาทิตย์) เป็นธาตุ${sunT.el} ส่วนภาพลักษณ์และวิธีเริ่มต้น (ลัคนา) เป็นธาตุ${ascT.el}`,
-      meta: `คำนวณจากตำแหน่งดาวจริง แบบ tropical zodiac (จักรราศีอิงฤดูกาล) ร่วมกับระบบเรือน Placidus — JD(UT) ${jdUT.toFixed(4)}`,
+      meta: `คำนวณจากตำแหน่งดาวจริง แบบจักรราศีอิงฤดูกาล ร่วมกับระบบเรือนแบบตะวันตก`,
     });
     secs.push({ kind: "grid", title: "ตำแหน่งดาวในราศีและเรือนชะตา", glyph: "星", accent: STAR, cells });
     secs.push({
       kind: "cards",
-      title: "สมดุลธาตุในดวง (Element Balance)",
+      title: "สมดุลธาตุในดวง",
       glyph: "衡",
       subtitle: "นับจากดาวพระเคราะห์ 7 ดวง รวมลัคนา เป็น 8 จุด",
       accent: STAR,
       items: elementCards,
     });
     if (aspectItems.length)
-      secs.push({ kind: "blocks", title: "มุมสัมพันธ์สำคัญ (Aspects)", glyph: "角", items: aspectItems });
+      secs.push({ kind: "blocks", title: "มุมสัมพันธ์สำคัญ", glyph: "角", items: aspectItems });
     secs.push({
       kind: "cards",
-      title: "ขอบเรือนชะตาทั้ง 12 เรือน (House Cusps)",
+      title: "ขอบเรือนชะตาทั้ง 12 เรือน",
       glyph: "宮",
-      subtitle: "ราศีที่กำกับแต่ละด้านของชีวิต เรียงตามระบบ Placidus",
+      subtitle: "ราศีที่กำกับแต่ละด้านของชีวิต เรียงตามระบบเรือนแบบตะวันตก",
       accent: STAR,
       items: houseCards,
     });

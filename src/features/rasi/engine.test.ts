@@ -8,7 +8,7 @@ describe("rasi engine", () => {
   it("reference vector: 1990-05-15 => ราศีพฤษภ ธาตุดิน เจ้าเรือนศุกร์", () => {
     const secs = ref();
     const head = secs.find((s) => s.kind === "prose");
-    expect(head && head.kind === "prose" && head.title).toBe("ราศีพฤษภ (Taurus)");
+    expect(head && head.kind === "prose" && head.title).toBe("ราศีพฤษภ");
     const grid = secs.find((s) => s.kind === "grid");
     if (grid && grid.kind === "grid") {
       expect(grid.cells.find((c) => c.name === "ราศี")?.value).toBe("ราศีพฤษภ");

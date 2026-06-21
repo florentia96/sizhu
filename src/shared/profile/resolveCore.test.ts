@@ -71,14 +71,14 @@ describe("resolveCoreValue — แกนตรงตำแหน่ง", () => {
       resolveCoreValue(sel("วันเกิด", ["อาทิตย์", "พุธ (กลางวัน)", "พุธ (กลางคืน)"]), P),
     ).toBe("พุธ (กลางวัน)");
   });
-  it("field ของคนที่ 2 (compat) ไม่ดึงจาก profile", () => {
-    expect(resolveCoreValue(date("คนที่ 2 — วันเกิด"), P)).toBeNull();
-    expect(resolveCoreValue(time("คนที่ 2 — เวลาเกิด (ถ้ามี)"), P)).toBeNull();
-    expect(resolveCoreValue(city("คนที่ 2 — เมืองเกิด (ถ้ามี)"), P)).toBeNull();
+  it("field ของคู่ (compat, partner) ไม่ดึงจาก profile", () => {
+    expect(resolveCoreValue({ ...date("คู่ของคุณ — วันเกิด"), partner: true }, P)).toBeNull();
+    expect(resolveCoreValue({ ...time("คู่ของคุณ — เวลาเกิด"), partner: true }, P)).toBeNull();
+    expect(resolveCoreValue({ ...city("คู่ของคุณ — เมืองเกิด"), partner: true }, P)).toBeNull();
   });
-  it("คนที่ 1 (compat) ยังดึงจาก profile", () => {
-    expect(resolveCoreValue(date("คนที่ 1 — วันเกิด"), P)).toBe("2000-01-05");
-    expect(resolveCoreValue(time("คนที่ 1 — เวลาเกิด (ถ้ามี)"), P)).toBe("10:30");
+  it("ฝั่งคุณ (compat) ยังดึงจาก profile", () => {
+    expect(resolveCoreValue(date("คุณ — วันเกิด"), P)).toBe("2000-01-05");
+    expect(resolveCoreValue(time("คุณ — เวลาเกิด"), P)).toBe("10:30");
   });
   it("field ที่ไม่ใช่แกน → null", () => {
     expect(resolveCoreValue({ label: "ข้อความฝัน", type: "textarea" }, P)).toBeNull();
@@ -110,21 +110,21 @@ describe("extraFieldIndexes", () => {
     ];
     expect(extraFieldIndexes(lc, P)).toEqual([1]);
   });
-  it("compat: คนที่ 1 ดึงครบ เหลือคนที่ 2 (index 1,4,5)", () => {
+  it("compat: ฝั่งคุณดึงครบ เหลือฝั่งคู่ (index 1,4,5)", () => {
     const compat: Field[] = [
-      date("คนที่ 1 — วันเกิด"),
-      date("คนที่ 2 — วันเกิด"),
-      time("คนที่ 1 — เวลาเกิด (ถ้ามี)"),
-      city("คนที่ 1 — เมืองเกิด (ถ้ามี)"),
-      time("คนที่ 2 — เวลาเกิด (ถ้ามี)"),
-      city("คนที่ 2 — เมืองเกิด (ถ้ามี)"),
+      date("คุณ — วันเกิด"),
+      { ...date("คู่ของคุณ — วันเกิด"), partner: true },
+      time("คุณ — เวลาเกิด"),
+      city("คุณ — เมืองเกิด"),
+      { ...time("คู่ของคุณ — เวลาเกิด"), partner: true },
+      { ...city("คู่ของคุณ — เมืองเกิด"), partner: true },
     ];
     expect(extraFieldIndexes(compat, P)).toEqual([1, 4, 5]);
   });
 });
 
-// กัน label drift: resolveCore จับคู่ด้วย substring ของ label ภาษาไทย — ถ้าแก้ copy ของ label
-// ในไฟล์ fields.ts ใด autofill one-tap ของ field นั้นจะพังเงียบ ๆ เทสต์นี้กวาดทุก feature จริงใน registry
+// กัน label drift: resolveCore จับคู่ด้วย substring ของ label ภาษาไทย (ยกเว้น field.partner) — ถ้าแก้ copy
+// ของ label ในไฟล์ fields.ts ใด autofill one-tap ของ field นั้นจะพังเงียบ ๆ เทสต์นี้กวาดทุก feature จริงใน registry
 describe("registry sweep — core fields ต้อง resolve จาก profile เต็ม", () => {
   const P: Profile = {
     birthDate: "2000-01-05",
@@ -143,13 +143,13 @@ describe("registry sweep — core fields ต้อง resolve จาก profile 
     }
   });
 
-  it("ไม่มี field วันเกิด/เวลา/เมือง/ปีเกิด/เพศ หลงเหลือใน extra (ยกเว้นคนที่ 2)", () => {
+  it("ไม่มี field วันเกิด/เวลา/เมือง/ปีเกิด/เพศ ของผู้ใช้หลงเหลือใน extra (ยกเว้นฝั่งคู่)", () => {
     const marker = /วันเกิด|ปีเกิด|เวลาเกิด|เมืองเกิด|เพศ/;
     for (const [id, def] of Object.entries(FEATURES)) {
-      const extra = extraFieldIndexes(def.fields, P).map((i) => def.fields[i].label);
-      for (const lbl of extra) {
-        if (marker.test(lbl) && !/ที่ 2/.test(lbl)) {
-          throw new Error(`${id}: "${lbl}" ควร resolve จาก profile แต่ยังเป็น extra (อาจ label drift)`);
+      for (const i of extraFieldIndexes(def.fields, P)) {
+        const f = def.fields[i];
+        if (marker.test(f.label) && !f.partner) {
+          throw new Error(`${id}: "${f.label}" ควร resolve จาก profile แต่ยังเป็น extra (อาจ label drift)`);
         }
       }
     }

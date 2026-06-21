@@ -168,13 +168,13 @@ export const lifeEngine: FeatureEngine = {
       gradeLabel: `${focus ? scope + " · " : ""}ดาวจร ณ ${nowStr}`,
       accent: STAR,
       summary: `${PY_THEME[py] || ""} — ${balance}`,
-      meta: `ดาวจรเทียบดวงเดิม (transit) ณ ${nowStr} + ปีส่วนตัว (เลขศาสตร์ ระดับรายปี)`,
+      meta: `ดาวจรเทียบดวงเดิม ณ ${nowStr} + ปีส่วนตัว (ตามเลขศาสตร์ รายปี)`,
     });
 
     if (transitItems.length)
       secs.push({
         kind: "blocks",
-        title: focus ? `ดาวจรช่วงนี้ (${scope})` : "ดาวจรช่วงนี้เทียบดวงเดิม (Transits)",
+        title: focus ? `ดาวจรช่วงนี้ (${scope})` : "ดาวจรช่วงนี้เทียบดวงเดิม",
         glyph: "行",
         items: transitItems,
       });
@@ -224,7 +224,7 @@ export const lifeEngine: FeatureEngine = {
       glyph: "運",
       accent: STAR,
       paras: [
-        { h: `เลขชีวิต (Life Path) = ${lp} · ${LIFEPATH[lp]?.k ?? ""}`, t: LIFEPATH[lp]?.d ?? "" },
+        { h: `เลขชีวิต = ${lp} · ${LIFEPATH[lp]?.k ?? ""}`, t: LIFEPATH[lp]?.d ?? "" },
         { h: `ปีส่วนตัว = ${py}`, t: PY_THEME[py] || "" },
       ],
     });
@@ -232,9 +232,9 @@ export const lifeEngine: FeatureEngine = {
     secs.push({
       kind: "note",
       text:
-        "ดาวจร (transit) คำนวณจากตำแหน่งดาวจริง ณ วันที่เลือก เทียบกับดวงกำเนิด · " +
+        "ดาวจรคำนวณจากตำแหน่งดาวจริง ณ วันที่เลือก เทียบกับดวงกำเนิด · " +
         "ปีส่วนตัวและเลขชีวิตเป็นชั้นเลขศาสตร์ (ปีส่วนตัวละเอียดระดับรายปี อิงรอบวันเกิด) · " +
-        "ผลทั้งหมดคำนวณแบบกำหนดได้แน่นอน (deterministic) ตามวันที่ที่ระบุ ไม่ดึงเวลาปัจจุบันของเครื่อง",
+        "ผลทั้งหมดคำนวณแบบกำหนดได้แน่นอนตามวันที่ที่ระบุ ไม่ดึงเวลาปัจจุบันของเครื่อง",
     });
     return secs;
   },
