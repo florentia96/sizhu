@@ -10,6 +10,7 @@ import { SectionRenderer } from "../sections/SectionRenderer";
 import { ShareBar } from "../share/ShareBar";
 import { ResultHero } from "../share/ResultHero";
 import { CastingScreen } from "../../screens/CastingScreen";
+import { PetalCanvas } from "../../components/PetalCanvas";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { loadProfile } from "../profile/profile";
 import { resolveCoreValue } from "../profile/resolveCore";
@@ -92,27 +93,32 @@ export function FeatureFlow({ id, onHome }: { id: string; onHome: () => void }) 
 
   if (mode === "result" && sections) {
     return (
-      <div style={{ marginTop: 24 }}>
-        <ResultHero featureName={def.meta.name} glyph={def.meta.cn} sections={sections} accent={accent} />
-        <ShareBar
-          featureName={def.meta.name}
-          sections={sections}
-          url={
-            typeof window !== "undefined"
-              ? `${window.location.origin}${hrefFor({ name: "feature", id })}`
-              : hrefFor({ name: "feature", id })
-          }
-        />
-        <SectionRenderer sections={sections} accent={accent} />
-        <div style={{ textAlign: "center", margin: "26px 0 0", display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          {hasForm && (
-            <button type="button" onClick={() => setMode("form")} style={ghostBtn}>
-              ↺ แก้ไขข้อมูลที่กรอก
+      <div style={{ position: "relative", overflow: "hidden", marginTop: 24 }}>
+        <div className="result-bg" aria-hidden="true" />
+        <div className="stars" aria-hidden="true" />
+        {!reduced && <PetalCanvas />}
+        <div style={{ position: "relative", zIndex: 2 }}>
+          <ResultHero featureName={def.meta.name} glyph={def.meta.cn} sections={sections} accent={accent} />
+          <ShareBar
+            featureName={def.meta.name}
+            sections={sections}
+            url={
+              typeof window !== "undefined"
+                ? `${window.location.origin}${hrefFor({ name: "feature", id })}`
+                : hrefFor({ name: "feature", id })
+            }
+          />
+          <SectionRenderer sections={sections} accent={accent} />
+          <div style={{ textAlign: "center", margin: "26px 0 0", display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            {hasForm && (
+              <button type="button" onClick={() => setMode("form")} style={ghostBtn}>
+                ↺ แก้ไขข้อมูลที่กรอก
+              </button>
+            )}
+            <button type="button" onClick={onHome} style={ghostBtn}>
+              ← กลับหน้าแรก
             </button>
-          )}
-          <button type="button" onClick={onHome} style={ghostBtn}>
-            ← กลับหน้าแรก
-          </button>
+          </div>
         </div>
       </div>
     );

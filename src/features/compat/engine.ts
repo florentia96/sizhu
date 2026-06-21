@@ -94,7 +94,7 @@ function synastryBlock(
 export const compatEngine: FeatureEngine = {
   build(vals: string[]): Section[] {
     const s0 = (vals[0] || "").trim();
-    const s1 = (vals[1] || "").trim();
+    const s1 = (vals[3] || "").trim();
     if (!/^\d{4}-\d{2}-\d{2}$/.test(s0) || !/^\d{4}-\d{2}-\d{2}$/.test(s1)) {
       return [{ kind: "note", text: "กรอกวันเกิดของทั้งสองฝ่าย แล้วลองใหม่" }];
     }
@@ -165,7 +165,7 @@ export const compatEngine: FeatureEngine = {
       },
       { kind: "prose", title: "คำแนะนำสำหรับคู่นี้", glyph: "心", accent, paras: [{ t: advice }] },
     ];
-    const syn = synastryBlock(s0, s1, (vals[2] || "").trim(), (vals[3] || "").trim(), (vals[4] || "").trim(), (vals[5] || "").trim());
+    const syn = synastryBlock(s0, s1, (vals[1] || "").trim(), (vals[2] || "").trim(), (vals[4] || "").trim(), (vals[5] || "").trim());
     const methodNote: Section = {
       kind: "note",
       text: "คะแนนหลักประเมินจากธาตุราศีไทย (แบบนิรายนะ อิงดาวจริง) ร่วมกับผู้ครองวันเกิดและเลขชีวิต ให้ผลคงที่ทุกครั้งที่กรอกข้อมูลเดิม ส่วนชั้นดวงสมพงษ์ใช้ตำแหน่งดาวจริงแบบสากล ซึ่งเป็นคนละระบบกับคะแนนหลัก สองชั้นคำนวณแยกกันและไม่ได้รวมเป็นคะแนนเดียว",

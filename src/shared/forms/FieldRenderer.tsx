@@ -66,18 +66,41 @@ export function FieldRenderer({
     const selDefault =
       defaultValue && field.options.includes(defaultValue) ? defaultValue : field.options[0];
     control = (
-      <select
-        id={id}
-        ref={ref}
-        style={{ ...controlStyle, appearance: "none" }}
-        defaultValue={selDefault}
-      >
-        {field.options.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
-        ))}
-      </select>
+      <span style={{ position: "relative", display: "block" }}>
+        <select
+          id={id}
+          ref={ref}
+          style={{ ...controlStyle, appearance: "none", paddingRight: 38, cursor: "pointer" }}
+          defaultValue={selDefault}
+        >
+          {field.options.map((o) => (
+            <option key={o} value={o}>
+              {o}
+            </option>
+          ))}
+        </select>
+        <svg
+          aria-hidden="true"
+          width={18}
+          height={18}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.9}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{
+            position: "absolute",
+            right: 12,
+            top: "50%",
+            transform: "translateY(-50%)",
+            color: "var(--text-dim)",
+            pointerEvents: "none",
+          }}
+        >
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </span>
     );
   } else if (field.type === "textarea") {
     control = (

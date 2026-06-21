@@ -10,7 +10,7 @@ describe("compat engine — deterministic score (port of moodee-lib 871-902)", (
   });
 
   it("schema-valid + deterministic (dates only)", () => {
-    const v = ["1990-01-15", "1992-07-20"];
+    const v = ["1990-01-15", "", "", "1992-07-20"];
     const r = compatEngine.build(v);
     expect(() => ReportSchema.parse(r)).not.toThrow();
     expect(compatEngine.build(v)).toEqual(r);
@@ -38,7 +38,7 @@ describe("compat engine — deterministic score (port of moodee-lib 871-902)", (
   });
 
   it("output is a compat section + grid + prose + note", () => {
-    const r = compatEngine.build(["1990-01-15", "1992-07-20"]);
+    const r = compatEngine.build(["1990-01-15", "", "", "1992-07-20"]);
     expect(r[0].kind).toBe("compat");
     expect(r.some((s) => s.kind === "grid")).toBe(true);
     expect(r.some((s) => s.kind === "prose")).toBe(true);
@@ -52,14 +52,14 @@ describe("compat engine — deterministic score (port of moodee-lib 871-902)", (
   });
 
   it("does NOT add synastry block when birth time/city incomplete", () => {
-    const r = compatEngine.build(["1990-01-15", "1992-07-20"]);
+    const r = compatEngine.build(["1990-01-15", "", "", "1992-07-20"]);
     const blocks = r.filter((s) => s.kind === "blocks");
     expect(blocks.length).toBe(0);
   });
 });
 
 describe("compat engine — result completeness", () => {
-  const datesOnly = compatEngine.build(["1990-01-15", "1992-07-20"]);
+  const datesOnly = compatEngine.build(["1990-01-15", "", "", "1992-07-20"]);
 
   it("includes a sign love-reading prose for both parties", () => {
     const love = datesOnly.find((s) => s.kind === "prose" && s.title === "ราศีกับการครองคู่");
@@ -87,8 +87,8 @@ describe("compat engine — result completeness", () => {
 
   it("element point text varies by element relationship", () => {
     // harmonious (ไฟ×ลม) vs same-element (ดิน×ดิน) must differ
-    const harm = compatEngine.build(["1990-04-20", "1990-06-20"])[0];
-    const same = compatEngine.build(["1990-01-15", "1991-01-20"])[0];
+    const harm = compatEngine.build(["1990-04-20", "", "", "1990-06-20"])[0];
+    const same = compatEngine.build(["1990-01-15", "", "", "1991-01-20"])[0];
     if (harm.kind === "compat" && same.kind === "compat") {
       expect(harm.points[0].meaning).not.toBe(same.points[0].meaning);
     }

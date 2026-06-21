@@ -23,7 +23,7 @@ const SAMPLES: Record<string, string[]> = {
   ascendant: ["1990-05-15", "08:30", BANGKOK],
   num7: ["1990-05-15"],
   lifegraph: ["1990-05-15", "08:30", BANGKOK, "ภาพรวมปีนี้", "2026-06-19"],
-  compat: ["1990-05-15", "1992-03-20"],
+  compat: ["1990-05-15", "", "", "1992-03-20"], // self bd@0, partner bd@3 (self group 0-2, partner 3-5)
   timing: ["ขึ้นบ้านใหม่", "2025-05"],
   // chinese
   bazi: [], // fullRoute — no-op engine, not exercised through the Section pipeline

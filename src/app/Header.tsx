@@ -144,11 +144,11 @@ export function Header({ query, onQueryChange, onLogo }: HeaderProps) {
           style={{ display: "flex", alignItems: "center", gap: 12, minHeight: "var(--tap-min)", cursor: "pointer", flexShrink: 0 }}
         >
           <div style={LOGO_MARK}>卜</div>
-          <div style={{ lineHeight: 1.05 }}>
-            <div style={{ fontFamily: "var(--font-head)", fontWeight: 500, fontSize: 21, color: "var(--text-strong)", letterSpacing: ".01em" }}>
+          <div>
+            <div style={{ fontFamily: "var(--font-head)", fontWeight: 500, fontSize: 21, lineHeight: 1.2, color: "var(--text-strong)", letterSpacing: ".01em" }}>
               มูดีย์
             </div>
-            <div style={{ fontSize: 9.5, color: "var(--text-dim)", letterSpacing: 3, fontWeight: 500 }}>MOODEE · 神算</div>
+            <div style={{ fontSize: 9.5, color: "var(--text-dim)", letterSpacing: 3, fontWeight: 500, marginTop: 2 }}>MOODEE · 神算</div>
           </div>
         </div>
 
