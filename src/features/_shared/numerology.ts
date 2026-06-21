@@ -1,4 +1,4 @@
-// Ported from .archive/.../moodee-lib.js (PAIRS / SUM_GOOD / SUM_BAD canonical popular table)
+// PAIRS / SUM_GOOD / SUM_BAD — canonical popular-number table from the MooDee reference library
 
 import type { Section } from "../../shared/sections/types";
 import { TONE_HEX } from "../../shared/sections/types";
