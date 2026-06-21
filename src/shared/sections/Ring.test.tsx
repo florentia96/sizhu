@@ -27,7 +27,7 @@ describe("Ring", () => {
       expect(c.getAttribute("cx")).toBe("75");
       expect(c.getAttribute("cy")).toBe("75");
     }
-    expect(cs[0].getAttribute("stroke")).toBe("rgba(255,255,255,.08)");
+    expect(cs[0].getAttribute("stroke")).toBe("var(--surface-sink)");
     expect(cs[1].getAttribute("stroke")).toBe("#6cc18a");
   });
 

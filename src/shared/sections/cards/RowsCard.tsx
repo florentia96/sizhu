@@ -17,7 +17,7 @@ export function RowsCard({ section }: { section: Rows }) {
               gap: 14,
               alignItems: "flex-start",
               paddingBottom: 13,
-              borderBottom: "1px solid rgba(255,255,255,.06)",
+              borderBottom: "1px solid var(--border-gold)",
             }}
           >
             <div
@@ -25,7 +25,7 @@ export function RowsCard({ section }: { section: Rows }) {
                 minWidth: 50,
                 height: 50,
                 padding: "0 9px",
-                borderRadius: 6,
+                borderRadius: "var(--radius-sm)",
                 display: "grid",
                 placeItems: "center",
                 flexShrink: 0,

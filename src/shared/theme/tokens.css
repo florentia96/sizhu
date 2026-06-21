@@ -1,64 +1,191 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Anuphan:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;600;700&family=Anuphan:wght@300;400;500;600;700&display=swap");
 
-:root {
-  --bg: #0e1116;
-  --bg-grad-top: #1c2433;
-  --surface: rgba(24, 28, 36, 0.72);
-  --surface-inset: rgba(255, 255, 255, 0.03);
-  --border-gold: rgba(216, 166, 74, 0.16);
+/* ============================================================
+   MooDee design tokens — "ฟ้าอรุณ / Dawn Aurora"
+   light (pastel) = ค่าเริ่มต้น · soft dark = สลับด้วย [data-theme="dark"]
+   ทุก token นิยามที่นี่ที่เดียว → คอมโพเนนต์/CSS อื่นอ้าง var() แล้วสลับธีมตามอัตโนมัติ
+   ============================================================ */
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
 
-  --primary: #b1352a;
-  --primary-shadow: #8a2820;
-  --primary-bright: #e0584b;
+  /* พื้นหลังฟ้าอรุณ */
+  --bg: #f4eef9;
+  --bg-grad-top: #ffe7dc;
+  --aurora-1: rgba(255, 198, 173, 0.55); /* พีช */
+  --aurora-2: rgba(201, 166, 234, 0.5);  /* ลิลัค */
+  --aurora-3: rgba(160, 210, 226, 0.4);  /* ฟ้า */
+  --star-dot: rgba(150, 130, 185, 0.16); /* ละอองอรุณ (สว่าง) */
 
-  --gold: #d8a64a;
-  --jade: #6cc18a;
-  --star: #7da6d8;
-  --ame: #c98ad8;
+  /* พื้นผิว (กระจกฝ้า) */
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-solid: #fffdff;
+  --surface-inset: rgba(255, 255, 255, 0.58);
+  --surface-sink: rgba(120, 100, 160, 0.08);
 
-  --text: #e7dcc2;
-  --text-strong: #f4ecd9;
-  --text-muted: #b9b2a0;
-  --text-dim: #8a8474;
-  --text-faint: #6f6a5c;
+  /* เส้นขอบ — ลาเวนเดอร์หม่นบาง ๆ เห็นบนพื้นสว่าง */
+  --border-gold: rgba(120, 100, 160, 0.16);
+  --gold-line: rgba(120, 100, 160, 0.16);
 
-  --radius-card: 5px;
-  --radius-input: 4px;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  /* แบรนด์ — กล้วยไม้-ม่วงอมชมพู (สืบจากตราชาดเดิม แต่ละมุน) */
+  --primary: #b86bb0;
+  --primary-bright: #c982bf;
+  --primary-shadow: #9a5390;
+  --on-primary: #fffafd;
+  /* ตัวอักษรบนปุ่ม gradient — เข้มทั้งสองโหมด (gradient อ่อนเท่ากันทั้งคู่) ผ่าน AA ~6:1
+     ตราประทับ (decorative/aria-hidden) ยังใช้ --on-primary ขาวได้ */
+  --on-grad: #2a1830;
+  --grad-brand: linear-gradient(95deg, #e58cb4, #9f86e6);
 
-  /* touch: 44px = พื้นต่ำสุดของ tap target (Apple HIG / Material), 8px = ระยะห่างขั้นต่ำระหว่างปุ่ม */
-  --tap-min: 44px;
+  /* 5 ศาสตร์ + heritage accent (โทนข้อความ — ผ่าน AA บนกระจก) */
+  --jade: #4f9d80;   /* 數 เขียว */
+  --gold: #bf9555;   /* 名 ทองน้ำผึ้ง */
+  --star: #5f80c8;   /* 星 ฟ้าคราม */
+  --ember: #d27a68;  /* 緣 ปะการัง */
+  --ame: #9d6fc4;    /* 卦 ม่วงกล้วยไม้ */
+  --gold-soft: rgba(191, 149, 85, 0.14);
+  --ember-soft: rgba(210, 122, 104, 0.14);
+
+  /* ตัวอักษร */
+  --ink: #38324a;
+  --ink-soft: #5a5570;
+  --ink-faint: #7d7892;
+  --text-strong: #38324a;
+  --text: #4f4a63;
+  --text-muted: #6f6a86;
+  --text-dim: #8a86a0;
+  --text-faint: #a39fb6;
+
+  /* การ์ดกระดาษสว่าง (ResultHero/aux) */
+  --paper: #fbf7ff;
+  --panel: #ffffff;
+
+  /* alias โลกหน้าผล (BaZi) — light = สว่าง */
+  --dark-bg: #f4eef9;
+  --dark-panel: rgba(255, 255, 255, 0.72);
+  --dark-text: #38324a;
+  --dark-soft: #5a5570;
+  --dark-faint: #7d7892;
+
+  --shadow: 0 18px 40px -22px rgba(120, 90, 170, 0.3);
+  --shadow-sm: 0 8px 22px -14px rgba(120, 90, 170, 0.28);
+  --shadow-glow: 0 18px 44px -20px rgba(159, 134, 230, 0.45);
+
+  /* มุมโค้งมน */
+  --radius-card: 22px;
+  --radius-input: 14px;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --radius-pill: 999px;
+
+  --maxw-form: 540px;
+  --maxw-result: 880px;
+
+  --tap-min: 46px;
   --tap-gap: 8px;
+  --glass-blur: 16px;
 
   --font-cn: "Noto Serif SC", serif;
-  /* ฟอนต์ไทยไม่มีหัว (loopless) ตัวเดียวทั้งเว็บ — หัวเรื่อง/เนื้อหาแยกด้วยน้ำหนัก */
-  --font-head: "Anuphan", system-ui, sans-serif;
+  --font-head: "Mitr", "Anuphan", system-ui, sans-serif;
   --font-body: "Anuphan", system-ui, sans-serif;
 }
 
+/* ---------- soft dark (ทไวไลต์ม่วง ไม่ใช่ดำกระด้าง) ---------- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #1c1830;
+  --bg-grad-top: #2a2142;
+  --aurora-1: rgba(224, 122, 166, 0.22);
+  --aurora-2: rgba(154, 122, 224, 0.26);
+  --aurora-3: rgba(90, 165, 200, 0.18);
+  --star-dot: rgba(255, 255, 255, 0.5); /* ดาว (มืด) */
+
+  --surface: rgba(48, 42, 72, 0.55);
+  --surface-solid: #272240;
+  --surface-inset: rgba(255, 255, 255, 0.05);
+  --surface-sink: rgba(0, 0, 0, 0.22);
+
+  --border-gold: rgba(255, 255, 255, 0.1);
+  --gold-line: rgba(255, 255, 255, 0.1);
+
+  --primary: #c98fd6;
+  --primary-bright: #d9a6e2;
+  --primary-shadow: #6f4a7a;
+  --on-primary: #241830;
+  --grad-brand: linear-gradient(95deg, #e58cb4, #9f86e6);
+
+  --jade: #82c9a8;
+  --gold: #d8b072;
+  --star: #93b1ee;
+  --ember: #ef9a86;
+  --ame: #c4a0ea;
+  --gold-soft: rgba(216, 176, 114, 0.16);
+  --ember-soft: rgba(239, 154, 134, 0.16);
+
+  --ink: #f0eafc;
+  --ink-soft: #ddd6ec;
+  --ink-faint: #b3abc8;
+  --text-strong: #f0eafc;
+  --text: #ddd6ec;
+  --text-muted: #b3abc8;
+  --text-dim: #8e87a6;
+  --text-faint: #756e90;
+
+  --paper: #2b2545;
+  --panel: #322b50;
+
+  --dark-bg: #1c1830;
+  --dark-panel: rgba(48, 42, 72, 0.55);
+  --dark-text: #f0eafc;
+  --dark-soft: #c3bcd8;
+  --dark-faint: #948dab;
+
+  --shadow: 0 18px 44px -20px rgba(0, 0, 0, 0.6);
+  --shadow-sm: 0 8px 24px -16px rgba(0, 0, 0, 0.55);
+  --shadow-glow: 0 18px 44px -20px rgba(0, 0, 0, 0.6);
+}
+
+/* ---------- reset + ฐาน ---------- */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-
 html {
   -webkit-text-size-adjust: 100%;
 }
-
 body {
   min-height: 100vh;
   background: var(--bg);
-  background-image: radial-gradient(circle at 50% -8%, var(--bg-grad-top) 0, var(--bg) 52%);
   color: var(--text);
   font-family: var(--font-body);
-  line-height: 1.6;
+  line-height: 1.62;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.4s ease, color 0.3s ease;
+}
+/* ม่านฟ้าอรุณ — โคมแสงพาสเทลเบลอ อยู่หลังเนื้อหา ติดจอ ไม่กินคลิก */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 8% 2%, var(--aurora-1), transparent 60%),
+    radial-gradient(55% 50% at 98% 12%, var(--aurora-2), transparent 60%),
+    radial-gradient(60% 55% at 70% 100%, var(--aurora-3), transparent 62%),
+    linear-gradient(168deg, var(--bg-grad-top) 0%, var(--bg) 42%);
+  transition: opacity 0.4s ease;
+}
+
+.cn {
+  font-family: var(--font-cn);
 }
 
 ::selection {
-  background: rgba(224, 88, 75, 0.4);
+  background: color-mix(in srgb, var(--primary) 32%, transparent);
   color: var(--text-strong);
 }
 
@@ -69,7 +196,7 @@ button {
   font-family: inherit;
 }
 
-/* แตะแล้วตอบสนองทันที (กัน tap-delay 300ms) + ฟีดแบ็กตอนกดทุกปุ่มทั้งเว็บ */
+/* แตะแล้วตอบสนองทันที (กัน tap-delay 300ms) + ฟีดแบ็กตอนกด */
 button,
 [role="button"],
 select,
@@ -79,7 +206,7 @@ label {
 }
 button:active,
 [role="button"]:active {
-  opacity: 0.82;
+  opacity: 0.9;
 }
 
 input::placeholder,
@@ -88,8 +215,35 @@ textarea::placeholder {
 }
 
 select option {
-  background: #181c24;
+  background: var(--surface-solid);
   color: var(--text);
+}
+
+/* focus เห็นชัดทุก control (a11y) */
+:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ละออง/ดาว — สีปรับตามธีมผ่าน --star-dot */
+.starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 18% 12%, var(--star-dot), transparent),
+    radial-gradient(1px 1px at 72% 8%, var(--star-dot), transparent),
+    radial-gradient(1.4px 1.4px at 86% 20%, var(--star-dot), transparent),
+    radial-gradient(1px 1px at 38% 22%, var(--star-dot), transparent),
+    radial-gradient(1px 1px at 58% 34%, var(--star-dot), transparent),
+    radial-gradient(1px 1px at 8% 30%, var(--star-dot), transparent),
+    radial-gradient(1.3px 1.3px at 90% 56%, var(--star-dot), transparent),
+    radial-gradient(1px 1px at 28% 62%, var(--star-dot), transparent),
+    radial-gradient(1px 1px at 48% 82%, var(--star-dot), transparent),
+    radial-gradient(1px 1px at 78% 88%, var(--star-dot), transparent);
+  animation: twinkle 6s ease-in-out infinite;
 }
 
 @keyframes twinkle {
@@ -109,5 +263,11 @@ select option {
   }
   50% {
     transform: translateY(-12px) rotate(6deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    transition: none;
   }
 }

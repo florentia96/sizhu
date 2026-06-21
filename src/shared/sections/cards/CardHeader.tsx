@@ -10,9 +10,9 @@ export function CardHeader({
   return (
     <div
       style={{
-        fontFamily: "'Anuphan',system-ui,sans-serif",
-        fontWeight: 600,
-        fontSize: "1.05rem",
+        fontFamily: "var(--font-head)",
+        fontWeight: 500,
+        fontSize: "1.1rem",
         color: "var(--text-strong)",
         marginBottom: 16,
         display: "flex",

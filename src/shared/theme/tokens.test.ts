@@ -16,23 +16,24 @@ const TOKENS = [
   "--radius-card", "--radius-input", "--shadow",
 ];
 
+// ค่าโทน "ฟ้าอรุณ" (light = ค่าเริ่มต้น) — soft dark กำหนดแยกใน [data-theme="dark"]
 const VALUES: Record<string, string> = {
-  "--bg": "#0e1116",
-  "--bg-grad-top": "#1c2433",
-  "--primary": "#b1352a",
-  "--primary-shadow": "#8a2820",
-  "--primary-bright": "#e0584b",
-  "--gold": "#d8a64a",
-  "--jade": "#6cc18a",
-  "--star": "#7da6d8",
-  "--ame": "#c98ad8",
-  "--text": "#e7dcc2",
-  "--text-strong": "#f4ecd9",
-  "--text-muted": "#b9b2a0",
-  "--text-dim": "#8a8474",
-  "--text-faint": "#6f6a5c",
-  "--radius-card": "5px",
-  "--radius-input": "4px",
+  "--bg": "#f4eef9",
+  "--bg-grad-top": "#ffe7dc",
+  "--primary": "#b86bb0",
+  "--primary-shadow": "#9a5390",
+  "--primary-bright": "#c982bf",
+  "--gold": "#bf9555",
+  "--jade": "#4f9d80",
+  "--star": "#5f80c8",
+  "--ame": "#9d6fc4",
+  "--text": "#4f4a63",
+  "--text-strong": "#38324a",
+  "--text-muted": "#6f6a86",
+  "--text-dim": "#8a86a0",
+  "--text-faint": "#a39fb6",
+  "--radius-card": "22px",
+  "--radius-input": "14px",
 };
 
 describe("tokens.css", () => {
@@ -54,10 +55,15 @@ describe("tokens.css", () => {
     expect(css).toContain("Anuphan");
   });
 
-  it("sets the body background and a radial gradient", () => {
+  it("sets the body background and an aurora radial gradient", () => {
     expect(css).toMatch(/body\s*\{/);
     expect(css).toContain("var(--bg)");
     expect(css).toContain("radial-gradient");
-    expect(css).toContain("circle at 50% -8%");
+    expect(css).toContain("var(--aurora-1)");
+  });
+
+  it("provides a light and a dark theme block", () => {
+    expect(css).toMatch(/\[data-theme="light"\]/);
+    expect(css).toMatch(/\[data-theme="dark"\]/);
   });
 });

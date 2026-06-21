@@ -7,16 +7,18 @@ const WRAP: CSSProperties = {
   flexWrap: "wrap",
   alignItems: "center",
   gap: 9,
-  marginBottom: 14,
-  padding: "12px 14px",
-  background: "var(--surface, rgba(24,28,36,.72))",
-  border: "1px solid var(--border-gold, rgba(216,166,74,.18))",
-  borderRadius: "var(--radius-card, 6px)",
+  marginBottom: 16,
+  padding: "12px 16px",
+  background: "var(--surface)",
+  border: "1px solid var(--border-gold)",
+  borderRadius: "var(--radius-card)",
+  backdropFilter: "blur(var(--glass-blur))",
+  WebkitBackdropFilter: "blur(var(--glass-blur))",
 };
 
 const LABEL: CSSProperties = {
   fontSize: ".82rem",
-  color: "var(--text-dim, #8a8474)",
+  color: "var(--text-dim)",
   marginRight: 4,
 };
 
@@ -24,21 +26,23 @@ const BTN: CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
   gap: 7,
-  minHeight: "var(--tap-min, 44px)",
+  minHeight: "var(--tap-min)",
   fontFamily: "inherit",
   fontSize: ".84rem",
-  color: "var(--paper, #e7dcc2)",
-  background: "var(--ember-soft, rgba(224,88,75,.16))",
-  border: "1px solid rgba(224,88,75,.4)",
-  borderRadius: 20,
-  padding: "8px 15px",
+  fontWeight: 500,
+  color: "var(--ember)",
+  background: "var(--ember-soft)",
+  border: "1px solid color-mix(in srgb, var(--ember) 38%, transparent)",
+  borderRadius: "var(--radius-pill)",
+  padding: "8px 16px",
   cursor: "pointer",
 };
 
 const BTN_GHOST: CSSProperties = {
   ...BTN,
-  background: "rgba(255,255,255,.04)",
-  border: "1px solid var(--border-gold, rgba(216,166,74,.3))",
+  color: "var(--text)",
+  background: "var(--surface-inset)",
+  border: "1px solid var(--border-gold)",
 };
 
 function ShareIcon() {

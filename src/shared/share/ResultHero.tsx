@@ -2,57 +2,53 @@ import type { CSSProperties } from "react";
 import type { Section } from "../sections/types";
 import { summarize } from "./buildShareText";
 
-// palette "โลกกระดาษ" จากดีไซน์ระบบเดิม (tokens.css) — สว่าง คอนทราสต์ผ่าน WCAG AA
-// ตั้งใจให้ต่างจาก shell มืดของแอป เพราะการ์ดนี้คือหน่วยที่ผู้ใช้แคปไปแชร์
-const PAPER = "#efe7d0";
-const PANEL = "#f6f0e0";
-const INK = "#22262d";
-const INK_SOFT = "#55564d";
-const CINNABAR = "#b1352a";
-
+// การ์ดสรุปผล (หน่วยที่ผู้ใช้แคปไปแชร์) — กระจกฝ้า + แบรนด์ accent ตามธีม สลับ light/dark ได้
 const CARD: CSSProperties = {
   position: "relative",
   overflow: "hidden",
-  marginBottom: 14,
+  marginBottom: 16,
   padding: "clamp(20px,4vw,28px)",
-  borderRadius: "var(--radius-card, 6px)",
-  background: `linear-gradient(150deg, ${PANEL}, ${PAPER})`,
-  border: "1px solid rgba(0,0,0,.08)",
-  borderLeft: `4px solid ${CINNABAR}`,
-  boxShadow: "0 12px 38px rgba(0,0,0,.5)",
+  borderRadius: "var(--radius-card)",
+  background: "var(--surface)",
+  backgroundImage: "linear-gradient(150deg, color-mix(in srgb, var(--primary) 10%, transparent), transparent 70%)",
+  border: "1px solid color-mix(in srgb, var(--primary) 22%, var(--border-gold))",
+  borderLeft: "5px solid var(--primary)",
+  backdropFilter: "blur(var(--glass-blur))",
+  WebkitBackdropFilter: "blur(var(--glass-blur))",
+  boxShadow: "var(--shadow)",
 };
 
 const EYEBROW: CSSProperties = {
   fontSize: ".72rem",
   letterSpacing: ".26em",
   textTransform: "uppercase",
-  color: CINNABAR,
-  fontWeight: 700,
+  color: "var(--primary)",
+  fontWeight: 600,
   marginBottom: 8,
 };
 
 const NAME: CSSProperties = {
-  fontFamily: "var(--font-head, 'Anuphan', system-ui, sans-serif)",
-  fontWeight: 700,
+  fontFamily: "var(--font-head)",
+  fontWeight: 500,
   fontSize: "clamp(1.4rem,4.6vw,1.95rem)",
   lineHeight: 1.18,
-  color: INK,
+  color: "var(--ink)",
   margin: 0,
 };
 
 const HEADLINE: CSSProperties = {
-  fontFamily: "var(--font-head, 'Anuphan', system-ui, sans-serif)",
-  fontWeight: 600,
+  fontFamily: "var(--font-head)",
+  fontWeight: 500,
   fontSize: "clamp(1.02rem,3vw,1.22rem)",
   lineHeight: 1.4,
-  color: INK,
+  color: "var(--ink)",
   margin: "12px 0 0",
 };
 
 const SUB: CSSProperties = {
   fontSize: ".92rem",
   lineHeight: 1.55,
-  color: INK_SOFT,
+  color: "var(--ink-soft)",
   margin: "7px 0 0",
 };
 

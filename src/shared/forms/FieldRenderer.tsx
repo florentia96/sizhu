@@ -31,13 +31,12 @@ const controlStyle: CSSProperties = {
   fontSize: "16px",
   width: "100%",
   minWidth: "0px",
-  minHeight: "var(--tap-min, 44px)",
-  colorScheme: "dark",
-  border: "1px solid var(--border-gold, rgba(216,166,74,.22))",
-  background: "var(--surface-inset, rgba(255,255,255,.04))",
-  borderRadius: "var(--radius-input, 4px)",
+  minHeight: "var(--tap-min, 46px)",
+  border: "1.5px solid var(--border-gold)",
+  background: "var(--surface-inset)",
+  borderRadius: "var(--radius-input)",
   padding: "11px 12px",
-  color: "var(--text, #e7dcc2)",
+  color: "var(--text)",
   outline: "none",
 };
 

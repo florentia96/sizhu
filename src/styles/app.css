@@ -4,7 +4,7 @@
 }
 
 /* ============================================================
-   โลกราตรีมงคล — ฟอร์มกรอกวันเกิด (MooDee dark, tokens only)
+   ฟอร์มกรอกวันเกิด (ปาจื้อ) — โทน "ฟ้าอรุณ" tokens เท่านั้น
    ============================================================ */
 .paper-screen {
   min-height: 100vh;
@@ -12,8 +12,6 @@
   align-items: center;
   justify-content: center;
   padding: clamp(22px, 5vw, 52px) 16px;
-  background:
-    radial-gradient(circle at 50% -8%, var(--bg-grad-top) 0, var(--bg) 52%);
   color: var(--text);
 }
 .paper-wrap {
@@ -26,14 +24,14 @@
 }
 .brand-eyebrow {
   font-size: 0.74rem;
-  letter-spacing: 0.4em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--primary-bright);
+  color: var(--primary);
   font-weight: 600;
   margin-bottom: 10px;
 }
 .brand-cn {
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
   font-size: clamp(3.4rem, 13vw, 5.4rem);
   font-weight: 700;
   line-height: 0.9;
@@ -41,12 +39,12 @@
   letter-spacing: 0.05em;
 }
 .brand-cn span {
-  color: var(--primary-bright);
+  color: var(--primary);
 }
 .brand-sub {
-  font-family: "Anuphan", system-ui, sans-serif;
+  font-family: var(--font-head);
   font-size: clamp(1.15rem, 4vw, 1.4rem);
-  font-weight: 600;
+  font-weight: 500;
   margin-top: 10px;
   color: var(--text);
 }
@@ -62,12 +60,14 @@
   border: 1px solid var(--border-gold);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   padding: clamp(18px, 4vw, 28px);
 }
 .form-head {
-  font-family: "Anuphan", system-ui, sans-serif;
-  font-weight: 600;
-  font-size: 1.05rem;
+  font-family: var(--font-head);
+  font-weight: 500;
+  font-size: 1.12rem;
   color: var(--text-strong);
   margin-bottom: 16px;
   display: flex;
@@ -75,8 +75,8 @@
   gap: 9px;
 }
 .form-head .mk {
-  font-family: "Noto Serif SC", serif;
-  color: var(--primary-bright);
+  font-family: var(--font-cn);
+  color: var(--primary);
   font-size: 1.2rem;
 }
 .grid2 {
@@ -106,20 +106,27 @@ input[type="number"] {
   font-size: 16px; /* กัน iOS ซูมตอนแตะ */
   color: var(--text);
   background: var(--surface-inset);
-  border: 1px solid var(--border-gold);
+  border: 1.5px solid var(--border-gold);
   border-radius: var(--radius-input);
-  padding: 10px;
+  padding: 11px;
   min-height: var(--tap-min);
   width: 100%;
   min-width: 0;
   display: block;
-  color-scheme: dark;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="number"]:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: var(--surface-solid);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 16%, transparent);
 }
 .input-wrap {
   position: relative;
   display: block;
 }
-/* date/time: ปิด native appearance ให้เคารพ width (กัน layout เพี้ยน/ยาวเกินบน iOS) + เว้นที่ไอคอน */
 .input-wrap input[type="date"],
 .input-wrap input[type="time"] {
   -webkit-appearance: none;
@@ -127,7 +134,6 @@ input[type="number"] {
   padding-right: 38px;
   cursor: pointer;
 }
-/* ขยายปุ่ม picker ของ webkit ให้คลุมทั้ง input (โปร่งใส) → คลิก/แตะตรงไหนก็เปิด */
 .input-wrap input::-webkit-calendar-picker-indicator {
   position: absolute;
   inset: 0;
@@ -139,7 +145,7 @@ input[type="number"] {
 }
 .input-ic {
   position: absolute;
-  right: 11px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-dim);
@@ -155,7 +161,7 @@ input[type="number"] {
 }
 .seg {
   display: flex;
-  border: 1px solid var(--border-gold);
+  border: 1.5px solid var(--border-gold);
   border-radius: var(--radius-input);
   overflow: hidden;
   background: var(--surface-inset);
@@ -173,8 +179,9 @@ input[type="number"] {
   transition: 0.15s;
 }
 .seg button[aria-pressed="true"] {
-  background: var(--primary);
-  color: var(--text-strong);
+  background: var(--surface-inset); /* fallback color-mix */
+  background: color-mix(in srgb, var(--primary) 18%, var(--surface));
+  color: var(--primary);
   font-weight: 600;
 }
 .adv-toggle {
@@ -183,7 +190,7 @@ input[type="number"] {
   align-items: center;
   min-height: var(--tap-min);
   font-size: 0.82rem;
-  color: var(--primary-bright);
+  color: var(--primary);
   background: none;
   border: 0;
   cursor: pointer;
@@ -211,15 +218,15 @@ input[type="number"] {
   padding: 0;
 }
 .check-box {
-  width: 18px;
-  height: 18px;
-  border-radius: var(--radius-input);
-  border: 1px solid var(--primary-bright);
+  width: 20px;
+  height: 20px;
+  border-radius: 7px;
+  border: 1.5px solid var(--primary);
   display: flex;
   align-items: center;
   justify-content: center;
   background: transparent;
-  color: var(--text-strong);
+  color: var(--on-primary);
   font-size: 0.7rem;
   flex: 0 0 auto;
 }
@@ -234,34 +241,28 @@ input[type="number"] {
 .go {
   width: 100%;
   margin-top: 18px;
-  font-family: "Anuphan", system-ui, sans-serif;
+  font-family: var(--font-head);
   font-weight: 600;
   font-size: 1.1rem;
-  color: var(--text-strong);
-  background: var(--primary);
+  color: var(--on-grad);
+  background: var(--grad-brand);
   border: 0;
-  border-radius: var(--radius-input);
+  border-radius: var(--radius-pill);
   padding: 14px;
   cursor: pointer;
   letter-spacing: 0.02em;
-  box-shadow: 0 2px 0 var(--primary-shadow);
-  transition:
-    background 0.2s ease,
-    transform 0.12s ease,
-    box-shadow 0.12s ease;
+  box-shadow: 0 14px 26px -12px var(--primary);
+  transition: transform 0.12s ease, box-shadow 0.2s ease;
 }
 .go:hover {
-  background: var(--primary-bright);
-  box-shadow:
-    0 4px 14px var(--primary-shadow),
-    0 2px 0 var(--primary-shadow);
+  transform: translateY(-1px);
+  box-shadow: 0 18px 32px -12px var(--primary);
 }
 .go:active {
   transform: translateY(1px);
-  box-shadow: 0 1px 0 var(--primary-shadow);
 }
 .form-err {
-  color: var(--primary-bright);
+  color: var(--ember);
   font-size: 0.85rem;
   margin-top: 10px;
   min-height: 1em;
@@ -282,7 +283,10 @@ input[type="number"] {
   position: fixed;
   inset: 0;
   z-index: 60;
-  background: radial-gradient(circle at 50% 45%, var(--bg-grad-top), var(--bg) 70%);
+  background: var(--bg); /* fallback เครื่องที่ไม่รองรับ color-mix */
+  background:
+    radial-gradient(60% 50% at 50% 40%, color-mix(in srgb, var(--primary) 18%, transparent), transparent 62%),
+    var(--bg);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -290,9 +294,8 @@ input[type="number"] {
   gap: 26px;
   border: 0;
   cursor: pointer;
-  color: var(--dark-text);
+  color: var(--text-strong);
 }
-/* ยกเว้นปุ่มเต็มจอจาก :active dim ทั่วโลก — ไม่ให้ทั้งจอหรี่ตอนแตะเพื่อข้าม */
 .casting:active {
   opacity: 1;
 }
@@ -308,42 +311,42 @@ input[type="number"] {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 1px solid rgba(216, 166, 74, 0.55);
+  border: 1.5px solid color-mix(in srgb, var(--primary) 55%, transparent);
   animation: bloom 2.6s ease-out infinite;
 }
 .orb-ring:nth-child(2) {
-  border-color: rgba(224, 88, 75, 0.55);
+  border-color: color-mix(in srgb, var(--ame) 55%, transparent);
   animation-delay: 0.9s;
 }
 .orb-ring:nth-child(3) {
-  border-color: rgba(216, 166, 74, 0.35);
+  border-color: color-mix(in srgb, var(--star) 45%, transparent);
   animation-delay: 1.8s;
 }
 .orb-glyph {
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
   font-size: 3.4rem;
-  color: var(--dark-text);
+  color: var(--primary);
   animation: spin360 11s linear infinite;
-  text-shadow: 0 0 18px rgba(216, 166, 74, 0.6);
+  text-shadow: 0 6px 24px color-mix(in srgb, var(--primary) 40%, transparent);
 }
 .casting-text {
-  font-family: "Anuphan", system-ui, sans-serif;
+  font-family: var(--font-head);
   font-size: 1.2rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.1em;
+  color: var(--text-strong);
 }
 .casting-sub {
-  color: var(--dark-faint);
+  color: var(--text-muted);
   font-size: 0.85rem;
   letter-spacing: 0.04em;
 }
 
 /* ============================================================
-   โลกราตรี — หน้าผล
+   หน้าผล
    ============================================================ */
 .result-screen {
   position: relative;
   min-height: 100vh;
-  background: var(--dark-bg);
   color: var(--dark-text);
   padding-bottom: 54px;
   overflow: hidden;
@@ -353,23 +356,24 @@ input[type="number"] {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background: radial-gradient(circle at 50% 0%, #1a2230 0, #0e1116 45%);
+  background: radial-gradient(80% 50% at 50% 0%, var(--bg-grad-top) 0, transparent 60%);
 }
 .stars {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: radial-gradient(1px 1px at 18% 12%, rgba(255, 255, 255, 0.55), transparent),
-    radial-gradient(1px 1px at 72% 8%, rgba(255, 255, 255, 0.45), transparent),
-    radial-gradient(1px 1px at 38% 26%, rgba(255, 255, 255, 0.38), transparent),
-    radial-gradient(1.4px 1.4px at 86% 18%, rgba(255, 236, 200, 0.5), transparent),
-    radial-gradient(1px 1px at 58% 34%, rgba(255, 255, 255, 0.32), transparent),
-    radial-gradient(1px 1px at 8% 22%, rgba(255, 255, 255, 0.3), transparent),
-    radial-gradient(1px 1px at 28% 52%, rgba(255, 255, 255, 0.3), transparent),
-    radial-gradient(1.3px 1.3px at 90% 62%, rgba(255, 236, 200, 0.4), transparent),
-    radial-gradient(1px 1px at 48% 78%, rgba(255, 255, 255, 0.28), transparent),
-    radial-gradient(1px 1px at 14% 88%, rgba(255, 255, 255, 0.26), transparent);
+  background-image:
+    radial-gradient(1px 1px at 18% 12%, var(--star-dot), transparent),
+    radial-gradient(1px 1px at 72% 8%, var(--star-dot), transparent),
+    radial-gradient(1px 1px at 38% 26%, var(--star-dot), transparent),
+    radial-gradient(1.4px 1.4px at 86% 18%, var(--star-dot), transparent),
+    radial-gradient(1px 1px at 58% 34%, var(--star-dot), transparent),
+    radial-gradient(1px 1px at 8% 22%, var(--star-dot), transparent),
+    radial-gradient(1px 1px at 28% 52%, var(--star-dot), transparent),
+    radial-gradient(1.3px 1.3px at 90% 62%, var(--star-dot), transparent),
+    radial-gradient(1px 1px at 48% 78%, var(--star-dot), transparent),
+    radial-gradient(1px 1px at 14% 88%, var(--star-dot), transparent);
   animation: twinkle 5s ease-in-out infinite;
 }
 .petals {
@@ -399,11 +403,10 @@ input[type="number"] {
 }
 .result-brand .cn {
   font-size: 1.8rem;
-  color: var(--paper);
-  text-shadow: 0 0 14px rgba(216, 166, 74, 0.35);
+  color: var(--primary);
 }
 .recap {
-  font-family: "Anuphan", system-ui, sans-serif;
+  font-family: var(--font-head);
   color: var(--dark-soft);
   font-size: 0.92rem;
   white-space: nowrap;
@@ -414,12 +417,12 @@ input[type="number"] {
   display: inline-flex;
   align-items: center;
   min-height: var(--tap-min);
-  font-family: "Anuphan", system-ui, sans-serif;
+  font-family: var(--font-head);
   font-size: 0.85rem;
-  color: var(--paper);
+  color: var(--ember);
   background: var(--ember-soft);
-  border: 1px solid rgba(224, 88, 75, 0.4);
-  border-radius: 20px;
+  border: 1.5px solid color-mix(in srgb, var(--ember) 40%, transparent);
+  border-radius: var(--radius-pill);
   padding: 7px 16px;
   cursor: pointer;
   white-space: nowrap;
@@ -427,8 +430,8 @@ input[type="number"] {
   transition: background 0.25s ease, box-shadow 0.25s ease;
 }
 .btn-back:hover {
-  background: rgba(224, 88, 75, 0.34);
-  box-shadow: 0 0 16px rgba(224, 88, 75, 0.4);
+  background: color-mix(in srgb, var(--ember) 22%, transparent);
+  box-shadow: 0 0 16px -4px var(--ember);
 }
 .result-body {
   position: relative;
@@ -445,22 +448,23 @@ input[type="number"] {
 .reveal {
   animation: fadeUp 0.85s cubic-bezier(0.2, 0.75, 0.25, 1) both;
 }
+/* ไม่ใส่ backdrop-filter ที่ .panel — ซ้ำหลายอันในหน้าผล (เลี่ยง jank บนมือถือ) ใช้ translucent surface แทน */
 .panel {
   background: var(--dark-panel);
   border: 1px solid var(--gold-line);
   border-radius: var(--radius);
   padding: clamp(18px, 4vw, 26px);
-  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow);
   transition: border-color 0.35s ease, box-shadow 0.35s ease;
 }
 .panel:hover {
-  border-color: rgba(228, 180, 98, 0.42);
-  box-shadow: 0 16px 46px rgba(0, 0, 0, 0.55), 0 0 24px rgba(216, 166, 74, 0.13);
+  border-color: color-mix(in srgb, var(--gold) 42%, transparent);
+  box-shadow: var(--shadow), 0 0 24px -16px var(--gold);
 }
 .panel-head {
-  font-family: "Anuphan", system-ui, sans-serif;
-  font-weight: 600;
-  font-size: clamp(1.02rem, 3.4vw, 1.18rem);
+  font-family: var(--font-head);
+  font-weight: 500;
+  font-size: clamp(1.05rem, 3.4vw, 1.2rem);
   color: var(--dark-text);
   margin-bottom: 16px;
   display: flex;
@@ -468,24 +472,26 @@ input[type="number"] {
   gap: 10px;
 }
 .panel-head .mk {
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
   color: var(--ember);
   font-size: 1.3rem;
-  text-shadow: 0 0 10px rgba(224, 88, 75, 0.5);
 }
 
 /* ===== TL;DR ===== */
 .tldr {
-  background: linear-gradient(165deg, rgba(40, 30, 28, 0.85), rgba(22, 26, 34, 0.8));
-  border: 1px solid rgba(224, 88, 75, 0.3);
-  border-left: 4px solid var(--ember);
+  background: var(--surface); /* fallback เครื่องที่ไม่รองรับ color-mix */
+  background: linear-gradient(160deg, color-mix(in srgb, var(--ember) 12%, var(--surface)), var(--surface));
+  border: 1px solid color-mix(in srgb, var(--ember) 26%, var(--border-gold));
+  border-left: 5px solid var(--ember);
   border-radius: var(--radius);
   padding: clamp(18px, 4vw, 26px);
-  box-shadow: 0 12px 38px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   transition: box-shadow 0.35s ease;
 }
 .tldr:hover {
-  box-shadow: 0 16px 46px rgba(0, 0, 0, 0.6), 0 0 26px rgba(224, 88, 75, 0.2);
+  box-shadow: var(--shadow), 0 0 26px -16px var(--ember);
 }
 .tldr-eyebrow {
   font-size: 0.74rem;
@@ -496,10 +502,10 @@ input[type="number"] {
   margin-bottom: 10px;
 }
 .tldr-headline {
-  font-family: "Anuphan", system-ui, sans-serif;
-  font-weight: 700;
+  font-family: var(--font-head);
+  font-weight: 500;
   font-size: clamp(1.5rem, 5.4vw, 2rem);
-  color: #f4ecd9;
+  color: var(--text-strong);
   line-height: 1.25;
 }
 .tldr-sub {
@@ -519,11 +525,11 @@ input[type="number"] {
   align-items: flex-start;
   margin: 0 -8px;
   padding: 3px 8px;
-  border-radius: 7px;
+  border-radius: 10px;
   transition: background 0.25s ease;
 }
 .tldr-row:hover {
-  background: rgba(228, 180, 98, 0.07);
+  background: var(--surface-sink);
 }
 .tldr-dot {
   width: 9px;
@@ -546,7 +552,7 @@ input[type="number"] {
   color: var(--dark-faint);
   font-size: 0.82rem;
   margin-top: 16px;
-  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  border-top: 1px dashed var(--border-gold);
   padding-top: 12px;
 }
 
@@ -561,29 +567,30 @@ input[type="number"] {
   overflow: hidden;
 }
 .fp {
-  background: rgba(255, 255, 255, 0.022);
+  background: var(--surface-solid);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 .fp.day {
-  background: rgba(224, 88, 75, 0.1);
+  background: var(--ember-soft);
 }
 .fp-head {
   padding: 9px 2px;
   gap: 2px;
-  background: rgba(255, 255, 255, 0.045);
+  background: var(--surface-sink);
 }
 .fp-head.day {
-  background: rgba(224, 88, 75, 0.18);
+  background: var(--ember-soft); /* fallback color-mix */
+  background: color-mix(in srgb, var(--ember) 22%, transparent);
 }
 .fp-head .head-cn {
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
   font-size: 1.3rem;
   font-weight: 600;
   line-height: 1;
-  color: #cfc7b2;
+  color: var(--text-muted);
 }
 .fp-head.day .head-cn {
   color: var(--ember);
@@ -595,7 +602,7 @@ input[type="number"] {
 .dm-tag {
   font-size: 0.55rem;
   background: var(--ember);
-  color: #160d0c;
+  color: #1a1420;
   padding: 1px 6px;
   border-radius: 8px;
   font-weight: 600;
@@ -606,15 +613,16 @@ input[type="number"] {
   gap: 6px;
 }
 .fp-glyph {
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
   font-weight: 700;
   line-height: 1;
   font-size: clamp(1.9rem, 7vw, 2.5rem);
   display: inline-block;
+  color: var(--text-strong);
   transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), text-shadow 0.25s ease;
 }
 .fp-glyph:hover {
-  transform: scale(1.25) translateY(-2px);
+  transform: scale(1.2) translateY(-2px);
   text-shadow: 0 0 22px currentColor;
 }
 .fp-eltag {
@@ -622,7 +630,7 @@ input[type="number"] {
   font-weight: 600;
   padding: 1px 7px;
   border-radius: 8px;
-  color: #10130f;
+  color: #1a1420;
   white-space: nowrap;
 }
 .fp-tg {
@@ -648,7 +656,7 @@ input[type="number"] {
   color: var(--dark-soft);
 }
 .fp-hidden .hrow b {
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
 }
 .fp-extra {
   padding: 7px 4px 9px;
@@ -687,11 +695,11 @@ input[type="number"] {
   align-items: baseline;
   gap: 3px 9px;
   padding: 7px 11px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface-sink);
   border-radius: var(--radius-sm);
 }
 .aux-gz {
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--gold);
@@ -720,8 +728,8 @@ input[type="number"] {
   gap: 9px;
 }
 .domains .dhead {
-  font-family: "Anuphan", system-ui, sans-serif;
-  font-weight: 600;
+  font-family: var(--font-head);
+  font-weight: 500;
   font-size: 0.95rem;
   color: var(--dark-text);
   display: flex;
@@ -729,7 +737,7 @@ input[type="number"] {
   gap: 8px;
 }
 .domains .dhead .mk {
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
   color: var(--gold);
 }
 .domain {
@@ -757,20 +765,20 @@ input[type="number"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
   font-size: 2.7rem;
   font-weight: 700;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--surface-sink);
 }
 .dm-meta {
   flex: 1;
   min-width: 180px;
 }
 .dm-name {
-  font-family: "Anuphan", system-ui, sans-serif;
-  font-weight: 600;
+  font-family: var(--font-head);
+  font-weight: 500;
   font-size: 1.18rem;
-  color: #f4ecd9;
+  color: var(--text-strong);
 }
 .dm-pol {
   color: var(--dark-faint);
@@ -810,12 +818,12 @@ input[type="number"] {
   gap: 10px;
   margin: 6px -8px;
   padding: 2px 8px;
-  border-radius: 7px;
+  border-radius: 10px;
   font-size: 0.92rem;
   transition: background 0.2s ease, transform 0.2s ease;
 }
 .bar:hover {
-  background: rgba(228, 180, 98, 0.06);
+  background: var(--surface-sink);
   transform: translateX(3px);
 }
 .bar-nm {
@@ -826,20 +834,20 @@ input[type="number"] {
   flex: 0 0 auto;
 }
 .bar-nm .c {
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
   font-weight: 600;
 }
 .bar-track {
   flex: 1;
-  height: 11px;
-  background: rgba(255, 255, 255, 0.07);
-  border-radius: 6px;
+  height: 12px;
+  background: var(--surface-sink);
+  border-radius: var(--radius-pill);
   overflow: hidden;
 }
 .bar-fill {
   display: block;
   height: 100%;
-  border-radius: 6px;
+  border-radius: var(--radius-pill);
 }
 .bar-ct {
   width: 18px;
@@ -866,24 +874,24 @@ input[type="number"] {
 }
 .chip {
   font-size: 0.85rem;
-  padding: 5px 13px;
-  border-radius: 20px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 .chip.use {
   font-weight: 600;
-  color: #10130f;
+  color: #1a1420;
 }
 .chip.use:hover {
   transform: translateY(-2px) scale(1.05);
 }
 .chip.avoid {
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #9a9484;
+  border: 1.5px solid var(--border-gold);
+  color: var(--dark-faint);
 }
 .chip.avoid:hover {
-  border-color: rgba(228, 180, 98, 0.6);
-  color: #e6ddca;
+  border-color: color-mix(in srgb, var(--gold) 55%, transparent);
+  color: var(--dark-soft);
   transform: translateY(-2px);
 }
 
@@ -903,16 +911,16 @@ input[type="number"] {
   gap: 13px;
   padding: 11px 9px;
   margin: 0 -9px;
-  border-radius: 6px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  border-bottom: 1px solid var(--border-gold);
   align-items: flex-start;
   transition: background 0.25s ease;
 }
 .tg-item:hover {
-  background: rgba(228, 180, 98, 0.07);
+  background: var(--surface-sink);
 }
 .tg-cn {
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1;
@@ -940,8 +948,8 @@ input[type="number"] {
   margin-top: 16px;
 }
 .rel-head {
-  font-family: "Anuphan", system-ui, sans-serif;
-  font-weight: 600;
+  font-family: var(--font-head);
+  font-weight: 500;
   font-size: 0.95rem;
   color: var(--dark-text);
   display: flex;
@@ -949,7 +957,7 @@ input[type="number"] {
   gap: 8px;
 }
 .rel-head .mk {
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
   color: var(--gold);
 }
 .rel-item {
@@ -958,9 +966,8 @@ input[type="number"] {
   line-height: 1.65;
   margin: 8px 0 0;
 }
-/* label ไทย + อักษรจีน (เช่น "ชง (สวน 沖)") ในแถวเดียว — ไทยใช้ Anuphan, จีนตกไป SC ทีละตัวอักษร */
 .rel-item b {
-  font-family: "Anuphan", "Noto Serif SC", sans-serif;
+  font-family: var(--font-head), var(--font-cn);
   color: var(--ember);
 }
 .rel-item .pairs {
@@ -974,15 +981,15 @@ input[type="number"] {
   gap: 12px;
 }
 .tip {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(216, 166, 74, 0.12);
+  background: var(--surface-sink);
+  border: 1px solid var(--border-gold);
   border-radius: var(--radius-sm);
   padding: 13px;
   transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
 }
 .tip:hover {
-  border-color: rgba(228, 180, 98, 0.45);
-  background: rgba(228, 180, 98, 0.06);
+  border-color: color-mix(in srgb, var(--gold) 45%, transparent);
+  background: var(--gold-soft);
   transform: translateY(-2px);
 }
 .tip-label {
@@ -991,7 +998,7 @@ input[type="number"] {
   margin-bottom: 7px;
 }
 .tip-val {
-  color: #e6ddca;
+  color: var(--dark-text);
   font-size: 0.92rem;
   line-height: 1.55;
 }
@@ -1034,7 +1041,7 @@ input[type="number"] {
   line-height: 1.6;
 }
 .luck-minor b {
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
   color: var(--gold);
 }
 
@@ -1046,9 +1053,9 @@ input[type="number"] {
 }
 .ss-item {
   padding: 9px 12px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface-sink);
   border-radius: var(--radius-sm);
-  border-left: 2px solid var(--gold-line);
+  border-left: 3px solid var(--gold-line);
 }
 .ss-head {
   display: flex;
@@ -1057,12 +1064,13 @@ input[type="number"] {
   gap: 3px 8px;
 }
 .ss-cn {
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
   font-size: 1rem;
   color: var(--gold);
 }
 .ss-name {
   font-size: 0.92rem;
+  color: var(--dark-text);
 }
 .ss-where {
   font-size: 0.72rem;
@@ -1091,28 +1099,29 @@ input[type="number"] {
   gap: 9px;
 }
 .luck-card {
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-gold);
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface-sink);
   padding: 10px 5px;
   text-align: center;
   transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 .luck-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
-  background: rgba(255, 255, 255, 0.07);
+  box-shadow: var(--shadow-sm);
+  background: var(--gold-soft);
 }
 .luck-age {
   font-size: 0.71rem;
   color: var(--dark-faint);
 }
 .luck-gz {
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
   font-size: 1.5rem;
   font-weight: 700;
   margin: 5px 0 3px;
   line-height: 1;
+  color: var(--dark-text);
 }
 .luck-tg {
   font-size: 0.62rem;
@@ -1128,7 +1137,7 @@ input[type="number"] {
   line-height: 1.7;
   margin: 16px 0 12px;
   padding-top: 13px;
-  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  border-top: 1px dashed var(--border-gold);
 }
 .luck-sect {
   margin-top: 14px;
@@ -1139,6 +1148,7 @@ input[type="number"] {
   gap: 7px;
   font-size: 0.94rem;
   font-weight: 700;
+  color: var(--dark-text);
 }
 .luck-sect-dot {
   width: 9px;
@@ -1165,15 +1175,16 @@ input[type="number"] {
   align-items: baseline;
   gap: 3px 9px;
   padding: 8px 11px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface-sink);
   border-radius: var(--radius-sm);
-  border-left: 2px solid rgba(255, 255, 255, 0.1);
+  border-left: 3px solid var(--border-gold);
 }
 .luck-li-gz {
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
   font-size: 1.05rem;
   font-weight: 700;
   line-height: 1;
+  color: var(--dark-text);
 }
 .luck-li-age {
   font-size: 0.8rem;
@@ -1216,7 +1227,7 @@ input[type="number"] {
   align-items: baseline;
   gap: 3px 10px;
   padding: 7px 11px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface-sink);
   border-radius: var(--radius-sm);
 }
 .ln-year {
@@ -1230,9 +1241,10 @@ input[type="number"] {
   font-weight: 400;
 }
 .ln-gz {
-  font-family: "Noto Serif SC", serif;
+  font-family: var(--font-cn);
   font-size: 1.05rem;
   font-weight: 700;
+  color: var(--dark-text);
 }
 .ln-tg {
   font-size: 0.74rem;
@@ -1257,13 +1269,13 @@ input[type="number"] {
   padding: 10px 6px;
 }
 .result-footer .off {
-  color: #6cc18a;
+  color: var(--jade);
   font-weight: 600;
   margin-bottom: 4px;
 }
 .result-footer .disc {
   font-style: italic;
-  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  border-top: 1px dashed var(--border-gold);
   padding-top: 12px;
   margin: 12px auto 0;
   max-width: 560px;
@@ -1274,36 +1286,36 @@ input[type="number"] {
   align-items: center;
   justify-content: center;
   min-height: var(--tap-min);
-  font-family: "Anuphan", system-ui, sans-serif;
+  font-family: var(--font-head);
   font-size: 1rem;
-  color: var(--paper);
+  color: var(--ember);
   background: var(--ember-soft);
-  border: 1px solid rgba(224, 88, 75, 0.4);
-  border-radius: 24px;
+  border: 1.5px solid color-mix(in srgb, var(--ember) 40%, transparent);
+  border-radius: var(--radius-pill);
   padding: 11px 26px;
   cursor: pointer;
   transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
 }
 .btn-restart:hover {
-  background: rgba(224, 88, 75, 0.34);
-  box-shadow: 0 0 20px rgba(224, 88, 75, 0.4);
+  background: color-mix(in srgb, var(--ember) 22%, transparent);
+  box-shadow: 0 0 20px -6px var(--ember);
   transform: translateY(-2px);
 }
 
-/* ปุ่มกลับหน้าหลัก — มีได้ทั้งหน้าฟอร์มและหน้าผล (เปิดดวงเต็มจอ ไม่มี Header) */
+/* ปุ่มกลับหน้าหลัก */
 .btn-home {
   align-self: center;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   min-height: var(--tap-min);
-  font-family: "Anuphan", system-ui, sans-serif;
+  font-family: var(--font-head);
   font-size: 0.85rem;
   color: var(--text);
   background: var(--surface-inset);
-  border: 1px solid var(--border-gold);
-  border-radius: 20px;
-  padding: 7px 15px;
+  border: 1.5px solid var(--border-gold);
+  border-radius: var(--radius-pill);
+  padding: 7px 16px;
   cursor: pointer;
   white-space: nowrap;
   flex: 0 0 auto;
@@ -1311,9 +1323,8 @@ input[type="number"] {
 }
 .btn-home:hover {
   background: var(--gold-soft);
-  border-color: rgba(216, 166, 74, 0.5);
+  border-color: color-mix(in srgb, var(--gold) 50%, transparent);
 }
-/* หน้าฟอร์ม: วางชิดซ้ายเหนือแบรนด์ */
 .paper-home {
   align-self: flex-start;
   margin-bottom: 14px;

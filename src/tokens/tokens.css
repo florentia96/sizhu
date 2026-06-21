@@ -1,78 +1,9 @@
-/* [ถัง 4] design tokens — พาเลตหมึก-ชาด-กระดาษ (ฟอร์ม) + ราตรี (หน้าผล) + คีย์เฟรม */
-:root {
-  /* โลกกระดาษ (ฟอร์ม) */
-  --ink: #22262d;
-  --ink-soft: #55564d;
-  --ink-faint: #6f6e5e; /* เข้มขึ้นจากเดิมให้ผ่าน WCAG AA บนกระดาษ */
-  --paper: #e7dcc2;
-  --panel: #f2ebd7;
-  --edge: #d3c4a0;
-  --field-bg: #fffdf6;
-  --cinnabar: #b1352a;
-  --cinnabar-deep: #8a2820;
-  --cinnabar-bright: #c23e31;
+/* [BaZi] คีย์เฟรม + a11y สำหรับหน้าผลปาจื้อ
+   โทเคนสี/รัศมีทั้งหมดย้ายไปอยู่ที่ shared/theme/tokens.css (ธีมเดียวคุมทั้งเว็บ) แล้ว
+   ไฟล์นี้เหลือเฉพาะ keyframe ที่ app.css ใช้ ไม่ override ธีม */
 
-  /* โลกราตรี (หน้าผล) */
-  --dark-bg: #0e1116;
-  --dark-panel: rgba(24, 28, 36, 0.72);
-  --dark-text: #ece4d2;
-  --dark-soft: #c4baa6; /* body — เดิม #b9b2a0 */
-  --dark-faint: #9a937f; /* caption — เดิม #6f6a5c (≈3.6:1 ตก) ตอนนี้ ≈5:1 ผ่าน AA */
-  --gold: #d8a64a;
-  --gold-soft: rgba(216, 166, 74, 0.16);
-  --gold-line: rgba(216, 166, 74, 0.18);
-  --ember: #e0584b;
-  --ember-soft: rgba(224, 88, 75, 0.16);
-
-  --radius: 5px;
-  --radius-sm: 4px;
-  --maxw-form: 540px;
-  --maxw-result: 880px;
-
-  /* touch: 44px = พื้นต่ำสุดของ tap target, 8px = ระยะห่างขั้นต่ำระหว่างปุ่ม */
-  --tap-min: 44px;
-  --tap-gap: 8px;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-html {
-  -webkit-text-size-adjust: 100%;
-}
-body {
-  font-family: "Anuphan", system-ui, sans-serif;
-  color: var(--ink);
-  line-height: 1.6;
-  background: var(--dark-bg);
-}
-.cn {
-  font-family: "Noto Serif SC", serif;
-}
-
-/* แตะแล้วตอบสนองทันที (กัน tap-delay 300ms) + ฟีดแบ็กตอนกดทุกปุ่ม */
-button,
-[role="button"],
-select,
-summary,
-label {
-  touch-action: manipulation;
-}
-button:active,
-[role="button"]:active {
-  opacity: 0.82;
-}
-
-/* focus ที่มองเห็นได้ชัดทุก control (a11y) */
-:focus-visible {
-  outline: 2px solid var(--cinnabar);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
 .screen-result :focus-visible {
-  outline-color: var(--gold);
+  outline-color: var(--ame);
 }
 
 @keyframes fadeUp {
@@ -123,7 +54,6 @@ button:active,
   }
 }
 
-/* เคารพ prefers-reduced-motion ทุกแอนิเมชัน (รวม casting/ดาว) */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

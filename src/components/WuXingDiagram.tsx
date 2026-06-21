@@ -33,34 +33,37 @@ export function WuXingDiagram({ elements }: { elements: Record<ElementTH, number
         <line
           key={`k${k}`}
           x1={pos[a].x} y1={pos[a].y} x2={pos[b].x} y2={pos[b].y}
-          stroke="#e0584b" strokeWidth={1} strokeDasharray="3 4" opacity={0.32}
+          stroke="var(--ember)" strokeWidth={1} strokeDasharray="3 4" opacity={0.4}
         />
       ))}
       {SHENG.map(([a, b], k) => (
         <line
           key={`g${k}`}
           x1={pos[a].x} y1={pos[a].y} x2={pos[b].x} y2={pos[b].y}
-          stroke="#d8a64a" strokeWidth={1.3} opacity={0.45}
+          stroke="var(--gold)" strokeWidth={1.3} opacity={0.5}
         />
       ))}
       {pos.map((p, i) => {
         const r = 14 + p.n * 3.4;
         return (
           <g key={`n${i}`}>
-            <circle cx={p.x} cy={p.y} r={r} fill={EL_DARK[p.e]} opacity={p.n ? 0.92 : 0.25} />
+            <circle
+              cx={p.x} cy={p.y} r={r} fill={EL_DARK[p.e]} opacity={p.n ? 0.92 : 0.25}
+              stroke="var(--border-gold)" strokeWidth={1}
+            />
             <text
               x={p.x} y={p.y + 1} textAnchor="middle" dominantBaseline="central"
-              fontFamily="Noto Serif SC, serif" fontWeight={700} fontSize={p.n ? 15 : 13} fill="#10130f"
+              fontFamily="Noto Serif SC, serif" fontWeight={700} fontSize={p.n ? 15 : 13} fill="#1a1420"
             >
               {EL_CN[p.e]}
             </text>
-            <text x={p.x} y={p.y + r + 12} textAnchor="middle" fontSize={10} fill="#b9b2a0">
+            <text x={p.x} y={p.y + r + 12} textAnchor="middle" fontSize={10} fill="var(--dark-faint)">
               {p.n}
             </text>
           </g>
         );
       })}
-      <text x={120} y={233} textAnchor="middle" fontSize={9.5} fill="#9a937f">
+      <text x={120} y={233} textAnchor="middle" fontSize={9.5} fill="var(--dark-faint)">
         เส้นทอง = เกิด(生) · เส้นแดง = ข่ม(克)
       </text>
     </svg>

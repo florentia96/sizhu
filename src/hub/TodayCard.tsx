@@ -33,18 +33,22 @@ const QUICK = [
 const CARD: CSSProperties = {
   position: "relative",
   overflow: "hidden",
-  marginTop: 30,
-  border: "1px solid rgba(216,166,74,.2)",
-  borderRadius: "var(--radius-card, 6px)",
-  background: "linear-gradient(165deg, rgba(40,30,28,.55), rgba(22,26,34,.5))",
+  marginTop: 26,
+  border: "1px solid var(--border-gold)",
+  borderRadius: "var(--radius-card)",
+  background: "var(--surface)",
+  backgroundImage: "linear-gradient(160deg, color-mix(in srgb, var(--ame) 12%, transparent), transparent 70%)",
+  backdropFilter: "blur(var(--glass-blur))",
+  WebkitBackdropFilter: "blur(var(--glass-blur))",
+  boxShadow: "var(--shadow-sm)",
   padding: "clamp(20px,4vw,28px)",
 };
 
 const EYEBROW: CSSProperties = {
   fontSize: ".74rem",
-  letterSpacing: ".32em",
+  letterSpacing: ".3em",
   textTransform: "uppercase",
-  color: "var(--primary-bright, #e0584b)",
+  color: "var(--ame)",
   fontWeight: 600,
   marginBottom: 6,
 };
@@ -60,26 +64,26 @@ const DATELINE: CSSProperties = {
 const SWATCH_ROW: CSSProperties = { display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" };
 const SWATCH: CSSProperties = { display: "inline-flex", alignItems: "center", gap: 7, fontSize: ".88rem", color: "var(--text-muted, #b9b2a0)" };
 const DOT = (hex: string): CSSProperties => ({
-  width: 16,
-  height: 16,
+  width: 18,
+  height: 18,
   borderRadius: "50%",
   background: hex,
-  boxShadow: "0 0 0 1px rgba(255,255,255,.15)",
+  boxShadow: "0 0 0 1px var(--border-gold), var(--shadow-sm)",
   flex: "0 0 auto",
 });
 
-const DIVIDER: CSSProperties = { height: 1, background: "rgba(216,166,74,.18)", margin: "18px 0 16px" };
+const DIVIDER: CSSProperties = { height: 1, background: "var(--border-gold)", margin: "18px 0 16px" };
 
 const CHIP_WRAP: CSSProperties = { display: "flex", flexWrap: "wrap", gap: 10, marginTop: 12 };
 const CHIP: CSSProperties = {
   display: "flex",
   alignItems: "center",
   gap: 9,
-  minHeight: "var(--tap-min, 44px)",
-  background: "rgba(255,255,255,.04)",
-  color: "var(--text, #e7dcc2)",
-  border: "1px solid rgba(216,166,74,.3)",
-  borderRadius: 24,
+  minHeight: "var(--tap-min)",
+  background: "var(--surface-inset)",
+  color: "var(--text)",
+  border: "1.5px solid var(--border-gold)",
+  borderRadius: "var(--radius-pill)",
   padding: "9px 16px",
   fontSize: 13.5,
   cursor: "pointer",

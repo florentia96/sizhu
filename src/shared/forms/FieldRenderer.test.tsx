@@ -43,7 +43,8 @@ describe("FieldRenderer", () => {
     expect(el.style.fontSize).toBe("16px");
     expect(el.style.width).toBe("100%");
     expect(el.style.minWidth).toBe("0px");
-    expect(el.style.colorScheme).toBe("dark");
+    // ต้องไม่ตรึง color-scheme ไว้ → ตามธีมหน้า (light/dark) เพื่อให้ native picker ถูกโหมด
+    expect(el.style.colorScheme).not.toBe("dark");
   });
 
   it("select renders all options", () => {

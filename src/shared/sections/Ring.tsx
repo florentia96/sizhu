@@ -15,7 +15,7 @@ export function Ring({ pct, color }: { pct: number; color: string }) {
       aria-hidden="true"
       style={{ transform: "rotate(-90deg)" }}
     >
-      <circle cx={CX} cy={CY} r={R} fill="none" stroke="rgba(255,255,255,.08)" strokeWidth={STROKE} />
+      <circle cx={CX} cy={CY} r={R} fill="none" stroke="var(--surface-sink)" strokeWidth={STROKE} />
       <circle
         cx={CX}
         cy={CY}
