@@ -1,7 +1,7 @@
 /* ฟอนต์โหลดจาก <link> ใน index.html (preconnect + ครอบหน้า prerender) — ไม่ใช้ @import ที่นี่ */
 
 /* ============================================================
-   MooDee design tokens — "ฟ้าอรุณ / Dawn Aurora"
+   MooDee design tokens — "น้ำเงินคราม / Royal Azure"
    light (pastel) = ค่าเริ่มต้น · soft dark = สลับด้วย [data-theme="dark"]
    ทุก token นิยามที่นี่ที่เดียว → คอมโพเนนต์/CSS อื่นอ้าง var() แล้วสลับธีมตามอัตโนมัติ
    ============================================================ */
@@ -9,67 +9,67 @@
 :root[data-theme="light"] {
   color-scheme: light;
 
-  /* พื้นหลังฟ้าอรุณ */
-  --bg: #f4eef9;
-  --bg-grad-top: #ffe7dc;
-  --aurora-1: rgba(255, 198, 173, 0.55); /* พีช */
-  --aurora-2: rgba(201, 166, 234, 0.5);  /* ลิลัค */
-  --aurora-3: rgba(160, 210, 226, 0.4);  /* ฟ้า */
-  --star-dot: rgba(150, 130, 185, 0.16); /* ละอองอรุณ (สว่าง) */
+  /* พื้นหลังน้ำเงินคราม */
+  --bg: #eef1fb;
+  --bg-grad-top: #e0e8ff;
+  --aurora-1: rgba(150, 185, 255, 0.5);  /* ฟ้าสว่าง */
+  --aurora-2: rgba(120, 140, 240, 0.42); /* น้ำเงินคราม */
+  --aurora-3: rgba(110, 175, 230, 0.38); /* ฟ้า */
+  --star-dot: rgba(100, 120, 185, 0.16); /* ละอองฟ้า (สว่าง) */
 
   /* พื้นผิว (กระจกฝ้า) */
   --surface: rgba(255, 255, 255, 0.72);
-  --surface-solid: #fffdff;
+  --surface-solid: #fdfdff;
   --surface-inset: rgba(255, 255, 255, 0.58);
-  --surface-sink: rgba(120, 100, 160, 0.08);
+  --surface-sink: rgba(90, 110, 180, 0.08);
 
-  /* เส้นขอบ — ลาเวนเดอร์หม่นบาง ๆ เห็นบนพื้นสว่าง */
-  --border-gold: rgba(120, 100, 160, 0.16);
-  --gold-line: rgba(120, 100, 160, 0.16);
+  /* เส้นขอบ — ฟ้าครามหม่นบาง ๆ เห็นบนพื้นสว่าง */
+  --border-gold: rgba(90, 110, 185, 0.18);
+  --gold-line: rgba(90, 110, 185, 0.18);
 
-  /* แบรนด์ — กล้วยไม้-ม่วงอมชมพู (สืบจากตราชาดเดิม แต่ละมุน) */
-  --primary: #b86bb0;
-  --primary-bright: #c982bf;
-  --primary-shadow: #9a5390;
-  --on-primary: #fffafd;
-  /* ตัวอักษรบนปุ่ม gradient — เข้มทั้งสองโหมด (gradient อ่อนเท่ากันทั้งคู่) ผ่าน AA ~6:1
-     ตราประทับ (decorative/aria-hidden) ยังใช้ --on-primary ขาวได้ */
-  --on-grad: #2a1830;
-  --grad-brand: linear-gradient(95deg, #e58cb4, #9f86e6);
+  /* แบรนด์ — น้ำเงินคราม (Royal indigo) */
+  --primary: #3f5fd4;
+  --primary-bright: #5a73e4;
+  --primary-shadow: #2f48ad;
+  --on-primary: #f7f9ff;
+  /* ตัวอักษรบนปุ่ม gradient — gradient น้ำเงินเข้มพอให้ขาวผ่าน AA 4.5:1 ทั้งแถบ
+     ตราประทับ (decorative/aria-hidden) ยังใช้ --on-primary ได้ */
+  --on-grad: #ffffff;
+  --grad-brand: linear-gradient(95deg, #4f68df, #3f4fcf);
 
-  /* 5 ศาสตร์ + heritage accent (โทนข้อความ — ผ่าน AA บนกระจก) */
+  /* 5 ศาสตร์ + heritage accent (สีประจำหมวด — ผ่าน AA บนกระจก · ไม่ม่วง/ชมพู แยกจาก primary) */
   --jade: #4f9d80;   /* 數 เขียว */
   --gold: #bf9555;   /* 名 ทองน้ำผึ้ง */
-  --star: #5f80c8;   /* 星 ฟ้าคราม */
+  --star: #2f93a8;   /* 星 ฟ้าน้ำทะเล (teal) */
   --ember: #d27a68;  /* 緣 ปะการัง */
-  --ame: #9d6fc4;    /* 卦 ม่วงกล้วยไม้ */
+  --ame: #5466ad;    /* 卦 ครามหม่น */
   --gold-soft: rgba(191, 149, 85, 0.14);
   --ember-soft: rgba(210, 122, 104, 0.14);
 
   /* ตัวอักษร */
-  --ink: #38324a;
-  --ink-soft: #5a5570;
-  --ink-faint: #7d7892;
-  --text-strong: #38324a;
-  --text: #4f4a63;
-  --text-muted: #6f6a86;
-  --text-dim: #8a86a0;
-  --text-faint: #a39fb6;
+  --ink: #313548;
+  --ink-soft: #525874;
+  --ink-faint: #777d96;
+  --text-strong: #313548;
+  --text: #474d68;
+  --text-muted: #686f8a;
+  --text-dim: #868ca4;
+  --text-faint: #9ea4bb;
 
   /* การ์ดกระดาษสว่าง (ResultHero/aux) */
-  --paper: #fbf7ff;
+  --paper: #f6f8ff;
   --panel: #ffffff;
 
   /* alias โลกหน้าผล (BaZi) — light = สว่าง */
-  --dark-bg: #f4eef9;
+  --dark-bg: #eef1fb;
   --dark-panel: rgba(255, 255, 255, 0.72);
-  --dark-text: #38324a;
-  --dark-soft: #5a5570;
-  --dark-faint: #7d7892;
+  --dark-text: #313548;
+  --dark-soft: #525874;
+  --dark-faint: #777d96;
 
-  --shadow: 0 18px 40px -22px rgba(120, 90, 170, 0.3);
-  --shadow-sm: 0 8px 22px -14px rgba(120, 90, 170, 0.28);
-  --shadow-glow: 0 18px 44px -20px rgba(159, 134, 230, 0.45);
+  --shadow: 0 18px 40px -22px rgba(70, 95, 185, 0.3);
+  --shadow-sm: 0 8px 22px -14px rgba(70, 95, 185, 0.28);
+  --shadow-glow: 0 18px 44px -20px rgba(90, 120, 235, 0.45);
 
   /* มุมโค้งมน */
   --radius-card: 22px;
@@ -90,56 +90,56 @@
   --font-body: "Anuphan", system-ui, sans-serif;
 }
 
-/* ---------- soft dark (ทไวไลต์ม่วง ไม่ใช่ดำกระด้าง) ---------- */
+/* ---------- soft dark (ทไวไลต์น้ำเงิน ไม่ใช่ดำกระด้าง) ---------- */
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --bg: #1c1830;
-  --bg-grad-top: #2a2142;
-  --aurora-1: rgba(224, 122, 166, 0.22);
-  --aurora-2: rgba(154, 122, 224, 0.26);
-  --aurora-3: rgba(90, 165, 200, 0.18);
+  --bg: #14182e;
+  --bg-grad-top: #1e2747;
+  --aurora-1: rgba(90, 130, 230, 0.2);
+  --aurora-2: rgba(95, 120, 235, 0.24);
+  --aurora-3: rgba(70, 140, 205, 0.18);
   --star-dot: rgba(255, 255, 255, 0.5); /* ดาว (มืด) */
 
-  --surface: rgba(48, 42, 72, 0.55);
-  --surface-solid: #272240;
+  --surface: rgba(38, 46, 78, 0.55);
+  --surface-solid: #1f2540;
   --surface-inset: rgba(255, 255, 255, 0.05);
   --surface-sink: rgba(0, 0, 0, 0.22);
 
   --border-gold: rgba(255, 255, 255, 0.1);
   --gold-line: rgba(255, 255, 255, 0.1);
 
-  --primary: #c98fd6;
-  --primary-bright: #d9a6e2;
-  --primary-shadow: #6f4a7a;
-  --on-primary: #241830;
-  --grad-brand: linear-gradient(95deg, #e58cb4, #9f86e6);
+  --primary: #8aa6f5;
+  --primary-bright: #a3baf8;
+  --primary-shadow: #3a4da0;
+  --on-primary: #0e1226;
+  --grad-brand: linear-gradient(95deg, #4f68df, #3f4fcf);
 
   --jade: #82c9a8;
   --gold: #d8b072;
-  --star: #93b1ee;
+  --star: #6ec3d6;
   --ember: #ef9a86;
-  --ame: #c4a0ea;
+  --ame: #97a6e2;
   --gold-soft: rgba(216, 176, 114, 0.16);
   --ember-soft: rgba(239, 154, 134, 0.16);
 
-  --ink: #f0eafc;
-  --ink-soft: #ddd6ec;
-  --ink-faint: #b3abc8;
-  --text-strong: #f0eafc;
-  --text: #ddd6ec;
-  --text-muted: #b3abc8;
-  --text-dim: #8e87a6;
-  --text-faint: #756e90;
+  --ink: #eaeefc;
+  --ink-soft: #d6dcf0;
+  --ink-faint: #abb3cd;
+  --text-strong: #eaeefc;
+  --text: #d6dcf0;
+  --text-muted: #abb3cd;
+  --text-dim: #868ea8;
+  --text-faint: #6e7694;
 
-  --paper: #2b2545;
-  --panel: #322b50;
+  --paper: #232a48;
+  --panel: #2a3252;
 
-  --dark-bg: #1c1830;
-  --dark-panel: rgba(48, 42, 72, 0.55);
-  --dark-text: #f0eafc;
-  --dark-soft: #c3bcd8;
-  --dark-faint: #948dab;
+  --dark-bg: #14182e;
+  --dark-panel: rgba(38, 46, 78, 0.55);
+  --dark-text: #eaeefc;
+  --dark-soft: #c3c9e0;
+  --dark-faint: #9298b4;
 
   --shadow: 0 18px 44px -20px rgba(0, 0, 0, 0.6);
   --shadow-sm: 0 8px 24px -16px rgba(0, 0, 0, 0.55);

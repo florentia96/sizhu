@@ -18,22 +18,22 @@ const TOKENS = [
   "--radius-card", "--radius-input", "--shadow",
 ];
 
-// ค่าโทน "ฟ้าอรุณ" (light = ค่าเริ่มต้น) — soft dark กำหนดแยกใน [data-theme="dark"]
+// ค่าโทน "น้ำเงินคราม" (light = ค่าเริ่มต้น) — soft dark กำหนดแยกใน [data-theme="dark"]
 const VALUES: Record<string, string> = {
-  "--bg": "#f4eef9",
-  "--bg-grad-top": "#ffe7dc",
-  "--primary": "#b86bb0",
-  "--primary-shadow": "#9a5390",
-  "--primary-bright": "#c982bf",
+  "--bg": "#eef1fb",
+  "--bg-grad-top": "#e0e8ff",
+  "--primary": "#3f5fd4",
+  "--primary-shadow": "#2f48ad",
+  "--primary-bright": "#5a73e4",
   "--gold": "#bf9555",
   "--jade": "#4f9d80",
-  "--star": "#5f80c8",
-  "--ame": "#9d6fc4",
-  "--text": "#4f4a63",
-  "--text-strong": "#38324a",
-  "--text-muted": "#6f6a86",
-  "--text-dim": "#8a86a0",
-  "--text-faint": "#a39fb6",
+  "--star": "#2f93a8",
+  "--ame": "#5466ad",
+  "--text": "#474d68",
+  "--text-strong": "#313548",
+  "--text-muted": "#686f8a",
+  "--text-dim": "#868ca4",
+  "--text-faint": "#9ea4bb",
   "--radius-card": "22px",
   "--radius-input": "14px",
 };

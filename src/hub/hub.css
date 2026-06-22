@@ -192,7 +192,8 @@
 }
 .hub-reg-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  /* min(190px,100%) → ยุบเป็น 1 คอลัมน์เองบนจอแคบ กัน native date/time picker ล้นชนกัน */
+  grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr));
   gap: 14px;
   margin-top: 18px;
 }
