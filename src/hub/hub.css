@@ -132,8 +132,8 @@
   transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
 }
 .hub-pill:hover {
-  border-color: var(--primary);
-  background: color-mix(in srgb, var(--primary) 10%, var(--surface));
+  border-color: var(--gold);
+  background: color-mix(in srgb, var(--gold) 12%, var(--surface));
   transform: translateY(-1px);
 }
 .hub-pill-cn {

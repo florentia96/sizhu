@@ -13,7 +13,7 @@
   /* พื้นหลังนวลงาช้างอุ่น — ขับ navy + rose gold ให้เด่น */
   --bg: #f7f4ee;
   --bg-grad-top: #fbf6ee;
-  --aurora-1: rgba(183, 110, 121, 0.16); /* rose gold */
+  --aurora-1: rgba(183, 110, 121, 0.26); /* rose gold */
   --aurora-2: rgba(31, 42, 82, 0.12);    /* navy */
   --aurora-3: rgba(201, 163, 106, 0.14); /* ทองอุ่น */
   --star-dot: rgba(120, 100, 90, 0.14);  /* ละอองอุ่น */
@@ -24,9 +24,9 @@
   --surface-inset: rgba(255, 252, 246, 0.6);
   --surface-sink: rgba(31, 42, 82, 0.05);
 
-  /* เส้นขอบ — navy หม่นบาง ๆ เห็นบนพื้นนวล */
-  --border-gold: rgba(31, 42, 82, 0.16);
-  --gold-line: rgba(31, 42, 82, 0.16);
+  /* เส้นขอบ — rose gold ตัด เห็นชัดบนพื้นนวล (rose gold อ่อนกว่า navy ต้อง opacity สูงกว่าจึงเด่นเท่ากัน) */
+  --border-gold: rgba(183, 110, 121, 0.4);
+  --gold-line: rgba(183, 110, 121, 0.4);
 
   /* แบรนด์ — deep navy (navy นำ) */
   --primary: #1f2a52;
@@ -97,7 +97,7 @@
 
   --bg: #131a33;
   --bg-grad-top: #1d2747;
-  --aurora-1: rgba(183, 110, 121, 0.18); /* rose gold */
+  --aurora-1: rgba(217, 154, 163, 0.26); /* rose gold */
   --aurora-2: rgba(60, 80, 150, 0.22);   /* navy */
   --aurora-3: rgba(80, 100, 170, 0.16);
   --star-dot: rgba(255, 255, 255, 0.5); /* ดาว (มืด) */
@@ -107,8 +107,8 @@
   --surface-inset: rgba(255, 255, 255, 0.05);
   --surface-sink: rgba(0, 0, 0, 0.22);
 
-  --border-gold: rgba(255, 255, 255, 0.1);
-  --gold-line: rgba(255, 255, 255, 0.1);
+  --border-gold: rgba(217, 154, 163, 0.3);
+  --gold-line: rgba(217, 154, 163, 0.3);
 
   --primary: #93acf2;
   --primary-bright: #acc0f8;
