@@ -1,49 +1,50 @@
 /* ฟอนต์โหลดจาก <link> ใน index.html (preconnect + ครอบหน้า prerender) — ไม่ใช้ @import ที่นี่ */
 
 /* ============================================================
-   MooDee design tokens — "น้ำเงินคราม / Royal Azure"
-   light (pastel) = ค่าเริ่มต้น · soft dark = สลับด้วย [data-theme="dark"]
+   MooDee design tokens — "Navy + Rose Gold"
+   light = navy บนพื้นนวลงาช้าง (ค่าเริ่มต้น) · soft dark = สลับด้วย [data-theme="dark"]
+   navy นำ (ปุ่ม/ตัวอักษร) · rose gold ตัด (ขอบ/ไอคอน/glow)
    ทุก token นิยามที่นี่ที่เดียว → คอมโพเนนต์/CSS อื่นอ้าง var() แล้วสลับธีมตามอัตโนมัติ
    ============================================================ */
 :root,
 :root[data-theme="light"] {
   color-scheme: light;
 
-  /* พื้นหลังน้ำเงินคราม */
-  --bg: #eef1fb;
-  --bg-grad-top: #e0e8ff;
-  --aurora-1: rgba(150, 185, 255, 0.5);  /* ฟ้าสว่าง */
-  --aurora-2: rgba(120, 140, 240, 0.42); /* น้ำเงินคราม */
-  --aurora-3: rgba(110, 175, 230, 0.38); /* ฟ้า */
-  --star-dot: rgba(100, 120, 185, 0.16); /* ละอองฟ้า (สว่าง) */
+  /* พื้นหลังนวลงาช้างอุ่น — ขับ navy + rose gold ให้เด่น */
+  --bg: #f7f4ee;
+  --bg-grad-top: #fbf6ee;
+  --aurora-1: rgba(183, 110, 121, 0.16); /* rose gold */
+  --aurora-2: rgba(31, 42, 82, 0.12);    /* navy */
+  --aurora-3: rgba(201, 163, 106, 0.14); /* ทองอุ่น */
+  --star-dot: rgba(120, 100, 90, 0.14);  /* ละอองอุ่น */
 
-  /* พื้นผิว (กระจกฝ้า) */
-  --surface: rgba(255, 255, 255, 0.72);
-  --surface-solid: #fdfdff;
-  --surface-inset: rgba(255, 255, 255, 0.58);
-  --surface-sink: rgba(90, 110, 180, 0.08);
+  /* พื้นผิว (กระจกฝ้า) — ขาวอุ่นบนพื้นนวล */
+  --surface: rgba(255, 253, 249, 0.74);
+  --surface-solid: #fffdf9;
+  --surface-inset: rgba(255, 252, 246, 0.6);
+  --surface-sink: rgba(31, 42, 82, 0.05);
 
-  /* เส้นขอบ — ฟ้าครามหม่นบาง ๆ เห็นบนพื้นสว่าง */
-  --border-gold: rgba(90, 110, 185, 0.18);
-  --gold-line: rgba(90, 110, 185, 0.18);
+  /* เส้นขอบ — navy หม่นบาง ๆ เห็นบนพื้นนวล */
+  --border-gold: rgba(31, 42, 82, 0.16);
+  --gold-line: rgba(31, 42, 82, 0.16);
 
-  /* แบรนด์ — น้ำเงินคราม (Royal indigo) */
-  --primary: #3f5fd4;
-  --primary-bright: #5a73e4;
-  --primary-shadow: #2f48ad;
-  --on-primary: #f7f9ff;
-  /* ตัวอักษรบนปุ่ม gradient — gradient น้ำเงินเข้มพอให้ขาวผ่าน AA 4.5:1 ทั้งแถบ
+  /* แบรนด์ — deep navy (navy นำ) */
+  --primary: #1f2a52;
+  --primary-bright: #2f3f73;
+  --primary-shadow: #141c3a;
+  --on-primary: #f7f4ee;
+  /* ตัวอักษรบนปุ่ม gradient — gradient navy เข้มพอให้ขาวผ่าน AA 4.5:1 ทั้งแถบ
      ตราประทับ (decorative/aria-hidden) ยังใช้ --on-primary ได้ */
   --on-grad: #ffffff;
-  --grad-brand: linear-gradient(95deg, #4f68df, #3f4fcf);
+  --grad-brand: linear-gradient(95deg, #2f3f73, #1f2a52);
 
-  /* 5 ศาสตร์ + heritage accent (สีประจำหมวด — ผ่าน AA บนกระจก · ไม่ม่วง/ชมพู แยกจาก primary) */
+  /* 5 ศาสตร์ + heritage accent (สีประจำหมวด — แยก hue กันชัด · 名=rose gold 卦=navy) */
   --jade: #4f9d80;   /* 數 เขียว */
-  --gold: #bf9555;   /* 名 ทองน้ำผึ้ง */
+  --gold: #b76e79;   /* 名 rose gold (token เมทัลลิกหลัก) */
   --star: #2f93a8;   /* 星 ฟ้าน้ำทะเล (teal) */
   --ember: #d27a68;  /* 緣 ปะการัง */
-  --ame: #5466ad;    /* 卦 ครามหม่น */
-  --gold-soft: rgba(191, 149, 85, 0.14);
+  --ame: #34467f;    /* 卦 navy */
+  --gold-soft: rgba(183, 110, 121, 0.14);
   --ember-soft: rgba(210, 122, 104, 0.14);
 
   /* ตัวอักษร */
@@ -57,19 +58,19 @@
   --text-faint: #9ea4bb;
 
   /* การ์ดกระดาษสว่าง (ResultHero/aux) */
-  --paper: #f6f8ff;
+  --paper: #fffdf8;
   --panel: #ffffff;
 
   /* alias โลกหน้าผล (BaZi) — light = สว่าง */
-  --dark-bg: #eef1fb;
-  --dark-panel: rgba(255, 255, 255, 0.72);
+  --dark-bg: #f7f4ee;
+  --dark-panel: rgba(255, 253, 249, 0.74);
   --dark-text: #313548;
   --dark-soft: #525874;
   --dark-faint: #777d96;
 
-  --shadow: 0 18px 40px -22px rgba(70, 95, 185, 0.3);
-  --shadow-sm: 0 8px 22px -14px rgba(70, 95, 185, 0.28);
-  --shadow-glow: 0 18px 44px -20px rgba(90, 120, 235, 0.45);
+  --shadow: 0 18px 40px -22px rgba(31, 42, 82, 0.28);
+  --shadow-sm: 0 8px 22px -14px rgba(31, 42, 82, 0.26);
+  --shadow-glow: 0 18px 44px -20px rgba(183, 110, 121, 0.4);
 
   /* มุมโค้งมน */
   --radius-card: 22px;
@@ -90,37 +91,37 @@
   --font-body: "Anuphan", system-ui, sans-serif;
 }
 
-/* ---------- soft dark (ทไวไลต์น้ำเงิน ไม่ใช่ดำกระด้าง) ---------- */
+/* ---------- soft dark (navy เข้ม + rose gold ไม่ใช่ดำกระด้าง) ---------- */
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --bg: #14182e;
-  --bg-grad-top: #1e2747;
-  --aurora-1: rgba(90, 130, 230, 0.2);
-  --aurora-2: rgba(95, 120, 235, 0.24);
-  --aurora-3: rgba(70, 140, 205, 0.18);
+  --bg: #131a33;
+  --bg-grad-top: #1d2747;
+  --aurora-1: rgba(183, 110, 121, 0.18); /* rose gold */
+  --aurora-2: rgba(60, 80, 150, 0.22);   /* navy */
+  --aurora-3: rgba(80, 100, 170, 0.16);
   --star-dot: rgba(255, 255, 255, 0.5); /* ดาว (มืด) */
 
-  --surface: rgba(38, 46, 78, 0.55);
-  --surface-solid: #1f2540;
+  --surface: rgba(34, 42, 74, 0.55);
+  --surface-solid: #1d2440;
   --surface-inset: rgba(255, 255, 255, 0.05);
   --surface-sink: rgba(0, 0, 0, 0.22);
 
   --border-gold: rgba(255, 255, 255, 0.1);
   --gold-line: rgba(255, 255, 255, 0.1);
 
-  --primary: #8aa6f5;
-  --primary-bright: #a3baf8;
-  --primary-shadow: #3a4da0;
+  --primary: #93acf2;
+  --primary-bright: #acc0f8;
+  --primary-shadow: #2a3a6b;
   --on-primary: #0e1226;
-  --grad-brand: linear-gradient(95deg, #4f68df, #3f4fcf);
+  --grad-brand: linear-gradient(95deg, #3a4d8f, #2a3a6b);
 
   --jade: #82c9a8;
-  --gold: #d8b072;
+  --gold: #d99aa3;
   --star: #6ec3d6;
   --ember: #ef9a86;
-  --ame: #97a6e2;
-  --gold-soft: rgba(216, 176, 114, 0.16);
+  --ame: #8294d0;
+  --gold-soft: rgba(217, 154, 163, 0.16);
   --ember-soft: rgba(239, 154, 134, 0.16);
 
   --ink: #eaeefc;
@@ -132,11 +133,11 @@
   --text-dim: #868ea8;
   --text-faint: #6e7694;
 
-  --paper: #232a48;
+  --paper: #222a48;
   --panel: #2a3252;
 
-  --dark-bg: #14182e;
-  --dark-panel: rgba(38, 46, 78, 0.55);
+  --dark-bg: #131a33;
+  --dark-panel: rgba(34, 42, 74, 0.55);
   --dark-text: #eaeefc;
   --dark-soft: #c3c9e0;
   --dark-faint: #9298b4;

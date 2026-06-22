@@ -200,6 +200,7 @@
 .hub-reg-field {
   display: flex;
   flex-direction: column;
+  min-width: 0; /* กัน native date/time input ดัน grid track ล้นขวาบน iOS */
 }
 .hub-reg-label {
   font-size: 0.8rem;
@@ -218,6 +219,9 @@
   padding: 11px 12px;
   color: var(--text);
   outline: none;
+  /* iOS Safari ไม่ยอม width:100% กับ native date/time ถ้าไม่ตัด appearance → ล้นขวา */
+  -webkit-appearance: none;
+  appearance: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 .hub-reg-ctrl:focus {

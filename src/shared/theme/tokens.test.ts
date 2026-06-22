@@ -18,17 +18,17 @@ const TOKENS = [
   "--radius-card", "--radius-input", "--shadow",
 ];
 
-// ค่าโทน "น้ำเงินคราม" (light = ค่าเริ่มต้น) — soft dark กำหนดแยกใน [data-theme="dark"]
+// ค่าโทน "Navy + Rose Gold" (light = ค่าเริ่มต้น) — soft dark กำหนดแยกใน [data-theme="dark"]
 const VALUES: Record<string, string> = {
-  "--bg": "#eef1fb",
-  "--bg-grad-top": "#e0e8ff",
-  "--primary": "#3f5fd4",
-  "--primary-shadow": "#2f48ad",
-  "--primary-bright": "#5a73e4",
-  "--gold": "#bf9555",
+  "--bg": "#f7f4ee",
+  "--bg-grad-top": "#fbf6ee",
+  "--primary": "#1f2a52",
+  "--primary-shadow": "#141c3a",
+  "--primary-bright": "#2f3f73",
+  "--gold": "#b76e79",
   "--jade": "#4f9d80",
   "--star": "#2f93a8",
-  "--ame": "#5466ad",
+  "--ame": "#34467f",
   "--text": "#474d68",
   "--text-strong": "#313548",
   "--text-muted": "#686f8a",

@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="12" fill="#e7dcc2"/>
-  <text x="32" y="46" text-anchor="middle" font-family="'Noto Serif SC', serif" font-weight="700" font-size="42" fill="#b1352a">八</text>
+  <defs>
+    <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e6c9cf"/>
+      <stop offset="1" stop-color="#b76e79"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#1f2a52"/>
+  <text x="32" y="46" text-anchor="middle" font-family="'Noto Serif SC', serif" font-weight="700" font-size="42" fill="url(#rg)">八</text>
 </svg>
