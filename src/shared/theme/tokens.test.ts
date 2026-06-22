@@ -8,6 +8,8 @@ const css = readFileSync(
   "utf8",
 );
 
+const html = readFileSync(resolve(process.cwd(), "index.html"), "utf8");
+
 const TOKENS = [
   "--bg", "--bg-grad-top", "--surface", "--surface-inset", "--border-gold",
   "--primary", "--primary-shadow", "--primary-bright",
@@ -49,10 +51,15 @@ describe("tokens.css", () => {
     }
   });
 
-  it("imports Noto Serif SC (Chinese glyphs) + Anuphan (Thai, loopless) from Google Fonts", () => {
-    expect(css).toContain("fonts.googleapis.com");
-    expect(css).toContain("Noto+Serif+SC");
-    expect(css).toContain("Anuphan");
+  it("loads Mitr (headings) + Noto Serif SC (Chinese glyphs) + Anuphan (Thai, loopless) from Google Fonts in index.html", () => {
+    expect(html).toContain("fonts.googleapis.com");
+    expect(html).toContain("Mitr");
+    expect(html).toContain("Noto+Serif+SC");
+    expect(html).toContain("Anuphan");
+  });
+
+  it("does not pull fonts via CSS @import — fonts load once from the index.html <link>", () => {
+    expect(css).not.toMatch(/@import\s+url\(/);
   });
 
   it("sets the body background and an aurora radial gradient", () => {

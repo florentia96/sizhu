@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;600;700&family=Anuphan:wght@300;400;500;600;700&display=swap");
+/* ฟอนต์โหลดจาก <link> ใน index.html (preconnect + ครอบหน้า prerender) — ไม่ใช้ @import ที่นี่ */
 
 /* ============================================================
    MooDee design tokens — "ฟ้าอรุณ / Dawn Aurora"
