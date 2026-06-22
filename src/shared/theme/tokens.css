@@ -25,8 +25,8 @@
   --surface-sink: rgba(31, 42, 82, 0.05);
 
   /* เส้นขอบ — rose gold ตัด เห็นชัดบนพื้นนวล (rose gold อ่อนกว่า navy ต้อง opacity สูงกว่าจึงเด่นเท่ากัน) */
-  --border-gold: rgba(183, 110, 121, 0.4);
-  --gold-line: rgba(183, 110, 121, 0.4);
+  --border-gold: rgba(183, 110, 121, 0.55);
+  --gold-line: rgba(183, 110, 121, 0.55);
 
   /* แบรนด์ — deep navy (navy นำ) */
   --primary: #1f2a52;
@@ -41,6 +41,7 @@
   /* 5 ศาสตร์ + heritage accent (สีประจำหมวด — แยก hue กันชัด · 名=rose gold 卦=navy) */
   --jade: #4f9d80;   /* 數 เขียว */
   --gold: #b76e79;   /* 名 rose gold (token เมทัลลิกหลัก) */
+  --rose-ink: #9d5763; /* rose gold เข้มสำหรับ text เล็ก — ผ่าน AA 4.5:1 บนพื้นนวล (--gold เองได้แค่ 3.47) */
   --star: #2f93a8;   /* 星 ฟ้าน้ำทะเล (teal) */
   --ember: #d27a68;  /* 緣 ปะการัง */
   --ame: #34467f;    /* 卦 navy */
@@ -107,8 +108,8 @@
   --surface-inset: rgba(255, 255, 255, 0.05);
   --surface-sink: rgba(0, 0, 0, 0.22);
 
-  --border-gold: rgba(217, 154, 163, 0.3);
-  --gold-line: rgba(217, 154, 163, 0.3);
+  --border-gold: rgba(217, 154, 163, 0.42);
+  --gold-line: rgba(217, 154, 163, 0.42);
 
   --primary: #93acf2;
   --primary-bright: #acc0f8;
@@ -118,6 +119,7 @@
 
   --jade: #82c9a8;
   --gold: #d99aa3;
+  --rose-ink: #d99aa3; /* dark: gold สว่างพอเป็น text แล้ว (7.44:1) */
   --star: #6ec3d6;
   --ember: #ef9a86;
   --ame: #8294d0;
