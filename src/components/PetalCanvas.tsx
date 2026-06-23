@@ -5,8 +5,8 @@ interface Petal {
   rot: number; vr: number; size: number; op: number; deep: boolean;
 }
 
-// พื้นหลังกลีบดอกไม้ปลิว (เฉพาะหน้าผล) — โทน rose gold นุ่ม เข้าได้ทั้งสว่าง/มืด
-// canvas วาดด้วยค่าสีตรง (อ้าง var() ไม่ได้) — สีกลีบล้อโทน --gold rose gold
+// พื้นหลังกลีบดอกไม้ปลิว (เฉพาะหน้าผล) — โทน champagne gold (starlight) เข้าได้ทั้งสว่าง/มืด
+// canvas วาดด้วยค่าสีตรง (อ้าง var() ไม่ได้) — สีกลีบล้อโทน --gold champagne
 // ไม่ mount เมื่อผู้ใช้ขอลดการเคลื่อนไหว
 export function PetalCanvas() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -61,11 +61,11 @@ export function PetalCanvas() {
       ctx.globalAlpha = p.op;
       const g = ctx.createLinearGradient(0, -s, 0, s);
       if (p.deep) {
-        g.addColorStop(0, "#c98a93");
-        g.addColorStop(1, "#b76e79");
+        g.addColorStop(0, "#e0c074");
+        g.addColorStop(1, "#bd9436");
       } else {
-        g.addColorStop(0, "#f0e3df");
-        g.addColorStop(1, "#e6c9cf");
+        g.addColorStop(0, "#f4ecd8");
+        g.addColorStop(1, "#e6d5b0");
       }
       ctx.fillStyle = g;
       ctx.beginPath();
@@ -74,7 +74,7 @@ export function PetalCanvas() {
       ctx.bezierCurveTo(-s * 0.5, s * 0.62, -s * 0.72, -s * 0.5, 0, -s);
       ctx.fill();
       ctx.globalAlpha = p.op * 0.4;
-      ctx.strokeStyle = "rgba(120,80,90,.4)";
+      ctx.strokeStyle = "rgba(110,80,35,.4)";
       ctx.lineWidth = 0.7;
       ctx.beginPath();
       ctx.moveTo(0, -s * 0.62);

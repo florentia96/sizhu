@@ -1,20 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="'Noto Serif Thai','Noto Serif SC',serif">
   <defs>
     <radialGradient id="glow" cx="50%" cy="-6%" r="70%">
-      <stop offset="0%" stop-color="#28335c"/>
-      <stop offset="52%" stop-color="#0e1428"/>
-      <stop offset="100%" stop-color="#0e1428"/>
+      <stop offset="0%" stop-color="#2a2218"/>
+      <stop offset="52%" stop-color="#171310"/>
+      <stop offset="100%" stop-color="#171310"/>
     </radialGradient>
     <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#e6c9cf"/>
-      <stop offset="100%" stop-color="#b76e79"/>
+      <stop offset="0%" stop-color="#e9dfc6"/>
+      <stop offset="100%" stop-color="#cbb072"/>
     </linearGradient>
   </defs>
 
   <rect width="1200" height="630" fill="url(#glow)"/>
 
   <!-- starfield -->
-  <g fill="#ffffff">
+  <g fill="#f4ecd8">
     <circle cx="120" cy="90" r="1.6" opacity="0.5"/>
     <circle cx="300" cy="140" r="1.2" opacity="0.35"/>
     <circle cx="980" cy="70" r="1.8" opacity="0.5"/>
@@ -26,29 +26,30 @@
   </g>
 
   <!-- giant ghost glyph -->
-  <text x="1150" y="430" text-anchor="end" font-size="460" fill="#b76e79" opacity="0.08" font-family="'Noto Serif SC',serif">運</text>
+  <text x="1150" y="430" text-anchor="end" font-size="460" fill="#cbb072" opacity="0.08" font-family="'Noto Serif SC',serif">運</text>
 
-  <!-- logo mark -->
+  <!-- logo mark — ตัวทอง กรอบแดง -->
   <g transform="translate(110,150)">
-    <rect x="0" y="0" width="92" height="92" rx="16" fill="rgba(183,110,121,0.16)" stroke="#b76e79" stroke-opacity="0.55" stroke-width="2"/>
-    <text x="46" y="66" text-anchor="middle" font-size="52" fill="url(#gold)" font-family="'Noto Serif SC',serif">卜</text>
+    <rect x="0" y="0" width="92" height="92" rx="18" fill="url(#gold)"/>
+    <rect x="2" y="2" width="88" height="88" rx="16" fill="none" stroke="#9a2533" stroke-width="3"/>
+    <text x="46" y="64" text-anchor="middle" font-size="52" font-weight="700" fill="#7c1f2b" font-family="'Noto Serif SC',serif">卜</text>
   </g>
   <g transform="translate(222,168)">
-    <text x="0" y="34" font-size="46" font-weight="700" fill="#f4ecd9">มูดีย์</text>
-    <text x="2" y="70" font-size="20" letter-spacing="6" fill="#9a93a0">MOODEE · 神算</text>
+    <text x="0" y="34" font-size="46" font-weight="700" fill="#f2ece0">มูดีย์</text>
+    <text x="2" y="70" font-size="20" letter-spacing="6" fill="#928a78">MOODEE · 神算</text>
   </g>
 
   <!-- headline -->
-  <text x="110" y="360" font-size="86" font-weight="700" fill="#f4ecd9">ดูดวงครบ จบในที่เดียว</text>
+  <text x="110" y="360" font-size="86" font-weight="700" fill="#f2ece0">ดูดวงครบ จบในที่เดียว</text>
 
   <!-- chinese accent line -->
-  <text x="114" y="430" font-size="40" letter-spacing="14" fill="#b76e79" font-family="'Noto Serif SC',serif">命 · 名 · 數 · 星 · 緣</text>
+  <text x="114" y="430" font-size="40" letter-spacing="14" fill="#cbb072" font-family="'Noto Serif SC',serif">命 · 名 · 數 · 星 · 緣</text>
 
   <!-- subline -->
-  <text x="110" y="500" font-size="30" fill="#b9b2a0">เลขศาสตร์ · นามศาสตร์ · โหราศาสตร์ · ศาสตร์จีน · ความเชื่อไทย — รวม 22 บริการ</text>
+  <text x="110" y="500" font-size="30" fill="#b3aa98">เลขศาสตร์ · นามศาสตร์ · โหราศาสตร์ · ศาสตร์จีน · ความเชื่อไทย — รวม 22 บริการ</text>
 
   <!-- bottom rule + url -->
-  <rect x="110" y="548" width="980" height="1" fill="#b76e79" opacity="0.28"/>
-  <text x="110" y="592" font-size="24" fill="#9a93a0">florentia96.github.io/sizhu</text>
+  <rect x="110" y="548" width="980" height="1" fill="#9a2533" opacity="0.34"/>
+  <text x="110" y="592" font-size="24" fill="#928a78">florentia96.github.io/sizhu</text>
   <text x="1090" y="592" text-anchor="end" font-size="22" fill="#6cc18a">คำนวณในเครื่อง 100% · ไม่ส่งข้อมูลออก</text>
 </svg>

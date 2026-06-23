@@ -9,7 +9,7 @@ export interface GroupMeta {
   glow: string;
 }
 
-// สีหมวด — มิดโทนพาสเทล อ่านได้ทั้งโหมดสว่าง/มืด · แยก hue กันชัด (green/rose gold/teal/coral/navy)
+// สีหมวด — มิดโทนพาสเทล อ่านได้ทั้งโหมดสว่าง/มืด · แยก hue กันชัด ไม่มีน้ำเงิน (green/rose/amethyst/coral/garnet)
 export const GROUPS: GroupMeta[] = [
   {
     id: "numbers",
@@ -32,8 +32,8 @@ export const GROUPS: GroupMeta[] = [
     title: "โหราศาสตร์",
     sub: "ดวงกำเนิด · ลัคนา · เลข 7 ตัว · ดวงคู่ · ฤกษ์ยาม",
     cn: "星",
-    color: "#2f93a8",
-    glow: "rgba(47,147,168,.3)",
+    color: "#7d5bc0",
+    glow: "rgba(125,91,192,.3)",
   },
   {
     id: "chinese",
@@ -48,8 +48,8 @@ export const GROUPS: GroupMeta[] = [
     title: "ดวงประจำวัน & ความเชื่อไทย",
     sub: "วันเกิด · ราศี · สีมงคล · ทำนายฝัน",
     cn: "卦",
-    color: "#34467f",
-    glow: "rgba(52,70,127,.3)",
+    color: "#9a2533",
+    glow: "rgba(154,37,51,.3)",
   },
 ];
 

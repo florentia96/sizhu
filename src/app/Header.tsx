@@ -36,13 +36,14 @@ const LOGO_MARK: React.CSSProperties = {
   width: 44,
   height: 44,
   borderRadius: 14,
-  background: "var(--grad-brand)",
+  background: "var(--brand-seal-bg)",
   display: "grid",
   placeItems: "center",
   fontFamily: "var(--font-cn)",
   fontSize: 22,
-  color: "var(--on-primary)",
-  boxShadow: "inset 0 0 0 1.5px rgba(255,255,255,.28), 0 8px 18px -6px var(--primary)",
+  fontWeight: 700,
+  color: "var(--on-grad)",
+  boxShadow: "var(--brand-seal-shadow)",
   flexShrink: 0,
 };
 

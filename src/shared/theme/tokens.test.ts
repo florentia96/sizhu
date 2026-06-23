@@ -18,22 +18,22 @@ const TOKENS = [
   "--radius-card", "--radius-input", "--shadow",
 ];
 
-// ค่าโทน "Rose Gold + Navy" (rose gold นำ · light = ค่าเริ่มต้น) — soft dark กำหนดแยกใน [data-theme="dark"]
+// ค่าโทน "Starlight ↔ Midnight × Garnet" (light = Starlight champagne · ค่าเริ่มต้น) — Midnight กำหนดแยกใน [data-theme="dark"]
 const VALUES: Record<string, string> = {
-  "--bg": "#f7f4ee",
-  "--bg-grad-top": "#fbf6ee",
-  "--primary": "#9d5763",
-  "--primary-shadow": "#6e3d47",
-  "--primary-bright": "#b87481",
-  "--gold": "#b76e79",
+  "--bg": "#efe8d6",
+  "--bg-grad-top": "#f5f0e4",
+  "--primary": "#9a2533",
+  "--primary-shadow": "#6e1a25",
+  "--primary-bright": "#b8424f",
+  "--gold": "#9c7a30",
   "--jade": "#4f9d80",
-  "--star": "#2f93a8",
-  "--ame": "#34467f",
-  "--text": "#474d68",
-  "--text-strong": "#313548",
-  "--text-muted": "#686f8a",
-  "--text-dim": "#868ca4",
-  "--text-faint": "#9ea4bb",
+  "--star": "#7d5bc0",
+  "--ame": "#9a2533",
+  "--text": "#494337",
+  "--text-strong": "#2f2a22",
+  "--text-muted": "#6a6356",
+  "--text-dim": "#8b8273",
+  "--text-faint": "#a89f8c",
   "--radius-card": "22px",
   "--radius-input": "14px",
 };

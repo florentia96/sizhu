@@ -197,12 +197,12 @@ const submitBtn: CSSProperties = {
   borderRadius: "var(--radius-pill)",
   padding: "14px 22px",
   fontFamily: "var(--font-head)",
-  fontWeight: 600,
+  fontWeight: 700,
   fontSize: "1.05rem",
   color: "var(--on-grad)",
   cursor: "pointer",
-  background: "var(--grad-brand)",
-  boxShadow: "0 14px 26px -12px var(--primary)",
+  background: "var(--brand-pill-bg)",
+  boxShadow: "var(--brand-pill-shadow)",
 };
 
 const ghostBtn: CSSProperties = {
