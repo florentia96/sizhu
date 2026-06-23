@@ -1,5 +1,5 @@
-// ม่านละอองฟ้าอรุณ — พื้นหลังหลักวาดด้วย body::before (tokens.css)
-// ชั้นนี้เติม "ละออง/ดาว" จาง ๆ ที่ปรับสีตามธีมผ่าน --star-dot (สว่าง=ละอองลาเวนเดอร์, มืด=ดาวขาว)
+// Dawn-sky mist veil - the main background is drawn by body::before (tokens.css)
+// This layer adds faint "mist/stars" that tint per theme via --star-dot (light = lavender mist, dark = white stars)
 export function Starfield() {
   return <div aria-hidden className="starfield" />;
 }

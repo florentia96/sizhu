@@ -16,8 +16,8 @@ export function reduceSingle(n: number): number {
 }
 
 export function kuaNumber(ce: number, gender: string): number {
-  // สูตร Eight Mansions มาตรฐาน ใช้ 2 หลักท้ายของปี ค.ศ.
-  // ค่าคงที่สลับตอนปี 2000 (10−s vs 9−s / s+5 vs s+6) ออกแบบมาเพื่อ 2 หลักท้ายโดยเฉพาะ
+  // Standard Eight Mansions formula, uses the last 2 digits of the CE year
+  // The constants switch at year 2000 (10-s vs 9-s / s+5 vs s+6), designed specifically for the last 2 digits
   const s = reduceSingle(sumDigits(String(ce).slice(-2)));
   const male = gender === "ชาย";
   let k: number;
@@ -43,7 +43,7 @@ export function kuaReport(ce: number, gender: string): Section[] {
   const east = isEastGroup(k);
   const group = GROUP_INFO[east ? "east" : "west"];
 
-  // ชื่อทิศ (ไทย) ของแต่ละตำแหน่งตามลำดับ KUA_DIR
+  // Thai direction names for each position, in KUA_DIR order
   const D = (i: number) => DIR_TH[dirs[i]];
   const shengQi = D(0);
   const tianYi = D(1);

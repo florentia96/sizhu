@@ -11,7 +11,7 @@ const TONE_BY_KEY: Record<Tone, string> = {
   info: TONE.info,
 };
 
-// ป้ายกำกับสั้น ๆ ต่อภูมิ ใช้บนแท็กของ block (อังกฤษ-ไทยตามตำแหน่งบทบาท)
+// Short label per bhumi, shown on each block's tag (English-Thai by role position)
 const BHUMI_TAG: Record<string, string> = {
   บริวาร: "ผู้สนับสนุน",
   อายุ: "สุขภาพ",
@@ -46,14 +46,14 @@ function blockFor(cell: BhumiCell): {
 
 function buildKalakini(dayLabel: string): Section[] {
   const day = dayLabel || "อาทิตย์";
-  const t = taksaForDay(day); // t[0]=บริวาร ... t[7]=กาลกิณี
+  const t = taksaForDay(day); // t[0]=borriwan ... t[7]=kalakini
   const kala = t[7];
-  const auspicious = t.filter((x) => x.k === "good"); // เดช ศรี มูละ อุตสาหะ มนตรี
+  const auspicious = t.filter((x) => x.k === "good"); // decha, sri, moola, utsaha, montri
   const kalaLetters = kala.letters.join(" ");
 
   const secs: Section[] = [];
 
-  // 1) บทสรุปเด่น — เน้นอักษรกาลกิณีที่ต้องเลี่ยงเป็นอันดับแรก
+  // 1) Key summary - highlights the kalakini letters to avoid first
   secs.push({
     kind: "verdict",
     score: 0,
@@ -72,7 +72,7 @@ function buildKalakini(dayLabel: string): Section[] {
     meta: "ทักษาประจำวัน" + day + " · เริ่มนับบริวารที่ดาว" + t[0].planet,
   });
 
-  // 2) ที่มา/หลักการ
+  // 2) Source / principle
   secs.push({
     kind: "prose",
     title: "หลักทักษาประจำวัน" + day,
@@ -89,7 +89,7 @@ function buildKalakini(dayLabel: string): Section[] {
     ],
   });
 
-  // 3) ครบทั้ง 8 ภูมิ พร้อมอักษร + ความหมาย (ระบายสีตามคุณภาพภูมิ)
+  // 3) All 8 bhumi with letters + meaning (colored by bhumi quality)
   secs.push({
     kind: "blocks",
     title: "หมู่อักษรครบทั้ง 8 ภูมิ",
@@ -97,7 +97,7 @@ function buildKalakini(dayLabel: string): Section[] {
     items: t.map(blockFor),
   });
 
-  // 4) คำแนะนำปฏิบัติเมื่อนำไปตั้งชื่อ
+  // 4) Practical advice when using it to name
   const auspiciousNames = auspicious.map((x) => x.bhumi).join(" ");
   secs.push({
     kind: "prose",
@@ -127,7 +127,7 @@ function buildKalakini(dayLabel: string): Section[] {
     ],
   });
 
-  // 5) ตารางอ้างอิงแบบกระชับ
+  // 5) Compact reference table
   secs.push({
     kind: "grid",
     title: "ตารางอ้างอิง 8 ภูมิ",

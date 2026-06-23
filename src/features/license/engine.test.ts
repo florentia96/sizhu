@@ -26,7 +26,7 @@ describe("license meta + fields", () => {
     expect(f.type).toBe("text");
     if (f.type === "text") {
       expect(f.maxLength).toBe(8);
-      // plates contain Thai letters → must NOT be numeric
+      // plates contain Thai letters -> must NOT be numeric
       expect(f.inputMode).toBe("text");
       expect(f.placeholder).toBe("1กก2345");
       expect(f.hint).toBeTruthy();
@@ -99,7 +99,7 @@ describe("license enriched result", () => {
     expect(prose).toBeDefined();
     if (prose && prose.kind === "prose") {
       const joined = prose.paras.map((p) => p.t).join(" ");
-      // mentions both the combined-sum derivation and that หมวดอักษร carries no direct meaning
+      // mentions both the combined-sum derivation and that the letter-category (muat akson) carries no direct meaning
       expect(joined.includes("ผลรวมรวม")).toBe(true);
       expect(joined.includes("หมวดอักษร")).toBe(true);
     }

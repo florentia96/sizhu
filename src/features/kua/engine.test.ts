@@ -9,8 +9,8 @@ describe("kua engine", () => {
     expect(reduceSingle(22)).toBe(4);
     expect(reduceSingle(19)).toBe(1);
   });
-  // ค่าอ้างอิงจากสูตร Eight Mansions มาตรฐาน (2 หลักท้าย)
-  // ที่มา: prokerala.com/feng-shui/kua-number.php, calculator.academy/kua-number-calculator, lovetoknow.com
+  // Reference values from the standard Eight Mansions formula (last 2 digits)
+  // Sources: prokerala.com/feng-shui/kua-number.php, calculator.academy/kua-number-calculator, lovetoknow.com
   it("reference vector: 1978 male -> kua 4 (prokerala worked example: 7+8=15→6, 10-6=4)", () => {
     expect(kuaNumber(1978, "ชาย")).toBe(4);
   });
@@ -24,9 +24,9 @@ describe("kua engine", () => {
     expect(kuaNumber(1968, "ชาย")).toBe(2);
   });
   it("2000s branch uses 9-S / S+6", () => {
-    expect(kuaNumber(2000, "ชาย")).toBe(9); // 00→0, 9-0=9
-    expect(kuaNumber(2001, "ชาย")).toBe(8); // 01→1, 9-1=8
-    expect(kuaNumber(2002, "หญิง")).toBe(8); // 02→2, 2+6=8
+    expect(kuaNumber(2000, "ชาย")).toBe(9); // 00->0, 9-0=9
+    expect(kuaNumber(2001, "ชาย")).toBe(8); // 01->1, 9-1=8
+    expect(kuaNumber(2002, "หญิง")).toBe(8); // 02->2, 2+6=8
   });
   it("report has verdict, blocks(good), grid(bad), prose, note; schema valid", () => {
     const out = engine.build(["2535", "ชาย"]);
@@ -81,6 +81,6 @@ describe("kua engine", () => {
   it("no gendered particles or slang anywhere in output text", () => {
     const blob = JSON.stringify(engine.build(["2535", "หญิง"]));
     expect(blob).not.toMatch(/ครับ|ค่ะ|คะ|นะคะ|จ้า|จ้ะ|เด้อ/);
-    expect(blob).not.toContain("โป๊ยแถ่ว"); // niche Chinese reading -> use ฮวงจุ้ยแปดทิศ
+    expect(blob).not.toContain("โป๊ยแถ่ว"); // niche Chinese reading -> use the plain Thai term (eight-direction feng shui) instead
   });
 });

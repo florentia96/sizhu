@@ -1,10 +1,10 @@
 import type { Section } from "../sections/types";
 
-/** ดึงสาระสำคัญจากผลทำนาย → 1-2 บรรทัดสำหรับแชร์ */
+/** Extract the key points from a reading -> 1-2 lines for sharing */
 export function summarize(sections: Section[]): string[] {
   const lines: string[] = [];
 
-  // บรรทัดหลัก: verdict หรือ compat (จุดที่ "ว้าว" ที่สุด)
+  // Main line: verdict or compat (the most "wow" point)
   for (const s of sections) {
     if (s.kind === "verdict") {
       lines.push(`${s.gradeLabel} (${s.grade}) — ${s.summary}`);
@@ -16,7 +16,7 @@ export function summarize(sections: Section[]): string[] {
     }
   }
 
-  // บรรทัดรอง: prose / grid / swatches แรกที่เจอ
+  // Secondary line: the first prose / grid / swatches found
   for (const s of sections) {
     if (lines.length >= 2) break;
     if (s.kind === "prose" && s.paras[0]) {
@@ -29,7 +29,7 @@ export function summarize(sections: Section[]): string[] {
     }
   }
 
-  // กันกรณีไม่มีอะไรเลย — ใช้ note
+  // Fallback when there is nothing at all - use the note
   if (!lines.length) {
     const note = sections.find((s) => s.kind === "note");
     if (note && note.kind === "note") lines.push(note.text);
@@ -42,7 +42,7 @@ function clamp(s: string, max = 160): string {
   return s.length > max ? s.slice(0, max - 1).trimEnd() + "…" : s;
 }
 
-/** ข้อความแชร์เต็ม (title + สาระ) — ไม่รวม url (ส่งแยกผ่าน navigator.share) */
+/** Full share text (title + key points) - excludes the url (sent separately via navigator.share) */
 export function buildShareText(featureName: string, sections: Section[]): string {
   const lines = summarize(sections);
   return [`${featureName} · MooDee`, ...lines].join("\n");

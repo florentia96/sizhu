@@ -1,4 +1,4 @@
-// ส่วนขยายปฏิทิน: 納音 / 十二長生 / 空亡 — ฟังก์ชันบริสุทธิ์ ไม่แตะ DOM/เครือข่าย (ตรวจใน masterdata.test)
+// Almanac extensions: NaYin / shi'er changsheng / kongwang - pure functions, no DOM/network (verified in masterdata.test)
 import type { ElementTH, Gan, Pillars, Zhi } from "../types";
 import {
   CHANGSHENG_NAMES, CHANGSHENG_START, GAN, GAN_E, HUAGAI, JIANGXING, LUSHEN,
@@ -9,7 +9,7 @@ import {
 const gi = (g: Gan): number => GAN.indexOf(g);
 const zi = (z: Zhi): number => ZHI.indexOf(z);
 
-// ลำดับใน 60 甲子 (0..59) จากก้านบน + ก้านดิน (มีคำตอบเดียวเสมอตามทฤษฎีบทเศษเหลือจีน)
+// Position in the 60 jiazi cycle (0..59) from stem + branch (always a unique solution by the Chinese remainder theorem)
 export function sixtyIndex(gan: Gan, zhi: Zhi): number {
   const g = gi(gan);
   const z = zi(zhi);
@@ -19,13 +19,13 @@ export function sixtyIndex(gan: Gan, zhi: Zhi): number {
   throw new Error(`sixtyIndex: ${gan}${zhi} ไม่ใช่คู่ใน 60 甲子 (ก้าน/กิ่งขั้วไม่ตรง)`);
 }
 
-// 納音 ของเสาหนึ่ง
+// NaYin of a single pillar
 export function naYin(gan: Gan, zhi: Zhi): { cn: string; th: string; el: ElementTH } {
   const [cn, th, el] = NAYIN[Math.floor(sixtyIndex(gan, zhi) / 2)];
   return { cn, th, el };
 }
 
-// สถานะ 12 ช่วงของก้านบน (เช่น ก้านวัน) เมื่อตกบนก้านดินหนึ่ง — หยาง順 / ยิน逆
+// The 12 life stages of a stem (e.g. the day stem) over a given branch - yang forward / yin reverse
 export function changSheng(stem: Gan, branch: Zhi): string {
   const forward = GAN_E[stem][1] === 1;
   const step = zi(branch) - zi(CHANGSHENG_START[stem]);
@@ -33,7 +33,7 @@ export function changSheng(stem: Gan, branch: Zhi): string {
   return CHANGSHENG_NAMES[offset];
 }
 
-// 空亡 (旬空): ก้านดินที่ว่างของรอบวัน — อิงเสาวันตามมาตรฐาน
+// kongwang / xunkong (void): the void branches of the day's xun - based on the day pillar per standard
 export function voidBranches(dayGan: Gan, dayZhi: Zhi): readonly [Zhi, Zhi] {
   return VOID_BY_XUN[Math.floor(sixtyIndex(dayGan, dayZhi) / 10)];
 }
@@ -43,7 +43,7 @@ export interface ShenShaHit {
   where: string[];
 }
 
-// 神煞 ที่ตรวจพบในผัง — key ตามก้านวัน (貴人/祿/文昌/羊刃) และก้านดินวัน (將星/桃花/驛馬/華蓋) สแกนทั้งสี่เสา
+// ShenSha found in the chart - keyed by day stem (guiren/lu/wenchang/yangren) and day branch (jiangxing/taohua/yima/huagai), scanning all four pillars
 export function shenSha(pillars: Pillars): ShenShaHit[] {
   const dayGan = pillars.day.gan;
   const dayZhi = pillars.day.zhi;
@@ -72,7 +72,7 @@ export interface Combine {
   full: boolean;
 }
 
-// 合 ระดับกลุ่ม/ก้านบน (แยกจาก relation() ที่เป็นคู่ก้านดิน) — 三合(+半合) / 三會 / 天干五合
+// he (combinations) at the group/stem level (separate from relation() which handles branch pairs) - sanhe (+banhe) / sanhui / tiangan wuhe
 export function combinations(pillars: Pillars): Combine[] {
   const all = [pillars.year, pillars.month, pillars.day, pillars.hour];
   const branches = all.map((p) => p.zhi);
@@ -95,32 +95,32 @@ export function combinations(pillars: Pillars): Combine[] {
   return out;
 }
 
-// 胎元 (เสาเกิดในครรภ์): ก้านบนเดือน +1, ก้านดินเดือน +3
+// taiyuan (conception pillar): month stem +1, month branch +3
 export function taiYuan(monthGan: Gan, monthZhi: Zhi): { gan: Gan; zhi: Zhi; gz: string } {
   const gan = GAN[(gi(monthGan) + 1) % 10];
   const zhi = ZHI[(zi(monthZhi) + 3) % 12];
   return { gan, zhi, gz: gan + zhi };
 }
 
-// 命宮 (วังชะตา) — 子平 มาตรฐาน: เดือน/ยามนับ寅=1, เดือนปรับเลย中氣ขึ้นเดือนถัดไป, ก้านบนจาก五虎遁(ปีเกิด)
-// monthOrder: 0=寅..11=丑 (จาก節) · pastZhongQi: เลยจุด中氣ของเดือนนั้นแล้วหรือยัง
+// minggong (life palace) - standard Ziping: month/hour counted with yin=1, the month rolls to the next once past zhongqi (mid-term), stem from wuhudun (birth year)
+// monthOrder: 0=yin..11=chou (from the jie solar term) - pastZhongQi: whether the month's zhongqi (mid-term) has been passed
 export function mingGong(
   monthOrder: number,
   pastZhongQi: boolean,
   hourZhi: Zhi,
   yearGan: Gan,
 ): { gan: Gan; zhi: Zhi; gz: string } {
-  const monthNum = ((monthOrder + (pastZhongQi ? 1 : 0)) % 12) + 1; // 寅=1
-  const hourNum = ((zi(hourZhi) - 2 + 12) % 12) + 1; // ยามก็นับ寅=1
+  const monthNum = ((monthOrder + (pastZhongQi ? 1 : 0)) % 12) + 1; // yin=1
+  const hourNum = ((zi(hourZhi) - 2 + 12) % 12) + 1; // the hour is also counted with yin=1
   let L = (14 - (monthNum + hourNum)) % 12;
-  if (L <= 0) L += 12; // L = เลขก้านดิน命宮 (寅=1) ช่วง 1..12
-  const zhi = ZHI[(L + 1) % 12]; // L=1 → 寅 (index 2)
-  const base = [2, 4, 6, 8, 0][gi(yearGan) % 5]; // 五虎遁: ก้านบนที่ตก寅 ของปีนั้น
+  if (L <= 0) L += 12; // L = minggong branch number (yin=1), range 1..12
+  const zhi = ZHI[(L + 1) % 12]; // L=1 -> yin (index 2)
+  const base = [2, 4, 6, 8, 0][gi(yearGan) % 5]; // wuhudun: the stem that lands on yin for that year
   const gan = GAN[(base + (L - 1)) % 10];
   return { gan, zhi, gz: gan + zhi };
 }
 
-// 小運 (ก่อนเข้าต้าอวิ้น): นับจากเสาเวลา ±1 ต่อปีนักษัตร · ทิศเดียวกับ大運 (順 阳男阴女 / 逆 อื่น)
+// xiaoyun (minor luck, before DaYun begins): counted from the hour pillar +-1 per zodiac year - same direction as DaYun (forward for yang-male/yin-female, reverse otherwise)
 export function minorLuck(
   hourGan: Gan,
   hourZhi: Zhi,

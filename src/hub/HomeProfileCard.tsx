@@ -7,7 +7,7 @@ import {
   type Profile,
 } from "../shared/profile/profile";
 
-// แสดงวันเกิดเป็น วัน/เดือน/พ.ศ. ให้คนไทยอ่านง่าย (เก็บจริงเป็น ค.ศ. YYYY-MM-DD)
+// Show the birth date as day/month/BE for easy Thai reading (stored as CE YYYY-MM-DD)
 function fmtThaiDate(iso?: string): string {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso ?? "");
   if (!m) return "—";

@@ -65,7 +65,7 @@ export function rasiReport(y: number, m: number, d: number): Section[] {
     ],
   };
   try {
-    // ส่งปีดิบ (y) — siderealCell/siderealSunSign เป็นเจ้าของการ normalize พ.ศ.→ค.ศ. เอง (กัน normYear ซ้ำสองชั้น)
+    // pass the raw year (y) - siderealCell/siderealSunSign own the BE->CE normalization themselves (avoid double normYear across two layers)
     grid.cells.push(siderealCell(y, m, d));
   } catch {
     /* ephemeris unavailable -> keep tropical-only grid */

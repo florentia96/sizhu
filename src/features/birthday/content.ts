@@ -5,7 +5,7 @@ export const EL_NOTE: Record<string, string> = {
   น้ำ: "ธาตุน้ำ — อ่อนไหว ลึกซึ้ง เข้าใจความรู้สึก",
 };
 
-// ดาวเจ้าเรือน (ผู้ปกครองราศี) ตามโหราศาสตร์มาตรฐาน
+// Ruling planets (sign rulers) per standard astrology
 export const RULER: Record<string, string> = {
   เมษ: "อังคาร",
   พฤษภ: "ศุกร์",
@@ -27,9 +27,9 @@ export interface DayDetail {
   career: string;
 }
 
-// รายละเอียดผู้ครองวัน (เทพประจำวัน) เสริมจากบุคลิกย่อใน DAY_LORD
-// อิงคติเทวดานพเคราะห์ในโหราศาสตร์ไทย: อาทิตย์=ผู้นำ จันทร์=เสน่ห์อ่อนโยน อังคาร=นักสู้
-// พุธ=สื่อสาร/การค้า พฤหัสบดี=ครู/ปัญญา ศุกร์=ศิลปะ/ความรัก เสาร์=อดทน/วินัย ราหู=พลิกแพลง
+// Day-lord details (the deity of the day), expanding on the short personality in DAY_LORD
+// Based on the Navagraha deity beliefs in Thai astrology: Sun=leader, Moon=gentle charm, Mars=fighter
+// Mercury=communication/trade, Jupiter=teacher/wisdom, Venus=art/love, Saturn=patience/discipline, Rahu=adaptable
 export const DAY_DETAIL: Record<string, DayDetail> = {
   "อาทิตย์": {
     strength: "มีความเป็นผู้นำสูง องอาจ รักศักดิ์ศรี ทำอะไรมักโดดเด่นและได้รับการยอมรับ มีน้ำใจกับคนรอบข้าง",
@@ -131,5 +131,5 @@ export const LIFEPATH: Record<number, { k: string; d: string; guide: string }> =
   },
 };
 
-// PY_THEME ใช้ร่วมจาก _shared/thaiAstro เพื่อกัน drift ข้ามฟีเจอร์ (single source)
+// PY_THEME is shared from _shared/thaiAstro to prevent drift across features (single source)
 export { PY_THEME } from "../_shared/thaiAstro";

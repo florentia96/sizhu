@@ -11,7 +11,7 @@ export const COLOR_HEX: Record<string, string> = {
 };
 
 export interface ElLifeEntry {
-  nature: string; // ภาพรวมพื้นฐานนิสัยตามธาตุปี
+  nature: string; // base personality overview by year element
   career: string;
   wealth: string;
   love: string;
@@ -19,7 +19,7 @@ export interface ElLifeEntry {
   advice: string;
 }
 
-// ลักษณะชีวิตตามธาตุปีเกิด (ก้านฟ้า) — ใช้ประกอบกับนิสัยตามนักษัตร
+// Life traits by birth-year element (heavenly stem) - used together with the zodiac-animal personality
 export const EL_LIFE: Record<string, ElLifeEntry> = {
   "ไม้": {
     nature: "เติบโต ยืดหยุ่น มองการณ์ไกล มีเมตตาและชอบเริ่มต้นสิ่งใหม่ เหมือนต้นไม้ที่แตกกิ่งก้านไม่หยุดนิ่ง",
@@ -63,7 +63,7 @@ export const EL_LIFE: Record<string, ElLifeEntry> = {
   },
 };
 
-// คำแนะนำเฉพาะปีนักษัตร (ดัชนีตรงกับ ZODIAC: 0 ชวด … 11 กุน)
+// Advice specific to each zodiac year (index matches ZODIAC: 0 Rat ... 11 Pig)
 export const ANIMAL_GUIDE: { strength: string; watch: string; tip: string }[] = [
   { strength: "ไหวพริบและการมองหาโอกาส", watch: "คิดมากและกังวลเรื่องเล็กเกินจำเป็น", tip: "เชื่อสัญชาตญาณของตัวเอง แล้วลงมือก่อนที่โอกาสจะผ่านไป" },
   { strength: "ความอดทนและความน่าเชื่อถือ", watch: "ดื้อรั้นและยึดติดวิธีเดิม", tip: "เปิดรับความคิดใหม่ จะช่วยให้ความขยันออกผลเร็วขึ้น" },

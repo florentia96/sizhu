@@ -84,9 +84,9 @@ export function signFromLon(lon: number): {
 // Geocentric apparent ecliptic longitude of date (tropical chart convention).
 // astronomy-engine's EclipticLongitude is HELIOCENTRIC (and throws for the Sun),
 // so each body is computed via its geocentric-of-date routine:
-//   Sun  → SunPosition().elon       (geocentric true ecliptic of date)
-//   Moon → EclipticGeoMoon().lon    (ECT — ecliptic of date)
-//   else → Ecliptic(GeoVector()).elon (J2000 EQJ vector → true ecliptic of date)
+//   Sun  -> SunPosition().elon       (geocentric true ecliptic of date)
+//   Moon -> EclipticGeoMoon().lon    (ECT - ecliptic of date)
+//   else -> Ecliptic(GeoVector()).elon (J2000 EQJ vector -> true ecliptic of date)
 export function eclipticLongitude(body: Body, jdUT: number): number {
   const t = timeFromJdUT(jdUT);
   let lon: number;

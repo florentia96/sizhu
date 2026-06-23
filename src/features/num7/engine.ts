@@ -9,13 +9,13 @@ const STAR = "#7da6d8";
 const WARN = "#d8a64a";
 const GOLD = "#d8a64a";
 
-/** map any positive integer into the 1..7 ring (0 → 7) — ตรงกับกฎ "ลบ 7 จนเหลือ 1–7" */
+/** map any positive integer into the 1..7 ring (0 -> 7) - matches the rule "subtract 7 until 1-7 remains" */
 function ring7(n: number): number {
   const r = n % 7;
   return r === 0 ? 7 : r;
 }
 
-/** วางเลขใน 7 ช่อง: ตั้งเลขประจำฐานที่ช่องแรก แล้วเดิน +1 ทีละช่อง วน 7→1 */
+/** place numbers in 7 cells: set the base number in the first cell, then step +1 per cell, wrapping 7->1 */
 function walk(seed: number): number[] {
   const row: number[] = [];
   let v = ring7(seed);
@@ -26,7 +26,7 @@ function walk(seed: number): number[] {
   return row;
 }
 
-/** Parse 'YYYY-MM-DD', normalize พ.ศ.→ค.ศ. (>2300 ⇒ -543). null if invalid/impossible date. */
+/** Parse 'YYYY-MM-DD', normalize BE->CE (>2300 => -543). null if invalid/impossible date. */
 function parseISO(iso: string): { y: number; m: number; d: number } | null {
   const mt = /^(\d{3,4})-(\d{1,2})-(\d{1,2})$/.exec(iso.trim());
   if (!mt) return null;
@@ -40,29 +40,29 @@ function parseISO(iso: string): { y: number; m: number; d: number } | null {
   return { y, m, d };
 }
 
-/** เลขประจำปีนักษัตร 1=ชวด..12=กุน → ย่อเข้าวง 1..7 (กฎ "เกิน 7 ลบ 7") */
+/** zodiac-year number 1=Rat..12=Pig -> reduced into the 1..7 ring (the "over 7 subtract 7" rule) */
 function yearSeedFromCE(y: number): number {
   return ring7(zodiacIndexFromCE(y) + 1);
 }
 
 /**
- * 7 ฐาน × 7 ภพ:
- *  ฐาน1-3 = วันเกิด/เดือนเกิด/ปีนักษัตร (ตั้งเลขประจำ แล้วเดิน +1)
- *  ฐาน4   = ผลรวมดิบของฐาน1-3 ในแต่ละภพ (กำลังพระเคราะห์)
- *  ฐาน5   = ฐาน4 ย่อเข้าวง 1..7
- *  ฐาน6   = ฐาน5 × 2 ย่อเข้าวง · ฐาน7 = ฐาน6 × 2 ย่อเข้าวง
+ * 7 bases x 7 phop:
+ *  base1-3 = birth day/birth month/zodiac year (set the base number, then step +1)
+ *  base4   = raw sum of base1-3 in each phop (planetary power)
+ *  base5   = base4 reduced into the 1..7 ring
+ *  base6   = base5 x2 reduced into the ring - base7 = base6 x2 reduced into the ring
  */
 export function compute7(iso: string): number[][] | null {
   const p = parseISO(iso);
   if (!p) return null;
-  const daySeed = THAI_DAYS.indexOf(dayFromDate(p.y, p.m, p.d)) + 1; // 1=อาทิตย์..7=เสาร์
-  const monthSeed = ((p.m - 1) % 7) + 1; // เดือนสุริยคติ (ดูหมายเหตุ — ตำราเดิมใช้เดือนจันทรคติ)
+  const daySeed = THAI_DAYS.indexOf(dayFromDate(p.y, p.m, p.d)) + 1; // 1=Sunday..7=Saturday
+  const monthSeed = ((p.m - 1) % 7) + 1; // solar month (see note - the original text uses the lunar month)
   const yearSeed = yearSeedFromCE(p.y);
 
   const top = walk(daySeed);
   const mid = walk(monthSeed);
   const bot = walk(yearSeed);
-  const base4 = top.map((_, i) => top[i] + mid[i] + bot[i]); // raw column sum (กำลังพระเคราะห์)
+  const base4 = top.map((_, i) => top[i] + mid[i] + bot[i]); // raw column sum (planetary power)
   const base5 = base4.map(ring7);
   const base6 = base5.map((v) => ring7(v * 2));
   const base7 = base6.map((v) => ring7(v * 2));
@@ -73,7 +73,7 @@ function badInput(): Section[] {
   return [{ kind: "note", text: "กรอกวันเกิดให้ถูกต้อง (เช่น 2535-04-13 หรือ 1992-04-13) แล้วลองใหม่อีกครั้ง" }];
 }
 
-/** ภพในฐานบนที่กำลังพระเคราะห์ (ฐานบวก) สูงที่สุด — ใช้ชี้จุดเด่นของดวง */
+/** the phop in the upper base with the highest planetary power (additive base) - marks the chart's highlight */
 function strongestPhop(g: number[][]): { name: string; meaning: string; power: number } {
   let bestIdx = 0;
   for (let c = 1; c < 7; c++) if (g[3][c] > g[3][bestIdx]) bestIdx = c;
@@ -90,13 +90,13 @@ function build(vals: string[]): Section[] {
   const dayName = dayFromDate(p.y, p.m, p.d);
   const zodiac = ZODIAC[zodiacIndexFromCE(p.y)];
 
-  // เลขดาวเด่น (วันเกิด) = แก่นตัวตน
-  const coreStar = g[0][0]; // ฐานบน ช่องอัตตะ = เลขประจำวันเกิด
+  // dominant star number (birth day) = the core self
+  const coreStar = g[0][0]; // upper base, self cell = the birth-day number
   const coreStarName = NUM_MEANING[coreStar].split(" — ")[0];
   const coreStarTrait = NUM_MEANING[coreStar].split(" — ")[1];
   const strong = strongestPhop(g);
 
-  // 1) สรุปภาพรวมแบบอ่านง่าย (verdict — ซ่อนวงแหวนเพราะศาสตร์นี้ไม่ให้เลขชี้วัด)
+  // 1) Easy-to-read overview (verdict - rings hidden because this system gives no indicator number)
   const summary: Section = {
     kind: "verdict",
     score: 0,
@@ -121,7 +121,7 @@ function build(vals: string[]): Section[] {
     meta: "วิชาเลข 7 ตัว (มหาสัตตเลข) — ผูกฐานจากวัน เดือน และปีนักษัตรที่เกิด",
   };
 
-  // 2) ตาราง 3 ฐาน × 7 ภพ (เลขในช่อง + ดาวประจำเลข)
+  // 2) Table of 3 bases x 7 phop (number in cell + the number's planet)
   const cells = PHOP_NAMES.flatMap((row, r) =>
     row.map((name, c) => ({
       name,
@@ -130,7 +130,7 @@ function build(vals: string[]): Section[] {
     })),
   );
 
-  // 3) ฐานทั้ง 7 (บล็อกชิป)
+  // 3) All 7 bases (chip blocks)
   const baseRowItems = g.map((row, i) => ({
     title: BASE_MEANINGS[i + 1].split(" — ")[0],
     tag: "ฐาน " + (i + 1),
@@ -139,7 +139,7 @@ function build(vals: string[]): Section[] {
     chips: row.map(String),
   }));
 
-  // 4) ความหมายราย 21 ภพ — ฐานบน/กลาง/ล่าง แยกการ์ด ครบทุกเรือน
+  // 4) Per-phop meaning for all 21 - upper/middle/lower base as separate cards, every house
   const proseSecs: Section[] = PHOP_NAMES.map((row, r) => ({
     kind: "prose" as const,
     title:

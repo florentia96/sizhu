@@ -2,10 +2,10 @@ import { describe, it, expect } from "vitest";
 import { FEATURES, groupsOf } from "./registry";
 import { ReportSchema } from "../shared/sections/types";
 
-// CityField.parseCityValue accepts "name|lat|lon|tz" — the exact string the form emits onBlur.
+// CityField.parseCityValue accepts "name|lat|lon|tz" - the exact string the form emits onBlur.
 const BANGKOK = "กรุงเทพมหานคร|13.7563|100.5018|7";
 
-// Positional VALID sample inputs per feature — index order matches each def.fields.
+// Positional VALID sample inputs per feature - index order matches each def.fields.
 // Every sample is chosen to exercise the engine's full (non-fallback) path.
 const SAMPLES: Record<string, string[]> = {
   // numbers
@@ -26,7 +26,7 @@ const SAMPLES: Record<string, string[]> = {
   compat: ["1990-05-15", "", "", "1992-03-20"], // self bd@0, partner bd@3 (self group 0-2, partner 3-5)
   timing: ["ขึ้นบ้านใหม่", "2025-05"],
   // chinese
-  bazi: [], // fullRoute — no-op engine, not exercised through the Section pipeline
+  bazi: [], // fullRoute - no-op engine, not exercised through the Section pipeline
   zodiacyear: ["2535", "1990-05-15"],
   kua: ["2535", "ชาย", "1990-05-15"],
   zodiaccompat: ["ชวด", "ฉลู"],
@@ -79,7 +79,7 @@ describe("registry sweep — cross-feature gate", () => {
     expect(total).toBe(22);
   });
 
-  // For each pipeline feature: valid sample → ReportSchema passes, output is
+  // For each pipeline feature: valid sample -> ReportSchema passes, output is
   // non-degenerate (not the note-only fallback), and the build is deterministic.
   for (const id of EXPECTED_IDS) {
     const def = FEATURES[id];

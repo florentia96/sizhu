@@ -1,10 +1,10 @@
 import type { Field } from "../../app/feature";
 
 export interface Profile {
-  birthDate?: string; // yyyy-mm-dd จาก input[type=date]
+  birthDate?: string; // yyyy-mm-dd from input[type=date]
   birthTime?: string; // hh:mm
-  city?: string; // ค่า CityField ("ชื่อ|lat|lon|tz" หรือชื่อเมือง)
-  gender?: string; // "ชาย" | "หญิง" — เก็บเป็นไทยให้ตรง option ของ select เพศ (kua/namesuggest)
+  city?: string; // CityField value ("name|lat|lon|tz" or a city name)
+  gender?: string; // gender stored in Thai (male/female) to match the sex select's options (kua/namesuggest)
 }
 
 export type ProfileSlot = keyof Profile;
@@ -38,11 +38,11 @@ export function saveProfile(p: Profile): void {
   try {
     s.setItem(KEY, JSON.stringify(p));
   } catch {
-    /* quota/private mode — เงียบไว้ */
+    /* quota/private mode - stay silent */
   }
 }
 
-/** รวมเฉพาะค่าที่ไม่ว่างเข้ากับโปรไฟล์เดิม แล้วบันทึก คืนค่าโปรไฟล์ล่าสุด */
+/** Merge only non-empty values into the existing profile, save, and return the latest profile */
 export function patchProfile(patch: Partial<Profile>): Profile {
   const next: Profile = { ...loadProfile() };
   for (const [k, v] of Object.entries(patch)) {
@@ -62,22 +62,22 @@ export function clearProfile(): void {
   }
 }
 
-/** มีข้อมูลที่ autofill ได้อย่างน้อยหนึ่งช่องไหม */
+/** Whether there is at least one autofillable field */
 export function hasProfile(p: Profile = loadProfile()): boolean {
   return Boolean(p.birthDate || p.birthTime || p.city || p.gender);
 }
 
 /**
- * ข้อมูลแกนครบพอเปิดศาสตร์แบบ one-tap ไหม — ต้องมีวันเกิด + เพศ
- * (เวลาเกิด optional: ถ้าไม่ระบุ ศาสตร์ที่ต้องใช้เวลาจะถามเพิ่มในหน้า feature)
+ * Whether the core data is complete enough to open a discipline one-tap - needs birth date + sex
+ * (birth time optional: if unset, disciplines needing it will ask on the feature page)
  */
 export function hasCoreProfile(p: Profile = loadProfile()): boolean {
   return Boolean(p.birthDate && p.gender);
 }
 
 /**
- * จับคู่ field กับช่องโปรไฟล์ — ใช้ทั้งตอน autofill และตอนบันทึก
- * เจาะจงพอที่จะไม่ไปโดน field วันที่อื่น (เช่น ฤกษ์ยาม) หรือ select วันในสัปดาห์ของสีมงคล
+ * Match a field to a profile slot - used both during autofill and saving
+ * Specific enough not to catch other date fields (e.g. auspicious timing) or the day-of-week select in lucky color
  */
 export function slotForField(field: Field): ProfileSlot | null {
   if (field.type === "date" && field.label.includes("วันเกิด")) return "birthDate";

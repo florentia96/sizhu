@@ -4,19 +4,19 @@ import { KUA_DIR } from "./content";
 /**
  * Correctness guard for KUA_DIR.
  *
- * The 8 wandering stars of Eight Mansions (八宅 / 大遊年) are derived by flipping
+ * The 8 wandering stars of Eight Mansions (BaZhai / DaYouNian) are derived by flipping
  * specific lines (yao) of the natal trigram. We re-derive the whole table from
  * the classical line-change rules and assert it equals the shipped KUA_DIR.
  *
  * Rules (line index: 0=bottom, 1=middle, 2=top), each value = which lines flip:
- *   ShengQi 生氣 = top            -> proven via Kan/Li agreed good directions
- *   TianYi  天醫 = bottom+middle  -> proven via Kan/Li agreed good directions
- *   YanNian 延年 = all three      -> proven via Kan/Li agreed good directions
- *   FuWei   伏位 = none
- *   HuoHai  禍害 = bottom
- *   WuGui   五鬼 = middle+top     -> classical: Xun ☴ -> Kun ☷ (SW)
- *   LiuSha  六煞 = bottom+top     -> classical: Qian ☰ -> Kan ☵ (N)
- *   JueMing 絕命 = middle         -> classical: Gen ☶ -> Xun ☴ (SE)
+ *   ShengQi = top            -> proven via Kan/Li agreed good directions
+ *   TianYi  = bottom+middle  -> proven via Kan/Li agreed good directions
+ *   YanNian = all three      -> proven via Kan/Li agreed good directions
+ *   FuWei   = none
+ *   HuoHai  = bottom
+ *   WuGui   = middle+top     -> classical: Xun -> Kun (SW)
+ *   LiuSha  = bottom+top     -> classical: Qian -> Kan (N)
+ *   JueMing = middle         -> classical: Gen -> Xun (SE)
  */
 const TRI: Record<string, number[]> = {
   NW: [1, 1, 1], W: [1, 1, 0], S: [1, 0, 1], E: [1, 0, 0],

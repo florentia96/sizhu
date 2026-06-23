@@ -43,7 +43,7 @@ describe("FieldRenderer", () => {
     expect(el.style.fontSize).toBe("16px");
     expect(el.style.width).toBe("100%");
     expect(el.style.minWidth).toBe("0px");
-    // ต้องไม่ตรึง color-scheme ไว้ → ตามธีมหน้า (light/dark) เพื่อให้ native picker ถูกโหมด
+    // must not pin color-scheme -> follow the page theme (light/dark) so the native picker matches the mode
     expect(el.style.colorScheme).not.toBe("dark");
   });
 

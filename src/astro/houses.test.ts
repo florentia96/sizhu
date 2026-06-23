@@ -25,11 +25,11 @@ describe("F4.3 houses — constant sanity values", () => {
 });
 
 describe("F4.3 houses — Einstein ascendant reference vector", () => {
-  // Albert Einstein 1879-03-14, Ulm (lat 48.40°N, lon 9.98°E).
-  // Birth 11:30 LMT; Ulm lon 9.9833°E ⇒ LMT offset +0h39m56s ⇒ UT = 10:50:04 ≈ 10.8345h.
-  // Reference Ascendant: Cancer (~8°43'–11°38' across sources). Sign is the gate;
-  // degree tolerance widened from spec ±1° to ±3° because of historical-TZ input
-  // uncertainty (no standard zone in 1879 Ulm — ~13 min ⇒ ~3° of ascendant).
+  // Albert Einstein 1879-03-14, Ulm (lat 48.40 deg N, lon 9.98 deg E).
+  // Birth 11:30 LMT; Ulm lon 9.9833 deg E => LMT offset +0h39m56s => UT = 10:50:04 ~ 10.8345h.
+  // Reference Ascendant: Cancer (~8 deg 43' - 11 deg 38' across sources). Sign is the gate;
+  // degree tolerance widened from spec +-1 deg to +-3 deg because of historical-TZ input
+  // uncertainty (no standard zone in 1879 Ulm - ~13 min => ~3 deg of ascendant).
   const jd = julianDay(1879, 3, 14, 10 + 50 / 60 + 4 / 3600);
   const lat = 48.4;
   const lon = 9.9833;
@@ -41,7 +41,7 @@ describe("F4.3 houses — Einstein ascendant reference vector", () => {
 
   it("ascendant degree within ±3° of Cancer ~10° (≈ 100° absolute)", () => {
     const asc = ascendant({ jdUT: jd, lat, lon });
-    // Cancer is index 3 ⇒ absolute 90..120. Use ~10° within sign ⇒ 100°.
+    // Cancer is index 3 => absolute 90..120. Use ~10 deg within sign => 100 deg.
     expect(Math.abs(asc.deg - 100)).toBeLessThan(3);
   });
 

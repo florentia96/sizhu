@@ -19,7 +19,7 @@ describe("rasi content", () => {
     expect(RULER["มังกร"]).toBe("เสาร์");
   });
   it("RULER matches the traditional Thai/Vedic rulership for every sign", () => {
-    // domicile rulers (สัตตเคราะห์เจ้าเรือน) — Sun/Moon rule one sign each, the
+    // domicile rulers (the seven classical planet rulers) - Sun/Moon rule one sign each, the
     // five remaining planets rule two signs each (no Uranus/Neptune/Pluto in Thai astro).
     const expected: Record<string, string> = {
       เมษ: "อังคาร", พฤษภ: "ศุกร์", เมถุน: "พุธ", กรกฎ: "จันทร์",

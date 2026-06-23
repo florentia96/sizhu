@@ -27,7 +27,7 @@ function degStr(deg: number): string {
   return `${d}°${String(min).padStart(2, "0")}'`;
 }
 
-// เรือนแบบ Whole-sign: ราศีลัคนา = เรือน 1, ราศีถัดไป = เรือน 2 ...
+// Whole-sign houses: the Ascendant sign = house 1, the next sign = house 2 ...
 function wholeSignHouse(ascRasi: string, targetRasi: string): number {
   const a = RASI_ORDER.indexOf(ascRasi);
   const t = RASI_ORDER.indexOf(targetRasi);

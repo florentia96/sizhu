@@ -70,9 +70,9 @@ describe("dream engine", () => {
     const orig = intl.Segmenter;
     intl.Segmenter = undefined;
     try {
-      // คำสั้นที่พิมพ์ลำพังยังจับได้
+      // short words typed on their own are still matched
       expect(dreamReport("งู").find((s) => s.kind === "cards")).toBeDefined();
-      // 'มด' ต้องไม่ชนใน 'หมด' แม้ไม่มี Segmenter
+      // the short Thai word for 'ant' must not match inside the word for 'all gone' even without Segmenter
       const secs = dreamReport("ฝันว่าของหมด");
       expect(secs.find((s) => s.kind === "cards")).toBeUndefined();
       expect(secs[secs.length - 1].kind).toBe("note");
@@ -98,8 +98,8 @@ describe("dream engine", () => {
     const cards = secs.find((s) => s.kind === "cards");
     if (cards?.kind !== "cards") throw new Error("no cards");
     const values = cards.items.map((i) => i.value);
-    expect(values).toContain("28"); // เลขของพระจันทร์
-    expect(values).not.toContain("89"); // เลขของพระ ต้องไม่ปนเข้ามา
+    expect(values).toContain("28"); // the number for the moon (phra chan)
+    expect(values).not.toContain("89"); // the number for 'phra' (monk) must not bleed in
   });
 
   it("คำยาวไม่ถูกคำสั้นชน — 'ทะเลาะ' ไม่ดึงสัญลักษณ์/เลขของ 'น้ำ'", () => {
@@ -112,6 +112,6 @@ describe("dream engine", () => {
     const cards = secs.find((s) => s.kind === "cards");
     if (cards?.kind !== "cards") throw new Error("no cards");
     const values = cards.items.map((i) => i.value);
-    expect(values).not.toContain("27"); // เลขของน้ำ ต้องไม่ปนเข้ามา
+    expect(values).not.toContain("27"); // the number for 'water' must not bleed in
   });
 });

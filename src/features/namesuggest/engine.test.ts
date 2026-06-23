@@ -63,7 +63,7 @@ describe("namesuggest engine — pool filter", () => {
   });
 
   it("every weekday + gender yields >= 9 kalakini-free suggestions (no thin result)", () => {
-    // ครอบทุกวัน รวมวันจันทร์ที่กาลกิณีเป็นกลุ่มสระทั้งหมด (เคสบางสุด)
+    // covers every day, including Monday whose kalakini is the entire vowel group (the thinnest case)
     const dates: Record<string, string> = {
       อาทิตย์: "2024-06-16",
       จันทร์: "2024-06-17",
@@ -84,14 +84,14 @@ describe("namesuggest engine — pool filter", () => {
   });
 
   it("ranks auspicious-lead names first: the top suggestion leads with a เดช/ศรี letter when one exists", () => {
-    const date = "2024-06-19"; // พุธ
+    const date = "2024-06-19"; // Wednesday
     const day = dayFromDate(2024, 6, 19);
     const t = taksaForDay(day);
     const dechSri = new Set(t[2].letters.concat(t[3].letters));
     for (const gender of ["หญิง", "ชาย", "ไม่ระบุ"]) {
       const out = namesuggestEngine.build([date, gender, ""]);
       const cards = out.find((s) => s.kind === "cards") as Extract<typeof out[number], { kind: "cards" }>;
-      // มีชื่อที่อักษรนำเป็นเดช/ศรีอยู่ในคลังที่ปลอดกาลกิณี → ต้องถูกจัดมาเป็นลำดับแรก
+      // there are kalakini-free names whose leading letter is decha/sri -> they must be ranked first
       expect(dechSri.has(cards.items[0].value[0])).toBe(true);
     }
   });
@@ -101,7 +101,7 @@ describe("namesuggest engine — pool filter", () => {
     const cards = out.find((s) => s.kind === "cards") as Extract<typeof out[number], { kind: "cards" }>;
     const day = dayFromDate(2024, 6, 19);
     const t = taksaForDay(day);
-    // ข้ามสระนำ (เ แ โ ใ ไ) เพื่อจับพยัญชนะต้นจริง ให้ตรงกับ leadBhumi ใน engine
+    // skip leading vowels to catch the real initial consonant, matching leadBhumi in the engine
     const lead = (nm: string) => {
       const ch = [...nm].find((c) => !"เแโใไ".includes(c)) ?? nm[0];
       return t.find((c) => c.letters.indexOf(ch) >= 0)?.bhumi ?? "";

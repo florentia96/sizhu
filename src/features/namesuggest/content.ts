@@ -5,7 +5,7 @@ export const TONE = {
   info: "#7da6d8",
 } as const;
 
-// ตารางค่าอักษรเลขศาสตร์ "โหราเลขศาสตร์" (สำนักนิยมในไทย) — ที่มา: theluckyname.com, banpanicha.com
+// Letter-value table for "Hora Lek Sat" numerology (a popular Thai school) - sources: theluckyname.com, banpanicha.com
 const VALUE_GROUPS: Record<number, string[]> = {
   1: ["ก", "ด", "ท", "ถ", "ภ", "ฤ", "า", "ุ", "ำ", "่"],
   2: ["ข", "ช", "บ", "ป", "ง", "เ", "แ", "ู", "้"],
@@ -26,9 +26,9 @@ export const THAI_LETTER_VALUE: Record<string, number> = (() => {
   return m;
 })();
 
-// คลังชื่อมงคล — กระจายอักษรขึ้นต้นให้ครอบคลุมทั้ง 8 หมู่ทักษา เพื่อให้ทุกวันเกิด/เพศ
-// ยังเหลือชื่อที่ปลอดกาลกิณีมากพอ (>= 9 ชื่อ) แม้วันจันทร์ซึ่งกาลกิณีคือกลุ่มสระทั้งหมด
-// กลุ่มที่ไม่มีสระ (เช่น ธัญชนก กมลชนก พรรษชล) คือชุดที่รอดวันจันทร์
+// Auspicious-name bank - initial letters spread across all 8 taksa groups so that every birth day/gender
+// still has enough kalakini-free names (>= 9) even on Monday, whose kalakini is the entire vowel group
+// The vowel-less group (e.g. Thanchanok, Kamonchanok, Phatsachon) is the set that survives Monday
 export const NAME_POOL: Record<string, string[]> = {
   หญิง: [
     "ณิชาภัทร", "ปุญญิสา", "พิมพ์มาดา", "กัญญาณัฐ", "ธัญชนก",

@@ -1,7 +1,7 @@
 import "../styles/app.css";
 
-// พิธีเปิดดวง — แตะที่ใดก็ได้เพื่อข้ามไปหน้าผลทันที
-// ใช้ได้ทุก feature: ปรับ glyph/ข้อความได้ตามศาสตร์ (ค่าเริ่มต้นเป็นของปาจื้อ)
+// The casting ceremony - tap anywhere to skip straight to the result page
+// Works for every feature: glyph/text can be adjusted per discipline (defaults are BaZi's)
 export function CastingScreen({
   onSkip,
   glyph = "卜",

@@ -3,10 +3,10 @@ export const THAI_PLATE_CONVENTION =
   "ผลรวมรวมของป้าย = ผลบวกค่าตัวอักษร + ผลบวกตัวเลขบนป้าย · " +
   "บางสำนักจัดกลุ่มพยัญชนะต่างกัน (เช่น ค กับ ต สลับกลุ่มกันได้) ผลจึงอาจต่างเล็กน้อย โปรดใช้เป็นแนวทางประกอบ";
 
-// ตารางค่าพยัญชนะตรงกับ insurverse.co.th (สำนักที่จัด ต=3 · ค=4 · ซ=7 · ฟ=8 · ฏ=9 · ฑ=3)
-// ซึ่งครบ 44 ตัวและสอดคล้องกันภายในตัวเอง — ใช้เป็นสำนักอ้างอิงเดียวของฟีเจอร์นี้
-// หมายเหตุ: บางสำนัก (เช่น ktc.co.th) สลับกลุ่ม ค↔ต และไม่ครบทุกตัว จึงไม่ยึดเป็นฐาน
-// ฃ/ฅ (เลิกใช้แล้ว) ให้ค่าตามอักษรฐานเดิม: ฃ→ข=2 · ฅ→ค=4
+// Consonant value table matches insurverse.co.th (the school assigning to=3, kho=4, so=7, fo=8, to-patak=9, tho-montho=3)
+// which covers all 44 letters and is internally consistent - used as the single reference school for this feature
+// Note: some schools (e.g. ktc.co.th) swap the kho<->to groups and are incomplete, so they are not used as the base
+// kho-khuat / kho-khon (obsolete letters) take their base letter's value: kho-khuat->kho-khai=2, kho-khon->kho-khwai=4
 const BUCKETS: Record<number, string[]> = {
   1: ["ก", "ด", "ถ", "ท", "ภ"],
   2: ["ข", "ฃ", "บ", "ป", "ง", "ช"],

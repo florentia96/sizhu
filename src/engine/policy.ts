@@ -1,21 +1,21 @@
-// [ถัง 2] นโยบายการตีความ — heuristic ที่ "ปรับได้ตามสำนัก" แยกจากกฎคงที่ใน constants.ts
-// จุดที่ผู้เชี่ยวชาญปรับ 用神 / น้ำหนัก / สำนักเวลาจื่อ ได้ โดยไม่แตะตรรกะคำนวณ
+// [Tier 2] Interpretation policy - heuristics that are "tunable per school", kept separate from the fixed rules in constants.ts
+// Where an expert can tune yongshen (favorable element) / weights / zi-hour school without touching the calculation logic
 import type { ElementTH, StrengthLevel } from "../types";
 import { GEN, CTRL } from "./constants";
 
-// สำนักเวลาจื่อ: late = วันเปลี่ยนเที่ยงคืน (晚子時) · early = วันขยับตั้งแต่ 23:00 (早子時)
+// Zi-hour school: late = day changes at midnight (wanzishi) - early = day shifts from 23:00 (zaozishi)
 export const ZI_SCHOOL: "late" | "early" = "late";
 
-// ปรับเป็นเวลาสุริยคติจริงเพื่อเลือกยามเป็นค่ามาตรฐาน (ถูกตามตำรามากกว่า)
+// Use true solar time for hour-pillar selection as the default (more correct per the classics)
 export const USE_SOLAR_DEFAULT = true;
 
-// อายุเริ่มต้าอวิ้น: ระยะวันจากเกิดถึงจุดสารทที่ใช้ ÷ ค่านี้ = จำนวนปี (สูตร 3 วัน = 1 ปี)
+// Luck-pillar (DaYun) start age: days from birth to the relevant solar term / this value = number of years (3 days = 1 year rule)
 export const LUCK_DAYS_PER_YEAR = 3;
 
-// เกณฑ์แบ่งกำลังดวงจากสัดส่วน support/(support+drain)
+// Strength thresholds from the support/(support+drain) ratio
 export const STRENGTH_THRESHOLDS = { strong: 0.46, balanced: 0.36 } as const;
 
-// น้ำหนักในการประเมินแข็ง-อ่อน (ก้านล่างเดือน 得令 หนักสุด)
+// Weights for the strong/weak assessment (month branch deling = "in season" weighs most)
 export const WEIGHTS = {
   stemMonth: 1.2,
   stemOther: 1.0,
@@ -36,7 +36,7 @@ export function classifyStrength(ratio: number): StrengthLevel {
   return "weak";
 }
 
-// 用神/忌神 โดยประมาณ ตาม (ระดับกำลังดวง × ธาตุประจำตัว)
+// Approximate yongshen/jishen (favorable/unfavorable element) from (strength level x day-master element)
 export function usefulAvoid(
   level: StrengthLevel,
   dmE: ElementTH,

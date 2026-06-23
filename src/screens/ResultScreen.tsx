@@ -26,7 +26,7 @@ export function ResultScreen({
   onHome?: () => void;
 }) {
   const reduced = usePrefersReducedMotion();
-  // หน่วงเผยผลทีละแผง — ปิดเมื่อผู้ใช้ขอลดการเคลื่อนไหว
+  // Stagger revealing each panel - disabled when the user requests reduced motion
   const d = (i: number): number => (reduced ? 0 : i * 0.4);
 
   return (

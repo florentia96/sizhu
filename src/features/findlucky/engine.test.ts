@@ -57,15 +57,15 @@ describe("findlucky engine", () => {
   });
 
   it("unreachable wanted digit returns a specific note, not a misleading empty result", () => {
-    // 7 ไม่อยู่ใน GOOD_PAIRS เลย → ประกอบไม่ได้ทั้งเบอร์และทะเบียน
+    // 7 is not in GOOD_PAIRS at all -> cannot be built into either a phone number or a plate
     const phone7 = findluckyEngine.build(["เบอร์โทรศัพท์", "7", "มาตรฐาน", "0"]);
     expect(phone7).toHaveLength(1);
     expect(phone7[0].kind).toBe("note");
     expect(phone7[0].kind === "note" ? phone7[0].text : "").toContain("7");
-    // 0 ใช้กับทะเบียนไม่ได้ (ไม่มี prefix 06)
+    // 0 cannot be used on a plate (no "06" prefix there)
     const plate0 = findluckyEngine.build(["ทะเบียนรถ", "0", "มาตรฐาน", "0"]);
     expect(plate0[0].kind).toBe("note");
-    // 0 ใช้กับเบอร์ได้ (prefix 06) → ต้องได้การ์ดผลลัพธ์ตามปกติ ไม่ใช่ note
+    // 0 can be used on a phone number (the "06" prefix) -> must produce a normal result card, not a note
     const phone0 = findluckyEngine.build(["เบอร์โทรศัพท์", "0", "มาตรฐาน", "0"]);
     expect(phone0.find((s) => s.kind === "cards")).toBeDefined();
   });

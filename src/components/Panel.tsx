@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-// แผงผลแต่ละหัวข้อ — เผยขึ้นด้วย fadeUp (หน่วงตาม delay) · หัวข้อเป็น <h2> เพื่อ a11y
+// One result panel per topic - revealed with fadeUp (staggered by delay) - heading is an <h2> for a11y
 export function Panel({
   mark,
   title,

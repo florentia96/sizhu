@@ -32,7 +32,7 @@ describe("F4.9 astro module integration", () => {
     const lons: Record<string, number> = {};
     for (const b of BODIES) lons[b] = planets[b].lon;
     const asp = aspectsBetween(lons, lons);
-    // every body conjuncts itself (orb 0) → at least 7 conjunctions
+    // every body conjuncts itself (orb 0) -> at least 7 conjunctions
     expect(asp.filter((a) => a.a === a.b && a.type === "conjunction").length).toBe(7);
   });
 

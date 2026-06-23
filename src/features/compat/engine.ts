@@ -19,9 +19,9 @@ export function reduceSingle(n: number): number {
   return x;
 }
 
-// คะแนน deterministic — ต่อยอดจาก moodee-lib compatReport
-// เพิ่มการหักคะแนนเมื่อธาตุปะทะ (challenge) และเมื่อแนวทางชีวิตต่างกันมาก
-// เดิมมีแต่การบวก ทำให้คะแนนต่ำสุดคือ 65 (คู่ธาตุปะทะได้เท่าคู่กลาง) ระดับ "ต้องปรับเข้าหากัน" จึงไม่เคยปรากฏ
+// Deterministic score - building on moodee-lib compatReport
+// Adds penalties when elements clash (challenge) and when life paths differ greatly
+// Previously only added points, so the minimum score was 65 (a clashing pair scored the same as a neutral pair) and the "needs adjustment" tier never appeared
 export function scoreDeterministic(
   a: { y: number; m: number; d: number },
   b: { y: number; m: number; d: number },
@@ -35,11 +35,11 @@ export function scoreDeterministic(
   let score = 65;
   if (elSame) score += 12;
   else if (elHarmony) score += 18;
-  else score -= 14; // ธาตุปะทะ (challenge — ไม่เหมือนและไม่เกื้อหนุน)
+  else score -= 14; // elements clash (challenge - not the same and not supportive)
   const lpDiff = Math.abs(reduceSingle(lpa) - reduceSingle(lpb));
   if (lpDiff <= 1) score += 6;
-  else if (lpDiff >= 4) score -= 6; // แนวทางชีวิตต่างกันมาก
-  // กันเหนียว: บีบให้อยู่ [40,96] เผื่อปรับน้ำหนักคะแนนในอนาคต (ช่วงจริงปัจจุบันคือ 45–89 จึงยังไม่ถึงขอบ)
+  else if (lpDiff >= 4) score -= 6; // life paths differ greatly
+  // Safety clamp to [40,96] in case score weights change later (the actual current range is 45-89, so it never hits the edges)
   score = Math.max(40, Math.min(96, score));
   const label =
     score >= 85 ? "เข้ากันดีมาก" : score >= 72 ? "เข้ากันดี" : score >= 60 ? "พอเข้ากันได้" : "ต้องปรับเข้าหากัน";
@@ -48,7 +48,7 @@ export function scoreDeterministic(
 
 function dparts(s: string): { y: number; m: number; d: number } {
   const [yRaw, m, d] = (s || "").split("-").map(Number);
-  const y = yRaw > 2300 ? yRaw - 543 : yRaw; // normalize พ.ศ. → ค.ศ.
+  const y = yRaw > 2300 ? yRaw - 543 : yRaw; // normalize BE (Buddhist Era) -> CE
   return { y, m, d };
 }
 

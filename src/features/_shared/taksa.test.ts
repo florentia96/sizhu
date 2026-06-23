@@ -35,8 +35,8 @@ describe("taksaForDay — wheel rotation", () => {
   it("tone of กาลกิณี cell is bad; เดช/ศรี are good", () => {
     const t = taksaForDay("อาทิตย์");
     expect(t[7].k).toBe("bad");
-    expect(t[2].k).toBe("good"); // เดช
-    expect(t[3].k).toBe("good"); // ศรี
+    expect(t[2].k).toBe("good"); // decha
+    expect(t[3].k).toBe("good"); // sri
   });
 
   it("returns copies of letters (mutating result does not corrupt WHEEL)", () => {
@@ -49,9 +49,9 @@ describe("taksaForDay — wheel rotation", () => {
 describe("letterBucketMap", () => {
   it("maps every letter of the wheel to its bhumi+tone for the given day", () => {
     const m = letterBucketMap("อาทิตย์");
-    expect(m["ศ"].bhumi).toBe("กาลกิณี"); // ศ ∈ WHEEL[7]=ศุกร์ → กาลกิณี for Sunday
+    expect(m["ศ"].bhumi).toBe("กาลกิณี"); // the letter "so" is in WHEEL[7]=Venus -> kalakini for Sunday
     expect(m["ศ"].k).toBe("bad");
-    expect(m["ก"].bhumi).toBe("อายุ");   // ก ∈ WHEEL[1]=จันทร์ → [1]=อายุ for Sunday
+    expect(m["ก"].bhumi).toBe("อายุ");   // the letter "ko" is in WHEEL[1]=Moon -> [1]=ayu for Sunday
   });
 
   it("covers all letters of all 8 planets (no letter unmapped)", () => {

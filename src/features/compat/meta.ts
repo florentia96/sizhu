@@ -8,8 +8,8 @@ export const compatMeta: FeatureMeta = {
   long: "ประเมินความเข้ากันของสองคนจากธาตุราศี ผู้ครองวันเกิด และเลขชีวิต ให้ผลคงที่ทุกครั้งที่กรอกข้อมูลเดิม หากระบุเวลาและเมืองเกิดครบทั้งคุณและคู่ จะเพิ่มชั้นดวงสมพงษ์จากมุมสัมพันธ์ของดาวจริงทั้งสองดวง",
 };
 
-// จัดกลุ่ม: self (0-2) แล้วค่อย partner (3-5); วันเกิดที่ index 0,3 จำเป็น ที่เหลือไม่บังคับ
-// (ใส่เวลา+เมืองครบทั้งคู่เพื่อปลดล็อกดวงสมพงษ์จากดาวจริง) — engine.ts อ่าน vals ตาม index นี้ ถ้าสลับลำดับต้องแก้ engine คู่กัน
+// Grouping: self (0-2) then partner (3-5); the birth dates at index 0,3 are required, the rest optional
+// (provide time + city for both to unlock the synastry chart from real planets) - engine.ts reads vals by this index, so reordering requires updating the engine in tandem
 export const compatFields: Field[] = [
   { label: "คุณ — วันเกิด", type: "date", hint: "กรอก พ.ศ. หรือ ค.ศ. ก็ได้ ระบบปรับให้อัตโนมัติ" },
   { label: "คุณ — เวลาเกิด", type: "time", optional: true, hint: "ใส่เวลาและเมืองให้ครบทั้งคุณและคู่ เพื่อปลดล็อกชั้นดวงสมพงษ์จากดาวจริง" },

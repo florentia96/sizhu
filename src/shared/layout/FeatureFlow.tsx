@@ -33,7 +33,7 @@ export function FeatureFlow({ id, onHome }: { id: string; onHome: () => void }) 
 
   const [mode, setMode] = useState<Mode>(hasForm ? "form" : "casting");
   const [sections, setSections] = useState<Section[] | null>(null);
-  // ค่าที่ผู้ใช้กรอกในฟอร์ม เก็บไว้เติมกลับเมื่อกด "แก้ไขข้อมูลที่กรอก" (ฟอร์ม unmount ตอนไป casting/result)
+  // Values the user typed in the form, kept to refill when "edit entered data" is pressed (the form unmounts when going to casting/result)
   const [draft, setDraft] = useState<string[]>([]);
   const castT = useRef<number | undefined>(undefined);
 
@@ -58,7 +58,7 @@ export function FeatureFlow({ id, onHome }: { id: string; onHome: () => void }) 
     }, CAST_MS);
   };
 
-  // core-only (ไม่มี field พิเศษ): เปิดดวงทันทีที่เข้าหน้า → casting → result
+  // core-only (no extra fields): cast immediately on entering the page -> casting -> result
   useEffect(() => {
     if (def && !hasForm) run();
     return () => window.clearTimeout(castT.current);
@@ -124,7 +124,7 @@ export function FeatureFlow({ id, onHome }: { id: string; onHome: () => void }) 
     );
   }
 
-  // mode === "form" — กรอกเฉพาะข้อมูลที่ศาสตร์นี้ต้องใช้เพิ่ม (วันเกิด/เพศ ดึงจากหน้าแรกให้แล้ว)
+  // mode === "form" - enter only the extra data this discipline needs (birth date/sex are already pulled from the home page)
   return (
     <div style={{ maxWidth: 440, margin: "30px auto 0" }}>
       <div style={formCard}>

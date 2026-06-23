@@ -1,6 +1,6 @@
-/* [BaZi] คีย์เฟรม + a11y สำหรับหน้าผลปาจื้อ
-   โทเคนสี/รัศมีทั้งหมดย้ายไปอยู่ที่ shared/theme/tokens.css (ธีมเดียวคุมทั้งเว็บ) แล้ว
-   ไฟล์นี้เหลือเฉพาะ keyframe ที่ app.css ใช้ ไม่ override ธีม */
+/* [BaZi] keyframes + a11y for the BaZi result page
+   all color/radius tokens have moved to shared/theme/tokens.css (one theme controls the whole site)
+   this file keeps only the keyframes app.css uses, and does not override the theme */
 
 .screen-result :focus-visible {
   outline-color: var(--ame);

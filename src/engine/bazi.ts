@@ -1,4 +1,4 @@
-// เครื่องคำนวณปาจื้อ — ฟังก์ชันบริสุทธิ์ รับ object เดียว คืน object เดียว ไม่แตะ DOM/เครือข่าย
+// BaZi calculator - pure function, takes one object, returns one object, no DOM/network
 import type {
   BaziResult, ComputeInput, ElementTH, Gan, LuckPillar, Pillar,
   Pillars, PillarLabel, RelationKind, RelationPair, TenGod, Zhi,
@@ -13,7 +13,7 @@ import {
   classifyStrength, STRENGTH_LABEL, usefulAvoid,
 } from "./policy";
 
-// สิบเทพ: ความสัมพันธ์ของก้านอื่นเทียบก้านวัน (ครอบทั้ง 5 ความสัมพันธ์ของห้าธาตุ จึงคืนค่าเสมอ)
+// Ten Gods: relationship of another stem to the day stem (covers all 5 five-element relations, so it always returns a value)
 export function tenGod(dm: Gan, other: Gan): TenGod {
   const [de, dp] = GAN_E[dm];
   const [oe, op] = GAN_E[other];
@@ -27,7 +27,7 @@ export function tenGod(dm: Gan, other: Gan): TenGod {
 
 const normPair = (a: Zhi, b: Zhi): string => [a, b].sort().join("");
 
-// ปฏิสัมพันธ์ระหว่างก้านดินสองตัว
+// Interaction between two earthly branches
 export function relation(z1: Zhi, z2: Zhi): RelationKind[] {
   const k = normPair(z1, z2);
   const r: RelationKind[] = [];
@@ -45,16 +45,16 @@ export function compute(opts: ComputeInput): BaziResult {
   const useSolar = opts.useSolar ?? USE_SOLAR_DEFAULT;
   const zi = opts.zi ?? ZI_SCHOOL;
 
-  // เวลาจริงทางฟิสิกส์ (UT) ของวินาทีเกิด
+  // True physical time (UT) of the moment of birth
   const hourLocal = hour + minute / 60;
   const jdBirthUT = julianDay(year, month, day, hourLocal - tz);
   const lambda = sunLongitude(jdBirthUT);
 
-  // เสาเดือน (จาก sector ลองจิจูด เริ่ม 立春 = 315°)
-  const monthOrder = Math.floor(((((lambda - 315) % 360) + 360) % 360) / 30); // 0 = 寅
+  // Month pillar (from the longitude sector, starting at Lichun = 315 deg)
+  const monthOrder = Math.floor(((((lambda - 315) % 360) + 360) % 360) / 30); // 0 = yin
   const monthZhiIdx = (monthOrder + 2) % 12;
 
-  // เสาปี (เปลี่ยนที่ 立春)
+  // Year pillar (changes at Lichun)
   const lichunThisYear = solarTermJD(315, julianDay(year, 2, 4, 0));
   let byear = year;
   if (jdBirthUT < lichunThisYear) byear = year - 1;
@@ -62,13 +62,13 @@ export function compute(opts: ComputeInput): BaziResult {
   const yZhi = ((((byear - 4) % 12) + 12) % 12);
   const mStem = ((((yStem % 5) * 2 + 2 + monthOrder) % 10) + 10) % 10;
 
-  // ยาม (時辰) จากเวลาสุริยคติจริง — คำนวณก่อนเสาวัน เพราะ early-zi ใช้ชั่วโมงตัดสินวัน
+  // Hour pillar (shichen) from true solar time - computed before the day pillar because early-zi uses the hour to decide the day
   let solarShift = 0;
   if (useSolar) solarShift = (lon - tz * 15) * 4 + equationOfTime(year, month, day);
   const hs = ((((hourLocal + solarShift / 60) % 24) + 24) % 24);
   const ziIdx = hs >= 23 || hs < 1 ? 0 : Math.floor((hs + 1) / 2);
 
-  // เสาวัน (JDN เที่ยงวัน) — late-zi คงวันเดิม · early-zi (早子時) ช่วง 23:00–24:00 นับเป็นวันถัดไป
+  // Day pillar (noon JDN) - late-zi keeps the same day - early-zi (zaozishi) over 23:00-24:00 counts as the next day
   let dayJdn = jdnNoon(year, month, day);
   if (zi === "early" && hs >= 23) dayJdn += 1;
   const idx60 = (((dayJdn + DAY_PILLAR_OFFSET) % 60) + 60) % 60;
@@ -88,14 +88,14 @@ export function compute(opts: ComputeInput): BaziResult {
   const dm = pillars.day.gan;
   const all: Pillar[] = [pillars.year, pillars.month, pillars.day, pillars.hour];
 
-  // นับห้าธาตุ (รวมก้านซ่อน)
+  // Count the five elements (including hidden stems)
   const elements: Record<ElementTH, number> = { ไม้: 0, ไฟ: 0, ดิน: 0, ทอง: 0, น้ำ: 0 };
   all.forEach((p) => {
     elements[GAN_E[p.gan][0]]++;
     HIDDEN[p.zhi].forEach((h) => elements[GAN_E[h][0]]++);
   });
 
-  // แข็ง/อ่อน
+  // Strong/weak
   const isSupport = (g: TenGod): boolean => GROUP[g] === "พวกพ้อง" || GROUP[g] === "ตรา";
   let support = 0;
   let drain = 0;
@@ -116,11 +116,11 @@ export function compute(opts: ComputeInput): BaziResult {
   const strengthLevel = classifyStrength(ratio);
   const strength = STRENGTH_LABEL[strengthLevel];
 
-  // ธาตุใช้เสริม/ควรเลี่ยง
+  // Favorable / unfavorable elements
   const dmE = GAN_E[dm][0];
   const { useful, avoid } = usefulAvoid(strengthLevel, dmE);
 
-  // ปฏิสัมพันธ์ก้านล่าง (ทุกคู่เสา)
+  // Earthly-branch interactions (every pillar pair)
   const order: [PillarLabel, Zhi][] = [
     ["ปี", pillars.year.zhi], ["เดือน", pillars.month.zhi],
     ["วัน", pillars.day.zhi], ["เวลา", pillars.hour.zhi],
@@ -134,7 +134,7 @@ export function compute(opts: ComputeInput): BaziResult {
     }
   }
 
-  // ต้าอวิ้น (大運)
+  // DaYun (luck pillars)
   const yangYear = GAN_E[GAN[yStem]][1] === 1;
   const male = sex.toUpperCase() === "M";
   const forward = (yangYear && male) || (!yangYear && !male);

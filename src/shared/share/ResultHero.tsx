@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import type { Section } from "../sections/types";
 import { summarize } from "./buildShareText";
 
-// การ์ดสรุปผล (หน่วยที่ผู้ใช้แคปไปแชร์) — กระจกฝ้า + แบรนด์ accent ตามธีม สลับ light/dark ได้
+// Result summary card (the unit users screenshot to share) - frosted glass + brand accent per theme, light/dark switchable
 const CARD: CSSProperties = {
   position: "relative",
   overflow: "hidden",

@@ -63,8 +63,8 @@ export function BaziApp({ prefill, onHome }: { prefill?: BaziPrefill; onHome?: (
     }, 1650);
   };
 
-  // prefill จาก ?bd=&bt= → ยิง submit ครั้งเดียวบน mount (sex default 'M', time default '12:00')
-  // mirror _prefillFromURL: bd มี ⇒ ข้ามฟอร์มไป casting/result
+  // prefill from ?bd=&bt= -> fire submit once on mount (sex default 'M', time default '12:00')
+  // mirror _prefillFromURL: if bd is present => skip the form to casting/result
   useEffect(() => {
     if (!prefill?.autocast || !prefill.date || autocast.current) return;
     autocast.current = true;

@@ -9,7 +9,7 @@ export interface GroupMeta {
   glow: string;
 }
 
-// สีหมวด — มิดโทนพาสเทล อ่านได้ทั้งโหมดสว่าง/มืด · แยก hue กันชัด ไม่มีน้ำเงิน (green/rose/amethyst/coral/garnet)
+// Category colors - mid-tone pastels readable in both light/dark - distinct hues, no blue (green/rose/amethyst/coral/garnet)
 export const GROUPS: GroupMeta[] = [
   {
     id: "numbers",

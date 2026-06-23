@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
 import { CastingScreen } from "./CastingScreen";
 
-// ระบบไม่ระบุเพศ — ห้ามคำลงท้ายระบุเพศ/สแลง (ผูกท้ายประโยคเพื่อไม่ชนคำปกติเช่น "คะแนน")
+// The system is gender-neutral - no gendered finals/slang (anchored to sentence end so it does not collide with normal words like "khanaen")
 const PARTICLE = /(ครับ|ค่ะ|คะ|นะคะ|จ้า|จ้ะ|ฮะ|ฮ่ะ)(?=["'\s.,!?)…]|$)/;
 
 describe("CastingScreen", () => {

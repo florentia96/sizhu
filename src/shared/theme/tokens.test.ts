@@ -18,7 +18,7 @@ const TOKENS = [
   "--radius-card", "--radius-input", "--shadow",
 ];
 
-// ค่าโทน "Starlight ↔ Midnight × Garnet" (light = Starlight champagne · ค่าเริ่มต้น) — Midnight กำหนดแยกใน [data-theme="dark"]
+// Tone values "Starlight <-> Midnight x Garnet" (light = Starlight champagne, the default) - Midnight is defined separately in [data-theme="dark"]
 const VALUES: Record<string, string> = {
   "--bg": "#efe8d6",
   "--bg-grad-top": "#f5f0e4",

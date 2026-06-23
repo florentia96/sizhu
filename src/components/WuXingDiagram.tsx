@@ -2,9 +2,9 @@ import { ELEMENTS, type ElementTH } from "../types";
 import { EL_CN, GEN, CTRL } from "../engine/constants";
 import { EL_DARK } from "../tokens/elements";
 
-// ไดอะแกรมห้าเหลี่ยม: ขอบนอก = วงจรเกิด (生) เส้นทอง · เส้นดาวใน = วงจรข่ม (克) เส้นแดง
-// ขนาดโหนด = จำนวนธาตุในดวง
-// วงจร 生/克 derive จาก GEN/CTRL ของ engine — เป็น single source of truth ลำดับ ELEMENTS เปลี่ยนเส้นก็ตามถูกเอง
+// Pentagon diagram: outer edge = generating cycle (sheng) in gold - inner star lines = controlling cycle (ke) in red
+// Node size = count of that element in the chart
+// The sheng/ke cycles derive from the engine's GEN/CTRL - single source of truth; if the ELEMENTS order changes, the lines follow correctly
 const eIdx = (e: ElementTH): number => ELEMENTS.indexOf(e);
 export const SHENG: readonly [number, number][] = ELEMENTS.map((e, i) => [i, eIdx(GEN[e])]);
 export const KE: readonly [number, number][] = ELEMENTS.map((e, i) => [i, eIdx(CTRL[e])]);

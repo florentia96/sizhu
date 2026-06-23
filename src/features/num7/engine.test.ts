@@ -3,31 +3,31 @@ import { engine, compute7 } from "./engine";
 import { ReportSchema } from "../../shared/sections/types";
 
 describe("num7 engine", () => {
-  // Reference vector: 1987-01-01 = Thursday → day seed=5, month seed=1,
-  // year seed = ปีนักษัตรเถาะ (1987 = เถาะ, นักษัตรลำดับ 4) → ring7(4)=4
+  // Reference vector: 1987-01-01 = Thursday -> day seed=5, month seed=1,
+  // year seed = Rabbit zodiac year (1987 = Rabbit, zodiac index 4) -> ring7(4)=4
   it("computes the 7 bases for 1987-01-01 (Thursday, ปีเถาะ)", () => {
     expect(compute7("1987-01-01")).toEqual([
-      [5, 6, 7, 1, 2, 3, 4], // ฐานบน  วันพฤหัส=5
-      [1, 2, 3, 4, 5, 6, 7], // ฐานกลาง เดือน 1
-      [4, 5, 6, 7, 1, 2, 3], // ฐานล่าง ปีนักษัตรเถาะ=4
-      [10, 13, 16, 12, 8, 11, 14], // ฐาน4 column sum (raw)
-      [3, 6, 2, 5, 1, 4, 7], // ฐาน5 reduce(ฐาน4)
-      [6, 5, 4, 3, 2, 1, 7], // ฐาน6 reduce(ฐาน5×2)
-      [5, 3, 1, 6, 4, 2, 7], // ฐาน7 reduce(ฐาน6×2)
+      [5, 6, 7, 1, 2, 3, 4], // upper base, Thursday=5
+      [1, 2, 3, 4, 5, 6, 7], // middle base, month 1
+      [4, 5, 6, 7, 1, 2, 3], // lower base, Rabbit zodiac year=4
+      [10, 13, 16, 12, 8, 11, 14], // base4 column sum (raw)
+      [3, 6, 2, 5, 1, 4, 7], // base5 reduce(base4)
+      [6, 5, 4, 3, 2, 1, 7], // base6 reduce(base5 x2)
+      [5, 3, 1, 6, 4, 2, 7], // base7 reduce(base6 x2)
     ]);
   });
   it("year seed uses ปีนักษัตร, not digit-root of CE year", () => {
-    // 2008 = ปีชวด (นักษัตรลำดับ 1) → ฐานล่าง ช่องแรก = ring7(1) = 1
+    // 2008 = Rat year (zodiac index 1) -> lower base, first cell = ring7(1) = 1
     const g2008 = compute7("2008-01-15")!;
     expect(g2008[2][0]).toBe(1);
-    // 2020 = ปีชวด ด้วย (รอบ 12 ปี) → ฐานล่าง ช่องแรกเท่ากัน
+    // 2020 = Rat year too (12-year cycle) -> lower base, first cell is the same
     const g2020 = compute7("2020-06-10")!;
     expect(g2020[2][0]).toBe(1);
   });
   it("day seed: อาทิตย์=1 .. เสาร์=7", () => {
-    // 2023-01-01 = วันอาทิตย์ → ฐานบน ช่องแรก = 1
+    // 2023-01-01 = Sunday -> upper base, first cell = 1
     expect(compute7("2023-01-01")![0][0]).toBe(1);
-    // 2023-01-07 = วันเสาร์ → ฐานบน ช่องแรก = 7
+    // 2023-01-07 = Saturday -> upper base, first cell = 7
     expect(compute7("2023-01-07")![0][0]).toBe(7);
   });
   it("each base row walks +1 with wrap 7→1", () => {
@@ -65,7 +65,7 @@ describe("num7 engine", () => {
     expect(v.hideRing).toBe(true);
     expect(v.summary).toContain("พฤหัส");
     expect(v.summary).toContain("เถาะ");
-    expect(v.summary).toContain("ภพ"); // ระบุภพกำลังเด่น
+    expect(v.summary).toContain("ภพ"); // identifies the prominent phop
   });
   it("emits grid + how-to-read + per-base prose for all 21 ภพ", () => {
     const secs = engine.build(["1987-01-01"]);
@@ -77,9 +77,9 @@ describe("num7 engine", () => {
       (typeof secs)[number],
       { kind: "grid" }
     >;
-    expect(grid.cells).toHaveLength(21); // 3 ฐาน × 7 ภพ
+    expect(grid.cells).toHaveLength(21); // 3 bases x 7 phop
     expect(grid.cells[0].name).toBe("อัตตะ");
-    // 3 การ์ด prose ของฐาน + 1 การ์ดวิธีอ่าน = ภพครบ 21 ช่อง
+    // 3 prose cards for the bases + 1 how-to-read card = all 21 phop cells
     const proseParas = secs
       .filter((s) => s.kind === "prose")
       .flatMap((s) => (s as Extract<(typeof secs)[number], { kind: "prose" }>).paras);
@@ -105,7 +105,7 @@ describe("num7 engine", () => {
   it("polite-neutral tone: no gendered/slang particles in any text", () => {
     const secs = engine.build(["1987-01-01"]);
     // match particles only as sentence-enders (followed by quote/space/punct/end),
-    // so legitimate words like "เจ้าชะตา" or "คะแนน" do not false-positive
+    // so legitimate words like "chao chata" or "khanaen" do not false-positive
     const PARTICLES = /(ครับ|ค่ะ|คะ|นะคะ|จ้า|จ้ะ|ฮะ|ฮ่ะ)(?=["'\s.,!?)]|$)/;
     const blob = JSON.stringify(secs);
     expect(blob).not.toMatch(PARTICLES);

@@ -1,5 +1,5 @@
-// โหลด + validate content/th.json และยืนยันว่าครบทุกคีย์ที่ engine ผลิตได้
-// ถ้าถ้อยคำขาด → โยน error ตั้งแต่ build/โหลด (ไม่ปล่อยให้ undefined โผล่หน้าจอ)
+// Load + validate content/th.json and confirm it has every key the engine can produce
+// If any copy is missing -> throw an error at build/load time (do not let undefined reach the screen)
 import raw from "./th.json";
 import { contentSchema, type Content } from "./schema";
 import { GAN, ZHI, TG_TH, GROUP, SHENSHA_TH } from "../engine/constants";

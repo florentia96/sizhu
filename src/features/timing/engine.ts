@@ -17,7 +17,7 @@ function parseMonth(m: string): { y: number; mo: number } | null {
   const x = /^(\d{4})-(\d{2})$/.exec(m.trim());
   if (!x) return null;
   let y = parseInt(x[1], 10);
-  if (y > 2300) y -= 543; // normalize พ.ศ. → ค.ศ.
+  if (y > 2300) y -= 543; // normalize BE -> CE
   const mo = parseInt(x[2], 10);
   if (mo < 1 || mo > 12) return null;
   return { y, mo };
@@ -40,9 +40,9 @@ interface DayInfo {
   bad: ("อุบาทว์" | "โลกาวินาศ")[];
   waxing: boolean;
   dithi: number;
-  favored: boolean; // weekday ที่ activity นิยม
-  favRank: number; // ลำดับใน favorDow (0 = นิยมที่สุด, -1 = ไม่อยู่ในลิสต์)
-  avoided: boolean; // weekday ที่ activity ให้เลี่ยง
+  favored: boolean; // weekday this activity favors
+  favRank: number; // rank in favorDow (0 = most favored, -1 = not in the list)
+  avoided: boolean; // weekday this activity says to avoid
   score: number;
   reasons: string[];
 }
@@ -75,7 +75,7 @@ export const engine: FeatureEngine = {
       if (dow === w["อุบาทว์"]) bad.push("อุบาทว์");
       if (dow === w["โลกาวินาศ"]) bad.push("โลกาวินาศ");
 
-      const favRank = rule.favorDow.indexOf(dow); // -1 = ไม่นิยม, 0 = นิยมที่สุด
+      const favRank = rule.favorDow.indexOf(dow); // -1 = not favored, 0 = most favored
       const favored = favRank >= 0;
       const avoided = avoidSet.has(dow);
       const reasons: string[] = [];
@@ -85,7 +85,7 @@ export const engine: FeatureEngine = {
         reasons.push(`วัน${kala}`);
       }
       if (favored) {
-        // ลำดับใน favorDow มีน้ำหนัก — วันที่นิยมที่สุดได้คะแนนมากกว่า → งานต่างกันจัดอันดับวันต่างกันจริง
+        // the rank within favorDow matters - the most-favored day scores higher -> different tasks really rank days differently
         score += Math.max(1, 3 - favRank);
         reasons.push(`วัน${WEEKDAY_TH[dow]} เหมาะกับงานนี้`);
       }
@@ -112,12 +112,12 @@ export const engine: FeatureEngine = {
       });
     }
 
-    // วันแนะนำ = (วันกาลโยคดี ธงชัย/อธิบดี หรือ วันในสัปดาห์ที่ตำรานิยมสำหรับงานนี้)
-    //           ที่พ้นวันร้าย และไม่ตรงวันที่งานนี้ให้เลี่ยง
+    // recommended day = (a good kala-yok day, thongchai/athibodi, or a weekday the texts favor for this task)
+    //           that is past the bad days and not on a day this task says to avoid
     const recommended = all.filter(
       (x) => (x.kala || x.favored) && x.bad.length === 0 && !x.avoided,
     );
-    // จัดอันดับ: คะแนนมาก่อน แล้วตามด้วยวันที่
+    // ranking: by score first, then by date
     const ranked = [...recommended].sort(
       (a, b) => b.score - a.score || a.day - b.day,
     );
@@ -125,7 +125,7 @@ export const engine: FeatureEngine = {
     const best = ranked.filter((x) => x.score === topScore);
     const others = ranked.filter((x) => x.score < topScore);
 
-    // วันที่ควรเลี่ยง = อุบาทว์/โลกาวินาศ ในเดือนนั้น (ยุบเป็นรายวันในสัปดาห์ที่เป็นตัวแทน)
+    // days to avoid = ubat/lokawinat in that month (collapsed to a representative weekday)
     const avoidDays = all.filter((x) => x.bad.length > 0);
 
     const summaryLine =

@@ -5,8 +5,8 @@ export const TONE = {
   info: "#7da6d8",
 } as const;
 
-// ตารางค่าอักษรเลขศาสตร์ "โหราเลขศาสตร์" (สำนักนิยมในไทย) — ค่า 1–9 ตามพลังดวงดาว
-// ที่มา: theluckyname.com, banpanicha.com (ตรงกันสองแหล่ง) — สำนักอื่นอาจต่างกัน
+// Letter-value table for "Hora Lek Sat" numerology (a popular Thai school) - values 1-9 by planetary power
+// Sources: theluckyname.com, banpanicha.com (two agreeing sources) - other schools may differ
 const VALUE_GROUPS: Record<number, string[]> = {
   1: ["ก", "ด", "ท", "ถ", "ภ", "ฤ", "า", "ุ", "ำ", "่"],
   2: ["ข", "ช", "บ", "ป", "ง", "เ", "แ", "ู", "้"],
@@ -27,8 +27,8 @@ export const THAI_LETTER_VALUE: Record<string, number> = (() => {
   return m;
 })();
 
-// ความหมายเลขศาสตร์ผลรวมชื่อแบบลดทอนเหลือหลักเดียว (1–9) ตามสำนักโหราเลขศาสตร์
-// t=หัวข้อ, m=ความหมายโดยย่อ, k=โทน (good=หนุน, warn=ผสม/ควรระวัง)
+// Meaning of the name's reduced single-digit total (1-9) per the Hora Lek Sat school
+// t=title, m=short meaning, k=tone (good=supportive, warn=mixed/caution)
 export interface DigitMeaning {
   t: string;
   m: string;

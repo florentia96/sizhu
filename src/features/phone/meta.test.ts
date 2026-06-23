@@ -29,7 +29,7 @@ describe("phone meta + fields", () => {
     // Thai mobile numbers are exactly 10 digits.
     expect(f.maxLength).toBe(10);
     expect(f.inputMode).toBe("numeric");
-    // placeholder is a bare 10-digit sample (no "เช่น" prefix) per spec.
+    // placeholder is a bare 10-digit sample (no "for example" prefix) per spec.
     expect(f.placeholder).toBe("0812345678");
     expect(f.placeholder).toMatch(/^\d{10}$/);
     expect(f.hint).toBe("เบอร์มือถือไทย 10 หลัก");
@@ -37,7 +37,7 @@ describe("phone meta + fields", () => {
 
   it("keeps user-facing copy polite-neutral (no ครับ/ค่ะ/slang particles)", () => {
     const copy = [meta.name, meta.desc, meta.long, fields[0].label, fields[0].hint].join(" ");
-    // ครับ / ค่ะ / นะคะ / จ้า — but NOT the legit word คะแนน (score), which starts with "คะ".
+    // gendered finals khrap / kha / nakha / jaa - but NOT the legit word "khanaen" (score), which starts with "kha".
     expect(copy).not.toMatch(/ครับ|ค่ะ|นะคะ|จ้า|จ๊ะ/);
   });
 });

@@ -1,4 +1,4 @@
-// [ถัง 4] สีธาตุทั้งห้าสำหรับ JS/SVG — โทนสว่าง (พื้นกระดาษ) และโทนมืด (พื้นหน้าผล)
+// [Tier 4] Five-element colors for JS/SVG - light tone (paper background) and dark tone (result-page background)
 import type { ElementTH } from "../types";
 
 export const EL_HEX: Record<ElementTH, string> = {

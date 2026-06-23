@@ -5,7 +5,7 @@ import { GOOD_PAIRS, LEVEL_THRESHOLD, PAGE_SIZE } from "./content";
 
 const JADE = "#6cc18a";
 const MAX_EXAMINE = 20000;
-// Phone prefix: "06" — its leading pair (06/60/61) is not a "bad" pair in the
+// Phone prefix: "06" - its leading pair (06/60/61) is not a "bad" pair in the
 // numerology table, unlike "08" (which is bad and would reject every candidate).
 const PHONE_PREFIX = "06";
 
@@ -36,7 +36,7 @@ export function rankLucky(type: string, want: string, level: string): LuckyItem[
     if (examined >= MAX_EXAMINE) return;
     examined++;
     let core = coreParts.join("");
-    // เบอร์มือถือไทย = 10 หลัก: prefix "06" (2) + core 8 = 10 · ทะเบียน = 4 ตัวเลข
+    // Thai mobile number = 10 digits: prefix "06" (2) + core 8 = 10 - plate = 4 digits
     core = core.slice(0, isPlate ? 4 : 8);
     const num = isPlate ? core : PHONE_PREFIX + core;
     if (wantDigits && num.indexOf(wantDigits) < 0) return;
@@ -77,7 +77,7 @@ export function rankLucky(type: string, want: string, level: string): LuckyItem[
   return out;
 }
 
-// เลขที่ระบบประกอบได้จริง = หลักที่ปรากฏใน GOOD_PAIRS · เบอร์เพิ่ม 0,6 จาก prefix "06"
+// Digits the system can actually assemble = those appearing in GOOD_PAIRS - phone adds 0,6 from the "06" prefix
 const PAIR_DIGITS = new Set(GOOD_PAIRS.join("").split(""));
 
 export const findluckyEngine: FeatureEngine = {

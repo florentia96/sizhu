@@ -1,6 +1,6 @@
 import type { Reading } from "../lib/reading";
 
-// แผงสรุป TL;DR — หัวเรื่องผลเป็น <h1> (จุดสำคัญสุดของหน้าผล)
+// TL;DR summary panel - the result heading is an <h1> (the most important point of the result page)
 export function SummaryCard({ reading, delay }: { reading: Reading; delay: number }) {
   return (
     <div className="reveal" style={{ animationDelay: `${delay}s` }}>

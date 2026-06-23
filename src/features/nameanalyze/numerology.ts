@@ -39,7 +39,7 @@ export function numerologySections(first: string, last: string): Section[] {
   const surR = nameNumerologySum(last || "");
   const totalR = nameNumerologySum((first || "") + (last || ""));
 
-  // เลขชี้วัดหลัก: ใช้ค่ารวมชื่อ+สกุลถ้ามีสกุล มิฉะนั้นใช้ค่าชื่อ
+  // Primary indicator number: use the name+surname total if a surname exists, otherwise the name value
   const keyR = surR.sum ? totalR.reduced : nameR.reduced;
   const keyLabel = surR.sum ? "ค่ารวมชื่อ–สกุล" : "ค่าชื่อ";
   const keyMeaning = REDUCED_MEANING[keyR];
@@ -57,7 +57,7 @@ export function numerologySections(first: string, last: string): Section[] {
     ],
   });
 
-  // ความหมายของเลขลดทอน — ส่วนที่ทำให้ผลลัพธ์ "อ่านแล้วได้ความหมาย" ไม่ใช่แค่ตัวเลข
+  // Meaning of the reduced number - the part that makes the result "readable as meaning", not just a number
   const paras: { h?: string; t: string }[] = [];
   if (keyMeaning) {
     paras.push({

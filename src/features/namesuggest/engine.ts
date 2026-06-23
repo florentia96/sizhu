@@ -10,7 +10,7 @@ function normYear(y: number): number {
   return y > 2300 ? y - 543 : y;
 }
 
-// หมู่ทักษาที่ถือว่าหนุนดวง เรียงจากมงคลมากไปน้อย ใช้จัดอันดับชื่อแนะนำ
+// Taksa groups considered supportive, ordered most to least auspicious, used to rank suggested names
 const RANK: Record<string, number> = {
   เดช: 0,
   ศรี: 1,
@@ -19,8 +19,8 @@ const RANK: Record<string, number> = {
   อุตสาหะ: 4,
 };
 
-// คืนหมู่ทักษาของอักษรตัวแรกของชื่อ (ตัวที่ถือเป็น "อักษรนำ")
-// ข้ามสระนำ (เ แ โ ใ ไ) เพื่อจับพยัญชนะต้นจริง เช่น "เปมิกา" ต้องนับ ป ไม่ใช่ เ
+// Returns the taksa group of the name's first letter (the one treated as the "leading letter")
+// skip leading vowels to catch the real initial consonant, e.g. "Pemika" must count "p", not the leading vowel
 function leadBhumi(name: string, t: BhumiCell[]): string {
   const lead = [...name].find((ch) => !"เแโใไ".includes(ch)) ?? name[0];
   const hit = t.find((cell) => cell.letters.indexOf(lead) >= 0);
@@ -48,9 +48,9 @@ export function suggestNames(dateStr: string, gender: string, prefix: string): S
     return true;
   });
 
-  // จัดอันดับ: ชื่อที่อักษรนำอยู่หมู่เดช/ศรี/มนตรี/มูละ/อุตสาหะ มาก่อน (ตามลำดับมงคล)
-  // เพื่อให้รายชื่อที่แสดงสอดคล้องกับคำแนะนำ "ขึ้นต้นด้วยอักษรเดช/ศรี"
-  // คงความ deterministic ด้วยการ sort แบบ stable พร้อม tiebreak ด้วยลำดับเดิมในคลัง
+  // Ranking: names whose leading letter is in the decha/sri/montri/moola/utsaha group come first (in auspiciousness order)
+  // so the displayed list matches the advice "start with a decha/sri letter"
+  // keeps it deterministic with a stable sort, tie-breaking by the original order in the bank
   const ranked = safe
     .map((nm, idx) => {
       const bhumi = t ? leadBhumi(nm, t) : "";

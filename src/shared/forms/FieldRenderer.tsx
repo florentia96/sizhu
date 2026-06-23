@@ -137,7 +137,7 @@ export function FieldRenderer({
         inputMode={field.inputMode}
         maxLength={field.maxLength}
         onClick={isPicker ? openPicker : undefined}
-        // iOS ไม่ยอม width:100% กับ native date/time ถ้าไม่ตัด appearance → ล้นขอบขวา
+        // iOS refuses width:100% on native date/time unless appearance is reset -> overflows the right edge
         style={isPicker ? { ...controlStyle, WebkitAppearance: "none", appearance: "none" } : controlStyle}
       />
     );

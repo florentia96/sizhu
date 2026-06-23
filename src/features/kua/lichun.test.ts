@@ -7,7 +7,7 @@ describe("kua 立春 boundary", () => {
     const out = engine.build(["2527", "ชาย", "1984-01-20"]);
     const v = out[0] as Extract<Section, { kind: "verdict" }>;
     expect(v.grade).toBe("กัว " + kuaNumber(1983, "ชาย"));
-    expect(v.grade).toBe("กัว 8"); // 1983 ชาย: 83→8+3=11→2, 10-2=8
+    expect(v.grade).toBe("กัว 8"); // 1983 male: 83->8+3=11->2, 10-2=8
   });
   it("1984-03-01 male stays 1984 -> kua 7", () => {
     const out = engine.build(["2527", "ชาย", "1984-03-01"]);

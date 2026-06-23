@@ -9,7 +9,7 @@ describe("birthday engine", () => {
     const secs = ref();
     const prose = secs.find((s) => s.kind === "prose");
     expect(prose && prose.kind === "prose" && prose.title).toContain("อังคาร");
-    // มี grid หลายอัน — เลือกอันที่มี cell "ราศี" (สรุปดวงประจำตัว)
+    // There are several grids - pick the one with a "rasi" (zodiac) cell (the personal chart summary)
     const grid = secs.find(
       (s) => s.kind === "grid" && s.cells.some((c) => c.name === "ราศี"),
     );
@@ -27,16 +27,16 @@ describe("birthday engine", () => {
 
   it("includes day-lord personality, lucky + กาลกิณี swatches, and life-path guide", () => {
     const secs = ref();
-    // บุคลิกเชิงลึกของผู้ครองวัน (จุดแข็ง/ข้อควรระวัง/อาชีพ)
+    // In-depth personality of the day lord (strengths/cautions/career)
     const persona = secs.find(
       (s) => s.kind === "prose" && s.title.includes("บุคลิกของคนเกิดวัน"),
     );
     expect(persona).toBeDefined();
-    // มี swatches สองชุด: สีมงคล + สีกาลกิณี
+    // Two swatch sets: auspicious colors + kalakini colors
     const swatches = secs.filter((s) => s.kind === "swatches");
     expect(swatches.length).toBe(2);
     expect(swatches.some((s) => s.title.includes("กาลกิณี"))).toBe(true);
-    // เลขชีวิตมีย่อหน้า "แนวทางใช้ชีวิต"
+    // The life number has a "way of living" paragraph
     const lp = secs.find(
       (s) => s.kind === "prose" && s.title.includes("เลขชีวิต"),
     );

@@ -55,7 +55,7 @@ describe("natal engine", () => {
       kind: "note",
       text: "กรอกวันเกิดให้ครบ แล้วลองใหม่",
     });
-    // มีวันเกิดแล้วแต่ขาดเวลา → note ทวงเฉพาะเวลาเกิด ไม่ทวงช่องที่กรอกครบแล้ว
+    // has a birth date but no time -> the note asks only for the birth time, not for already-filled fields
     const noTime = natalEngine.build(["1990-01-15", "", "กรุงเทพมหานคร"]);
     expect(noTime).toHaveLength(1);
     expect(noTime[0].kind === "note" && noTime[0].text.includes("เวลาเกิด")).toBe(true);
@@ -119,7 +119,7 @@ describe("natal engine", () => {
     if (houses && houses.kind === "cards") {
       const c10 = houses.items[9].value;
       const c4 = houses.items[3].value;
-      // cusp 10 = MC; its opposite IC sits in the sign 6 places along (Aqu↔Leo here)
+      // cusp 10 = MC; its opposite IC sits in the sign 6 places along (Aquarius <-> Leo here)
       expect(c10).toContain("กุมภ์");
       expect(c4).toContain("สิงห์");
     }

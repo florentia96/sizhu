@@ -5,7 +5,7 @@ const JADE = "#6cc18a";
 const GOLD = "#d8a64a";
 const RED = "#e0584b";
 
-// dropdown แสดง "พุธ (กลางวัน)/(กลางคืน)" → map เป็น key ใน DAY_LORD (กลางคืน = ราหู)
+// dropdown shows Wednesday daytime/nighttime -> maps to a key in DAY_LORD (nighttime = Rahu)
 const DAY_KEY: Record<string, string> = {
   "พุธ (กลางวัน)": "พุธ",
   "พุธ (กลางคืน)": "ราหู",

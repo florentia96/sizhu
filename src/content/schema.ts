@@ -1,4 +1,4 @@
-// zod schema คุมรูปร่าง content/th.json — กัน key หาย/พิมพ์ผิด ตั้งแต่ตอน build
+// zod schema that constrains the shape of content/th.json - guards against missing/mistyped keys at build time
 import { z } from "zod";
 
 const nameDesc = z.object({ name: z.string(), desc: z.string() });

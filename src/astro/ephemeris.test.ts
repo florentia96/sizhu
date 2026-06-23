@@ -4,9 +4,9 @@ import { julianDay } from "../engine/astro";
 
 // Reference vector: Albert Einstein, 1879-03-14, 11:30 local Ulm.
 // Source: astrotheme.com / astro-charts.com (Rodden AA, birth certificate).
-// Sun = Pisces 23°30' = 330 + 23.5 = 353.5° absolute ecliptic longitude.
-// Ulm LMT (lon 9.9833°E ⇒ +0h39m56s) → UT = 11:30 - 0:40 = 10:50 UT = 10.8333h.
-// The Sun is robust to the ~13-min historical-TZ ambiguity (moves ~0.04°/13min).
+// Sun = Pisces 23 deg 30' = 330 + 23.5 = 353.5 deg absolute ecliptic longitude.
+// Ulm LMT (lon 9.9833 deg E => +0h39m56s) -> UT = 11:30 - 0:40 = 10:50 UT = 10.8333h.
+// The Sun is robust to the ~13-min historical-TZ ambiguity (moves ~0.04 deg/13min).
 describe("F4.2 ephemeris — Einstein Sun reference vector", () => {
   const jd = julianDay(1879, 3, 14, 10 + 50 / 60); // 10:50 UT
 

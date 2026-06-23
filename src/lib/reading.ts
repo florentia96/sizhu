@@ -1,5 +1,5 @@
-// แปลงผล compute() เป็นโครงข้อมูลพร้อมเรนเดอร์ (UI-agnostic) — ใช้ content ที่ validate แล้ว
-// สีใช้โทนมืด (EL_DARK) เพราะหน้าผลแสดงบนพื้นราตรีเสมอ
+// Transform compute() output into a render-ready structure (UI-agnostic) - uses validated content
+// Colors use the dark tone (EL_DARK) because the result page always shows on a night background
 import type {
   BaziResult, ElementTH, Gan, LuckPillar, PillarLabel, RelationKind, TenGod, Zhi,
 } from "../types";
@@ -101,7 +101,7 @@ export function buildReading(r: BaziResult): Reading {
   const polarity: "หยาง" | "ยิน" = GAN_E[dm][1] ? "หยาง" : "ยิน";
   const dmE = r.dayMasterElement;
 
-  // ฤดู + แข็งอ่อน
+  // Season + strength
   const mb = r.pillars.month.zhi;
   const sE = BRANCH_EL[mb];
   const st = content.seasonState[seasonStateId(dmE, sE)];
@@ -111,7 +111,7 @@ export function buildReading(r: BaziResult): Reading {
     `จึงเป็นเหตุผลหนึ่งที่กำลังดวงออกมาเป็น “${r.strength}”`;
   const strengthPara = content.strengthPara[r.strengthLevel];
 
-  // ธาตุเสริม/เลี่ยง
+  // Favorable / avoid elements
   const usefulText = r.useful.map((e) => `${e} (${EL_CN[e]})`).join(" และ ");
   const avoidText = r.avoid.map((e) => `${e} (${EL_CN[e]})`).join(" และ ");
   const colors = [...new Set(r.useful.map((e) => content.elInfo[e].color))].join(" · ");
@@ -122,7 +122,7 @@ export function buildReading(r: BaziResult): Reading {
     `ทิศของที่อยู่หรือโต๊ะทำงาน (${dirs}) และแนวกิจกรรมเกี่ยวกับ ${vibes} ` +
     `ส่วนธาตุ ${avoidText} ไม่ใช่สิ่งไม่ดี เพียงแต่มีอยู่มากพออยู่แล้ว จึงใช้แต่พอดี อย่าเพิ่มจนล้น`;
 
-  // สี่เสา
+  // Four pillars
   const voids = voidBranches(r.pillars.day.gan, r.pillars.day.zhi);
   const order = [r.pillars.year, r.pillars.month, r.pillars.day, r.pillars.hour];
   const pillars: ReadingPillar[] = order.map((p) => {
@@ -149,7 +149,7 @@ export function buildReading(r: BaziResult): Reading {
     desc: content.pillarDomain[k].desc,
   }));
 
-  // ห้าธาตุ
+  // Five elements
   const maxEl = Math.max(...ELEMENTS.map((e) => r.elements[e]), 1);
   const elementBars: ElementBar[] = ELEMENTS.map((e) => ({
     el: e, cn: EL_CN[e], count: r.elements[e],
@@ -158,13 +158,13 @@ export function buildReading(r: BaziResult): Reading {
   const usefulChips: ElementChip[] = r.useful.map((e) => ({ el: e, cn: EL_CN[e], color: col[e] }));
   const avoidChips: ElementChip[] = r.avoid.map((e) => ({ el: e, cn: EL_CN[e], color: col[e] }));
 
-  // สิบเทพ
+  // Ten Gods
   const counts = tgCounts(r);
   const tenGods: TenGodItem[] = (Object.keys(counts) as TenGod[])
     .sort((a, b) => (counts[b] ?? 0) - (counts[a] ?? 0))
     .map((g) => ({ cn: g, name: TG_TH[g], count: counts[g] ?? 0, meaning: content.tgMean[g], group: GROUP[g] }));
 
-  // ปฏิสัมพันธ์
+  // Interactions
   const Z: [PillarLabel, Zhi][] = [
     ["ปี", r.pillars.year.zhi], ["เดือน", r.pillars.month.zhi],
     ["วัน", r.pillars.day.zhi], ["เวลา", r.pillars.hour.zhi],
@@ -184,7 +184,7 @@ export function buildReading(r: BaziResult): Reading {
     meaning: content.relMean[k].meaning,
   }));
 
-  // มงคล + สุขภาพ
+  // Auspicious + health
   const groupTotals: Record<string, number> = {};
   (Object.keys(counts) as TenGod[]).forEach((k) => {
     const g = GROUP[k];
@@ -202,7 +202,7 @@ export function buildReading(r: BaziResult): Reading {
     weakEl, weakElCn: EL_CN[weakEl], weakColor: col[weakEl], organ: content.organ[weakEl],
   };
 
-  // ต้าอวิ้น — การ์ดไล่ช่วงอายุ + จัดกลุ่มช่วงเด่นเป็นรายการ พร้อมแนวทางรายช่วงตามสิบเทพ
+  // DaYun - cards stepping through age ranges + grouping notable periods into a list, with per-period guidance by Ten Gods
   const usefulSet = new Set(r.useful);
   const avoidSet = new Set(r.avoid);
   const luckPillars: LuckCard[] = r.luck.pillars.map((l) => {
@@ -277,8 +277,8 @@ export function buildReading(r: BaziResult): Reading {
     meaning: content.combine[c.kind],
   }));
   const ty = taiYuan(r.pillars.month.gan, r.pillars.month.zhi);
-  const moOrder = (ZHI.indexOf(r.pillars.month.zhi) - 2 + 12) % 12; // 0=寅 (จาก節)
-  const within = (((r.lambda - 315) % 360) + 360) % 360 - 30 * moOrder; // องศาในช่วงเดือน
+  const moOrder = (ZHI.indexOf(r.pillars.month.zhi) - 2 + 12) % 12; // 0=yin (from the jie solar term)
+  const within = (((r.lambda - 315) % 360) + 360) % 360 - 30 * moOrder; // degrees within the month
   const mg = mingGong(moOrder, within >= 15, r.pillars.hour.zhi, r.pillars.year.gan);
   const auxPillars: AuxPillar[] = [
     { cn: "命宮", label: "วังชะตา", gz: mg.gz, note: "ตัวตนภายในและแกนชะตาแฝง อ่านเสริมกับเสาวัน" },
@@ -312,7 +312,7 @@ export interface AnnualItem {
   el: ElementTH; elColor: string; tg: string; kind: LuckKind; relations: string[];
 }
 
-// อายุจริง (實歲) ณ วันที่ asOf — นับตามวันเกิดจริง ไม่ใช่ส่วนต่างปีปฏิทินดิบ (กันคลาด ±1 เมื่อยังไม่ถึงวันเกิดในปีนั้น)
+// Actual age (shisui) as of asOf - counted by the real birthday, not the raw calendar-year difference (avoids +-1 error before the birthday in that year)
 export function ageAt(
   birthYear: number, birthMonth: number, birthDay: number,
   asOfYear: number, asOfMonth: number, asOfDay: number,
@@ -322,8 +322,8 @@ export function ageAt(
   return asOfYear - birthYear - (hadBirthday ? 0 : 1);
 }
 
-// ดวงรายปี (流年) — ฟังก์ชันบริสุทธิ์: ผลคำนวณ + ปีเริ่ม + จำนวนปี + อายุจริงของปีเริ่ม (startAge) ที่ caller ส่งเข้า
-// ก้านปีเปลี่ยนจริงที่ 立春 — ระดับรายปีใช้ก้านปีตามปฏิทินตามธรรมเนียมตาราง 流年 · อายุไล่ +1 ต่อปีจาก startAge
+// Annual forecast (LiuNian) - pure function: compute result + start year + number of years + the start year's actual age (startAge) passed in by the caller
+// The year stem actually changes at Lichun - at the annual level it uses the calendar-year stem per LiuNian table convention - age steps +1 per year from startAge
 export function annualForecast(
   r: BaziResult,
   fromYear: number,

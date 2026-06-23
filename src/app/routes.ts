@@ -4,7 +4,7 @@ export type Route = {
   params?: Record<string, string>;
 };
 
-// base ของแอป (GitHub Pages = "/sizhu/") — path จริงทั้งหมดอยู่ใต้ base นี้
+// App base (GitHub Pages = "/sizhu/") - all real paths live under this base
 const BASE = import.meta.env.BASE_URL || "/";
 const BASE_NOSLASH = BASE.replace(/\/+$/, "");
 
@@ -74,12 +74,12 @@ export function buildPath(route: Route): string {
   }
 }
 
-/** base-prefixed path for <a href>, history.pushState และลิงก์แชร์ ("/sizhu/f/phone") */
+/** base-prefixed path for <a href>, history.pushState, and share links ("/sizhu/f/phone") */
 export function hrefFor(route: Route): string {
   return (BASE_NOSLASH + buildPath(route)) || "/";
 }
 
-/** ตัด base ออกจาก location.pathname(+search) → base-relative path ที่ parsePath รับได้ */
+/** Strip the base from location.pathname(+search) -> a base-relative path that parsePath accepts */
 export function relFromLocation(pathname: string, search = ""): string {
   let p = pathname || "/";
   if (BASE_NOSLASH && p.startsWith(BASE_NOSLASH)) p = p.slice(BASE_NOSLASH.length);

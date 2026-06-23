@@ -1,6 +1,6 @@
 import type { ReadingPillar } from "../lib/reading";
 
-// ผังสี่เสา 4×4 — gap:1px วาดเส้นแบ่ง · เสาวันไฮไลต์ + ป้าย 日主
+// Four-pillar grid 4x4 - gap:1px draws the dividers - day pillar highlighted + rizhu (day master) tag
 export function ChartGrid({
   pillars,
   solarShift,

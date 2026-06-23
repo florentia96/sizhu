@@ -1,5 +1,5 @@
-// [ถัง 1] กฎของศาสตร์ปาจื้อ — ค่าคงที่เชิงโครงสร้าง ห้ามแก้ตามใจ (มี test คุม)
-// แก้ที่นี่ = ผลผิดทั้งระบบ · ค่าที่ "ปรับได้ตามสำนัก" อยู่ใน policy.ts ไม่ใช่ที่นี่
+// [Tier 1] BaZi rules - structural constants, do not change at will (guarded by tests)
+// Changing these breaks results system-wide - values that are "tunable per school" live in policy.ts, not here
 import type { Gan, Zhi, ElementTH, TenGod } from "../types";
 
 export const GAN: readonly Gan[] = [
@@ -22,13 +22,13 @@ export const ZODIAC: Record<Zhi, string> = {
   午: "ม้า", 未: "แพะ", 申: "ลิง", 酉: "ไก่", 戌: "หมา", 亥: "หมู",
 };
 
-// ก้านสวรรค์ → [ธาตุ, ขั้ว] · ขั้ว 1 = หยาง, 0 = ยิน
+// Heavenly stem -> [element, polarity] - polarity 1 = yang, 0 = yin
 export const GAN_E: Record<Gan, [ElementTH, 0 | 1]> = {
   甲: ["ไม้", 1], 乙: ["ไม้", 0], 丙: ["ไฟ", 1], 丁: ["ไฟ", 0], 戊: ["ดิน", 1],
   己: ["ดิน", 0], 庚: ["ทอง", 1], 辛: ["ทอง", 0], 壬: ["น้ำ", 1], 癸: ["น้ำ", 0],
 };
 
-// ก้านดิน → ก้านซ่อน (藏干) ตัวแรกคือธาตุหลักของก้านดิน
+// Earthly branch -> hidden stems (canggan), the first is the branch's main element
 export const HIDDEN: Record<Zhi, Gan[]> = {
   子: ["癸"], 丑: ["己", "癸", "辛"], 寅: ["甲", "丙", "戊"], 卯: ["乙"],
   辰: ["戊", "乙", "癸"], 巳: ["丙", "庚", "戊"], 午: ["丁", "己"],
@@ -36,7 +36,7 @@ export const HIDDEN: Record<Zhi, Gan[]> = {
   戌: ["戊", "辛", "丁"], 亥: ["壬", "甲"],
 };
 
-// วงจรเกิด (生) และข่ม (克) ของห้าธาตุ
+// Generating (sheng) and controlling (ke) cycles of the five elements
 export const GEN: Record<ElementTH, ElementTH> = {
   ไม้: "ไฟ", ไฟ: "ดิน", ดิน: "ทอง", ทอง: "น้ำ", น้ำ: "ไม้",
 };
@@ -44,7 +44,7 @@ export const CTRL: Record<ElementTH, ElementTH> = {
   ไม้: "ดิน", ดิน: "น้ำ", น้ำ: "ไฟ", ไฟ: "ทอง", ทอง: "ไม้",
 };
 
-// สิบเทพ → ป้ายไทย + กลุ่ม
+// Ten Gods -> Thai label + group
 export const TG_TH: Record<TenGod, string> = {
   比肩: "ปี่เจียน (เพื่อน/พี่น้อง)", 劫財: "เจี๋ยไฉ (ชิงทรัพย์)",
   食神: "สือเสิน (เทพกินดี)", 傷官: "ซางกวน (ทำลายอำนาจ)",
@@ -59,14 +59,14 @@ export const GROUP: Record<TenGod, TenGodGroup> = {
   正官: "อำนาจ", 七殺: "อำนาจ",
 };
 
-// ปฏิสัมพันธ์ก้านดิน
+// Earthly-branch interactions
 export const CHONG: [Zhi, Zhi][] = [
   ["子", "午"], ["丑", "未"], ["寅", "申"], ["卯", "酉"], ["辰", "戌"], ["巳", "亥"],
 ];
 export const LIUHE: [Zhi, Zhi][] = [
   ["子", "丑"], ["寅", "亥"], ["卯", "戌"], ["辰", "酉"], ["巳", "申"], ["午", "未"],
 ];
-// 刑 ครบชุดตามตำรา: 三刑 (寅巳申 · 丑戌未) + 互刑 (子卯) + 自刑 (辰午酉亥 ธาตุซ้ำ)
+// xing (punishment) full set per classics: sanxing three-punishment (yin-si-shen, chou-xu-wei) + huxing mutual (zi-mao) + zixing self-punishment (chen wu you hai, same element)
 export const XING: [Zhi, Zhi][] = [
   ["寅", "巳"], ["巳", "申"], ["申", "寅"],
   ["丑", "戌"], ["戌", "未"], ["未", "丑"],
@@ -77,29 +77,29 @@ export const HAI: [Zhi, Zhi][] = [
   ["子", "未"], ["丑", "午"], ["寅", "巳"], ["卯", "辰"], ["申", "亥"], ["酉", "戌"],
 ];
 
-// ค่าคาลิเบรตเสาวัน — idx60 = (JDN เที่ยงวัน + 49) mod 60
-// คาลิเบรตกับ sxtwl (ตรวจ 2000-01-01=戊午, 2024-01-01=甲子) — ห้ามแก้โดยไม่รันเทสต์
+// Day-pillar calibration - idx60 = (noon JDN + 49) mod 60
+// Calibrated against sxtwl (check 2000-01-01=wuwu, 2024-01-01=jiazi) - do not change without running tests
 export const DAY_PILLAR_OFFSET = 49;
 
-// อักษรจีนของห้าธาตุ
+// Chinese characters for the five elements
 export const EL_CN: Record<ElementTH, string> = {
   ไม้: "木", ไฟ: "火", ดิน: "土", ทอง: "金", น้ำ: "水",
 };
 
-// ธาตุประจำก้านดิน (ใช้เป็นทั้งธาตุของก้านดินและธาตุฤดูของเดือน)
+// Element of each earthly branch (used both as the branch element and the month's seasonal element)
 export const BRANCH_EL: Record<Zhi, ElementTH> = {
   子: "น้ำ", 丑: "ดิน", 寅: "ไม้", 卯: "ไม้", 辰: "ดิน", 巳: "ไฟ",
   午: "ไฟ", 未: "ดิน", 申: "ทอง", 酉: "ทอง", 戌: "ดิน", 亥: "น้ำ",
 };
 
-// อักษรจีนหัวเสาตามป้ายไทย
+// Chinese characters for the pillar headers, keyed by Thai label
 export const HEAD_CN: Record<"ปี" | "เดือน" | "วัน" | "เวลา", string> = {
   ปี: "年", เดือน: "月", วัน: "日", เวลา: "時",
 };
 
-// ── ส่วนขยายปฏิทิน (canon · ตรวจใน masterdata.test) ──
+// -- Almanac extensions (canon, verified in masterdata.test) --
 
-// 納音 30 คู่ (ดัชนี = floor(ลำดับใน 60 甲子 / 2)) → [ชื่อจีน, ชื่อไทย, ธาตุ]
+// NaYin 30 pairs (index = floor(position in the 60 jiazi cycle / 2)) -> [Chinese name, Thai name, element]
 export const NAYIN: readonly [string, string, ElementTH][] = [
   ["海中金", "ทองกลางทะเล", "ทอง"], ["爐中火", "ไฟในเตา", "ไฟ"],
   ["大林木", "ไม้ป่าใหญ่", "ไม้"], ["路旁土", "ดินริมทาง", "ดิน"],
@@ -118,7 +118,7 @@ export const NAYIN: readonly [string, string, ElementTH][] = [
   ["石榴木", "ไม้ทับทิม", "ไม้"], ["大海水", "น้ำมหาสมุทร", "น้ำ"],
 ];
 
-// 十二長生: ก้านดิน "長生" ของแต่ละก้านสวรรค์ (สำนัก 火土同宮) · ทิศไล่ตามขั้ว (หยาง順 / ยิน逆)
+// Shi'er changsheng (twelve life stages): the "changsheng" branch of each heavenly stem (huotu tonggong school) - direction follows polarity (yang forward / yin reverse)
 export const CHANGSHENG_START: Record<Gan, Zhi> = {
   甲: "亥", 丙: "寅", 戊: "寅", 庚: "巳", 壬: "申",
   乙: "午", 丁: "酉", 己: "酉", 辛: "子", 癸: "卯",
@@ -129,12 +129,12 @@ export const CHANGSHENG_NAMES: readonly string[] = [
   "สุสาน (墓)", "สิ้นสูญ (絕)", "ตั้งครรภ์ (胎)", "ฟูมฟัก (養)",
 ];
 
-// 空亡 (旬空): ดัชนี旬 (floor(ลำดับใน 60 / 10)) → ก้านดินที่ "ว่าง" 2 ตัว
+// kongwang / xunkong (void): xun index (floor(position in 60 / 10)) -> the 2 "void" branches
 export const VOID_BY_XUN: readonly [Zhi, Zhi][] = [
   ["戌", "亥"], ["申", "酉"], ["午", "未"], ["辰", "巳"], ["寅", "卯"], ["子", "丑"],
 ];
 
-// 神煞 — key ตามก้านวัน (天乙貴人/祿神/文昌/羊刃) · key ตามก้านดินวัน (將星/桃花/驛馬/華蓋)
+// ShenSha (symbolic stars) - keyed by day stem (tianyi-guiren/lushen/wenchang/yangren) - keyed by day branch (jiangxing/taohua/yima/huagai)
 export const TIANYI: Record<Gan, [Zhi, Zhi]> = {
   甲: ["丑", "未"], 戊: ["丑", "未"], 庚: ["丑", "未"],
   乙: ["子", "申"], 己: ["子", "申"],
@@ -168,7 +168,7 @@ export const JIANGXING: Record<Zhi, Zhi> = {
   申: "子", 子: "子", 辰: "子", 寅: "午", 午: "午", 戌: "午",
   巳: "酉", 酉: "酉", 丑: "酉", 亥: "卯", 卯: "卯", 未: "卯",
 };
-// ป้ายไทยของ 神煞 (ลำดับคีย์ = ลำดับแสดง) · ความหมายอยู่ใน content/th.json
+// Thai labels of the ShenSha (key order = display order) - meanings live in content/th.json
 export const SHENSHA_TH: Record<string, string> = {
   天乙貴人: "เทียนอี่กุ้ยเหริน (ผู้อุปถัมภ์)",
   祿神: "ลู่เสิน (ลาภยศ)",
@@ -180,17 +180,17 @@ export const SHENSHA_TH: Record<string, string> = {
   羊刃: "หยางเริ่น (คมดาบ)",
 };
 
-// 三合 (สามประสาน → แปรธาตุ) · ตัวกลาง [1] คือก้านดิน旺 (ใช้ตัดสิน 半合)
+// sanhe (three-harmony -> transformed element) - the middle [1] is the peak (wang) branch (used to judge banhe half-harmony)
 export const SANHE: readonly [Zhi, Zhi, Zhi, ElementTH][] = [
   ["申", "子", "辰", "น้ำ"], ["亥", "卯", "未", "ไม้"],
   ["寅", "午", "戌", "ไฟ"], ["巳", "酉", "丑", "ทอง"],
 ];
-// 三會 (สามชุมนุมตามทิศ-ฤดู → ธาตุเด่น)
+// sanhui (three-meeting by direction/season -> dominant element)
 export const SANHUI: readonly [Zhi, Zhi, Zhi, ElementTH][] = [
   ["寅", "卯", "辰", "ไม้"], ["巳", "午", "未", "ไฟ"],
   ["申", "酉", "戌", "ทอง"], ["亥", "子", "丑", "น้ำ"],
 ];
-// 天干五合 (ก้านบนจับคู่ → ธาตุที่แปรเป็น)
+// tiangan wuhe (heavenly stems pair up -> the element they transform into)
 export const TIANGAN_HE: readonly [Gan, Gan, ElementTH][] = [
   ["甲", "己", "ดิน"], ["乙", "庚", "ทอง"], ["丙", "辛", "น้ำ"],
   ["丁", "壬", "ไม้"], ["戊", "癸", "ไฟ"],

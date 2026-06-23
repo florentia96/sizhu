@@ -1,23 +1,23 @@
-// 0=อาทิตย์ 1=จันทร์ 2=อังคาร 3=พุธ 4=พฤหัสบดี 5=ศุกร์ 6=เสาร์
+// 0=Sunday 1=Monday 2=Tuesday 3=Wednesday 4=Thursday 5=Friday 6=Saturday
 export const WEEKDAY_TH = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
 
 export interface ActivityRule {
-  // วันในสัปดาห์ที่ตำราไทยนิยมสำหรับงานนี้ (เรียงจากเหมาะที่สุด)
+  // Weekdays the Thai texts favor for this task (ordered most suitable first)
   favorDow: number[];
-  // วันในสัปดาห์ที่ตำราไทยให้เลี่ยงสำหรับงานนี้โดยเฉพาะ
+  // Weekdays the Thai texts say to avoid specifically for this task
   avoidDow: number[];
-  // เลือกข้างขึ้น (true) หรือยอมรับข้างแรมได้ (false=ไม่เน้น)
+  // prefer the waxing moon (true) or accept the waning moon (false = not emphasized)
   preferWaxing: boolean;
-  // หลักการโดยย่อ (ประโยคสมบูรณ์ โทนสุภาพกลาง)
+  // Brief principle (complete sentence, polite neutral tone)
   principle: string;
-  // คำแนะนำเฉพาะกิจ — ใช้ต่อท้ายเมื่อสรุปแนวทาง
+  // Task-specific advice - appended when summarizing the guidance
   guidance: string;
 }
 
-// ที่มาของธรรมเนียมวันในสัปดาห์: ตำราฤกษ์ไทยทั่วไป
-//   แต่งงาน นิยมศุกร์ (ดาวศุกร์ = ความรัก) · ขึ้นบ้านใหม่ นิยมพฤหัส/จันทร์ เลี่ยงเสาร์/อังคาร
-//   เปิดร้าน นิยมพฤหัส/พุธ (การค้า การเงิน) · ออกรถ นิยมพฤหัส/ศุกร์ เลี่ยงเสาร์ (ดาวเสาร์ = อุปสรรค)
-//   เซ็นสัญญา นิยมพฤหัส/จันทร์ (ความมั่นคง การสื่อสาร)
+// Source of the weekday conventions: general Thai auspicious-timing texts
+//   wedding favors Friday (Venus = love) - housewarming favors Thursday/Monday, avoid Saturday/Tuesday
+//   shop opening favors Thursday/Wednesday (trade, finance) - new car favors Thursday/Friday, avoid Saturday (Saturn = obstacles)
+//   signing a contract favors Thursday/Monday (stability, communication)
 export const ACTIVITY: Record<string, ActivityRule> = {
   ขึ้นบ้านใหม่: {
     favorDow: [4, 1, 3],
@@ -69,7 +69,7 @@ export const ACTIVITY: Record<string, ActivityRule> = {
 export const YAM_MONGKOL =
   "ช่วงเช้าเวลาประมาณ 06:00 ถึง 09:00 น. ถือเป็นยามอุดมมงคลสำหรับการเริ่มสิ่งใหม่ การประกอบพิธีในช่วงนี้ถือว่าเป็นสิริมงคล";
 
-// คำอธิบายความหมายกาลโยคทั้งสี่ (โทนสุภาพกลาง)
+// Explanation of the four kala-yok meanings (polite neutral tone)
 export const KALA_MEANING: Record<string, string> = {
   ธงชัย:
     "วันธงชัยถือเป็นวันแห่งชัยชนะและความสำเร็จ ตำราว่าเหมาะกับการเริ่มงานที่เกี่ยวกับวัตถุ สถานที่ และการก่อร่างสร้างตัว",

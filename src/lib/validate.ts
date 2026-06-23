@@ -1,4 +1,4 @@
-// ชั้น guard input ก่อนเข้า engine — ปิดช่อง NaN / วันที่ไม่มีจริง / ปีนอกช่วง / เพศผิด
+// Input guard layer before the engine - blocks NaN / impossible dates / out-of-range years / invalid sex
 import type { ComputeInput, Sex } from "../types";
 
 export const MIN_YEAR = 1900;
@@ -33,7 +33,7 @@ export function validateForm(f: RawForm): ValidationResult {
   if (year < MIN_YEAR || year > MAX_YEAR)
     return { ok: false, error: `รองรับปีเกิด ค.ศ. ${MIN_YEAR}–${MAX_YEAR} เท่านั้น` };
   if (month < 1 || month > 12) return { ok: false, error: "เดือนไม่ถูกต้อง" };
-  const maxDay = new Date(year, month, 0).getDate(); // กัน 31 ก.พ. / 29 ก.พ. ปีไม่อธิกสุรทิน
+  const maxDay = new Date(year, month, 0).getDate(); // guards against Feb 31 / Feb 29 in a non-leap year
   if (day < 1 || day > maxDay)
     return { ok: false, error: "วันที่นี้ไม่มีอยู่จริงในเดือนที่เลือก" };
 

@@ -8,7 +8,7 @@ vi.mock("../../astro/cities", async (importOriginal) => {
     { name: "Chiang Mai", lat: 18.79, lon: 98.98, tz: 7 },
   ];
   return {
-    ...actual, // คง parseCityValue จริง (ฟังก์ชันที่กำลังทดสอบ)
+    ...actual, // keep the real parseCityValue (the function under test)
     CITY,
     findCity: (name: string) =>
       CITY.find((c) => c.name.toLowerCase() === name.trim().toLowerCase()) ??

@@ -8,8 +8,8 @@ export interface BaziPrefill {
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const TIME_RE = /^\d{1,2}:\d{2}$/;
 
-// แปลง ?bd=YYYY-MM-DD&bt=HH:mm&sx=M|F → prefill — สะท้อน _prefillFromURL ของ template:
-// "bd มี ⇒ เริ่มที่ casting" ; bt ใช้ default 12:00 ถ้าไม่มี (จัดการที่ชั้น run ไม่ใช่ที่นี่)
+// Convert ?bd=YYYY-MM-DD&bt=HH:mm&sx=M|F -> prefill - mirrors the template's _prefillFromURL:
+// "if bd is present => start at casting"; bt defaults to 12:00 if missing (handled at the run layer, not here)
 export function parseBaziParams(query: string): BaziPrefill {
   const q = new URLSearchParams(query.replace(/^\?/, ""));
   const bd = q.get("bd");
@@ -22,7 +22,7 @@ export function parseBaziParams(query: string): BaziPrefill {
   return out;
 }
 
-/** สร้าง prefill จากโปรไฟล์แกน (home) → เปิดปาจื้อแบบไม่ต้องกรอกซ้ำ */
+/** Build prefill from the core profile (home) -> open BaZi without re-entering data */
 export function baziPrefillFromProfile(p: {
   birthDate?: string;
   birthTime?: string;

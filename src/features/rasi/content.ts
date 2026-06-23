@@ -20,7 +20,7 @@ export const EL_COMPAT: Record<string, string> = {
   ดิน: "น้ำ",
 };
 
-// ธาตุที่ต้องปรับเข้าหากัน: ไฟ↔น้ำ (ดับ/ระเหย), ดิน↔ลม (ฝุ่น/พังทลาย)
+// Elements that must adjust to each other: fire<->water (extinguish/evaporate), earth<->air (dust/erosion)
 export const EL_CLASH: Record<string, string> = {
   ไฟ: "น้ำ",
   น้ำ: "ไฟ",
@@ -54,7 +54,7 @@ export const EL_NOTE: Record<string, string> = {
   น้ำ: "ธาตุน้ำ — อ่อนไหว ลึกซึ้ง เข้าใจความรู้สึก",
 };
 
-// คำสั้น ๆ ของแต่ละธาตุ ใช้แสดงคู่กับชื่อราศีในส่วนความเข้ากัน
+// Short word for each element, shown alongside the sign name in the compatibility section
 export const EL_SHORT: Record<string, string> = {
   ไฟ: "พลังและความกล้า",
   ดิน: "ความมั่นคง",

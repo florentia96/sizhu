@@ -38,7 +38,7 @@ export function birthdayReport(
 
   const secs: Section[] = [];
 
-  // 1) ภาพรวม: วันเกิด + ผู้ครองวัน + ราศี
+  // 1) Overview: birth day + day lord + zodiac sign
   secs.push({
     kind: "prose",
     title: "เกิดวัน" + day + " · " + d + "/" + m + "/" + Y,
@@ -49,7 +49,7 @@ export function birthdayReport(
     ],
   });
 
-  // 2) ผู้ครองวัน — บุคลิกเชิงลึก + จุดแข็ง/ข้อควรระวัง/แนวอาชีพ
+  // 2) Day lord - in-depth personality + strengths/cautions/career direction
   if (detail) {
     secs.push({
       kind: "prose",
@@ -64,7 +64,7 @@ export function birthdayReport(
     });
   }
 
-  // 3) ราศี — บุคลิก + ธาตุ + ดาวเจ้าเรือน
+  // 3) Zodiac sign - personality + element + ruling planet
   secs.push({
     kind: "prose",
     title: "บุคลิกตามราศี" + r.s,
@@ -85,7 +85,7 @@ export function birthdayReport(
     ],
   });
 
-  // 4) สีมงคลพื้นฐาน
+  // 4) Basic auspicious colors
   secs.push({
     kind: "swatches",
     title: "สีมงคลประจำวัน" + day,
@@ -99,7 +99,7 @@ export function birthdayReport(
     items: swatch(info.color),
   });
 
-  // 5) สีกาลกิณี
+  // 5) Kalakini (inauspicious) colors
   secs.push({
     kind: "swatches",
     title: "สีกาลกิณี (ควรเลี่ยง)",
@@ -113,7 +113,7 @@ export function birthdayReport(
     items: swatch(info.avoid),
   });
 
-  // 6) สีเสริมแยกตามด้าน (อิงอักษร/สีทักษา การงาน-การเงิน-ความรัก-เมตตา)
+  // 6) Supplementary colors by area (based on letters / taksa colors: work-money-love-charisma)
   secs.push({
     kind: "grid",
     title: "สีเสริมแยกตามด้าน",
@@ -126,7 +126,7 @@ export function birthdayReport(
     ],
   });
 
-  // 7) สรุปดวงประจำตัว
+  // 7) Personal chart summary
   secs.push({
     kind: "grid",
     title: "สรุปดวงประจำตัว",
@@ -146,7 +146,7 @@ export function birthdayReport(
     ],
   });
 
-  // 8) เลขชีวิต — ความหมาย + แนวทาง
+  // 8) Life number - meaning + guidance
   if (LIFEPATH[lifePath]) {
     secs.push({
       kind: "prose",
@@ -163,7 +163,7 @@ export function birthdayReport(
     });
   }
 
-  // 9) ดวงปีปัจจุบัน — ปีส่วนตัว
+  // 9) Current-year forecast - personal year
   if (PY_THEME[py]) {
     secs.push({
       kind: "prose",
@@ -179,7 +179,7 @@ export function birthdayReport(
     });
   }
 
-  // 10) ที่มา/หมายเหตุ
+  // 10) Sources / notes
   secs.push({
     kind: "note",
     text: "บุคลิกตามวันเกิดและผู้ครองวันเป็นหลักโหราศาสตร์ไทย สีมงคลและสีกาลกิณีอิงตำราทักษา (ตำราต่างสำนักอาจกำหนดต่างกันได้เล็กน้อย) · ราศีอิงจักรราศีแบบไทย (อิงดาวจริง) ช่วงวันจึงต่างจากราศีสากล · เลขชีวิตและปีส่วนตัวคำนวณแบบเลขศาสตร์สากลจากวันเดือนปีเกิด",

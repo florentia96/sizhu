@@ -32,8 +32,8 @@ describe("compat engine — deterministic score (port of moodee-lib 871-902)", (
   });
 
   it("reference vector C: clashing elements (น้ำ×ไฟ) + far life-path → below 60 (ต้องปรับเข้าหากัน)", () => {
-    const a = { y: 1990, m: 7, d: 20 }; // กรกฎ = น้ำ
-    const b = { y: 1990, m: 4, d: 20 }; // เมษ = ไฟ
+    const a = { y: 1990, m: 7, d: 20 }; // Cancer = water
+    const b = { y: 1990, m: 4, d: 20 }; // Aries = fire
     const res = scoreDeterministic(a, b);
     expect(res.score).toBeLessThan(60);
     expect(res.label).toBe("ต้องปรับเข้าหากัน");
@@ -86,7 +86,7 @@ describe("compat engine — result completeness", () => {
   it("date-only path adds an unlock-guidance prose (graceful, not thin)", () => {
     const unlock = datesOnly.find((s) => s.kind === "prose" && s.title.includes("ลึกขึ้น"));
     expect(unlock).toBeTruthy();
-    // every section has real content — no empty paras / cells
+    // every section has real content - no empty paras / cells
     for (const s of datesOnly) {
       if (s.kind === "prose") for (const p of s.paras) expect(p.t.length).toBeGreaterThan(0);
       if (s.kind === "grid") for (const c of s.cells) expect(c.value.length).toBeGreaterThan(0);
@@ -94,7 +94,7 @@ describe("compat engine — result completeness", () => {
   });
 
   it("element point text varies by element relationship", () => {
-    // harmonious (ไฟ×ลม) vs same-element (ดิน×ดิน) must differ
+    // harmonious (fire x air) vs same-element (earth x earth) must differ
     const harm = compatEngine.build(["1990-04-20", "", "", "1990-06-20"])[0];
     const same = compatEngine.build(["1990-01-15", "", "", "1991-01-20"])[0];
     if (harm.kind === "compat" && same.kind === "compat") {
@@ -105,8 +105,8 @@ describe("compat engine — result completeness", () => {
   it("tone: no ครับ/ค่ะ and no 3+ item ' · ' stacking inside sentences", () => {
     const text = JSON.stringify(datesOnly);
     expect(text).not.toMatch(/ครับ|ค่ะ/);
-    // a sentence-level ' · ' run joining 3+ items would show as two+ ' · '
-    // in one string; section text fields must not contain ' · ' at all here
+    // a sentence-level middle-dot (U+00B7) run joining 3+ items would show as two+ middle-dots
+    // in one string; section text fields must not contain that middle-dot separator at all here
     for (const s of datesOnly) {
       if (s.kind === "note") expect(s.text).not.toContain(" · ");
       if (s.kind === "prose") for (const p of s.paras) expect(p.t).not.toContain(" · ");

@@ -80,7 +80,7 @@ export function ShareBar({
       await navigator.clipboard?.writeText(s);
       note(k);
     } catch {
-      /* clipboard ถูกบล็อก — เงียบไว้ */
+      /* clipboard blocked - stay silent */
     }
   };
 
@@ -91,7 +91,7 @@ export function ShareBar({
         await nav.share({ title: `${featureName} · MooDee`, text, url });
         note("shared");
       } catch {
-        /* ผู้ใช้ยกเลิก หรือไม่รองรับ */
+        /* user canceled or not supported */
       }
     } else {
       copy(`${text}\n${url}`, "text");

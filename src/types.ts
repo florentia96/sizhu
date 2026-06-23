@@ -1,4 +1,4 @@
-// โครงชนิดข้อมูลกลางของระบบปาจื้อ — ใช้ร่วมทุกชั้น (engine → reading → UI)
+// Central data types of the BaZi system - shared by every layer (engine -> reading -> UI)
 
 export type Sex = "M" | "F";
 
@@ -63,13 +63,13 @@ export interface ComputeInput {
   hour: number;
   minute: number;
   sex: Sex;
-  /** เขตเวลา (ชม.) ดีฟอลต์ 7 */
+  /** Timezone (hours), default 7 */
   tz?: number;
-  /** ลองจิจูด (ตะวันออก = +) ดีฟอลต์ 100.5 (กรุงเทพ) */
+  /** Longitude (east = +), default 100.5 (Bangkok) */
   lon?: number;
-  /** ปรับเป็นเวลาสุริยคติจริงเพื่อเลือกยาม — ดีฟอลต์ตาม policy */
+  /** Adjust to true solar time for hour-pillar selection - default per policy */
   useSolar?: boolean;
-  /** สำนักเวลาจื่อ — ดีฟอลต์ตาม policy (late = 晚子時, early = 早子時 เลื่อนเสาวันตั้งแต่ 23:00) */
+  /** Zi-hour school - default per policy (late = wanzishi, early = zaozishi which shifts the day pillar from 23:00) */
   zi?: "late" | "early";
 }
 
@@ -80,12 +80,12 @@ export interface BaziResult {
   solarShift: number;
   elements: Record<ElementTH, number>;
   strengthLevel: StrengthLevel;
-  /** ป้ายไทยของกำลังดวง เช่น "ตัวแข็ง (身強)" */
+  /** Thai label of chart strength, e.g. strong self (shenqiang) */
   strength: string;
   useful: ElementTH[];
   avoid: ElementTH[];
   relations: RelationPair[];
   luck: Luck;
-  /** ลองจิจูดดวงอาทิตย์ตอนเกิด (องศา) — ดีบัก */
+  /** Sun's ecliptic longitude at birth (degrees) - debug */
   lambda: number;
 }

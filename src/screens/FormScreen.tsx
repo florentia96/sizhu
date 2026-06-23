@@ -23,7 +23,7 @@ export function FormScreen({
   const [lon, setLon] = useState("100.5");
   const [useSolar, setUseSolar] = useState(true);
 
-  // คลิก/แตะได้ทั้งกล่อง → เปิด picker (showPicker รองรับเบราว์เซอร์ยุคปัจจุบัน; มือถือเปิด picker เองอยู่แล้ว)
+  // the whole box is clickable/tappable -> opens the picker (showPicker is supported by modern browsers; mobile opens the picker itself anyway)
   const openPicker = (e: MouseEvent<HTMLInputElement>): void => {
     const el = e.currentTarget;
     if (typeof el.showPicker === "function") el.showPicker();

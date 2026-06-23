@@ -30,8 +30,8 @@ export function analyzeNameTaksa(first: string, last: string, dayLabel: string):
   if (!first) return [{ kind: "note", text: "กรุณากรอกชื่อจริงเพื่อวิเคราะห์" }];
   const day = dayLabel || "อาทิตย์";
   const map = letterBucketMap(day);
-  // ไม่ strip สระ — สระบน-ล่าง (ิ ี ึ ื ุ ู) อยู่ในวงล้อกลุ่มอาทิตย์ ต้องนับ (คนเกิดจันทร์ = กาลกิณีหมู่สระ)
-  // วรรณยุกต์/พินทุที่ไม่อยู่ในวงล้อจะถูกข้ามด้วย map lookup (if !info) อยู่แล้ว
+  // Do not strip vowels - the above/below vowels are in the Sun group on the wheel and must count (Monday-born = vowel-group kalakini)
+  // Tone marks / pinthu not on the wheel are already skipped by the map lookup (if !info)
   const full = first + (last || "");
 
   const counts: Record<string, number> = {

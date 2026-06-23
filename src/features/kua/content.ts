@@ -8,8 +8,8 @@ export const DIR_TH: Record<string, string> = {
   SE: "ตะวันออกเฉียงใต้", SW: "ตะวันตกเฉียงใต้",
 };
 
-// ลำดับคงที่: [ShengQi, TianYi, YanNian, FuWei, HuoHai, WuGui, LiuSha, JueMing]
-// ทั้ง 8 ทิศต่อเลขกัว ตรงกับการแปลงเส้นยันต์ของตรีลักษณ์ (大遊年) — ดู engine.test.ts
+// Fixed order: [ShengQi, TianYi, YanNian, FuWei, HuoHai, WuGui, LiuSha, JueMing]
+// All 8 directions per kua number, matching the trigram line transformations (DaYouNian) - see engine.test.ts
 export const KUA_DIR: Record<number, string[]> = {
   1: ["SE", "E", "S", "N", "W", "NE", "NW", "SW"],
   2: ["NE", "W", "NW", "SW", "E", "SE", "S", "N"],
@@ -23,7 +23,7 @@ export const KUA_DIR: Record<number, string[]> = {
 
 export interface KuaName { cn: string; th: string; short: string; d: string; use: string }
 
-// 4 ทิศมงคล เรียงจากดีสุด → รองลงมา
+// 4 auspicious directions, ordered best -> next
 export const GOOD_NAME: KuaName[] = [
   {
     cn: "生氣", th: "เซิงชี่", short: "โชคลาภ วาสนา การงาน",
@@ -47,7 +47,7 @@ export const GOOD_NAME: KuaName[] = [
   },
 ];
 
-// 4 ทิศที่ควรเลี่ยง เรียงจากเบา → ร้ายแรงที่สุด
+// 4 directions to avoid, ordered mildest -> most severe
 export const BAD_NAME: KuaName[] = [
   {
     cn: "禍害", th: "ฮั่วไห่", short: "อุปสรรคจุกจิก",

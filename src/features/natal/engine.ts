@@ -30,7 +30,7 @@ export function toUT(
   tz: number,
 ): { y: number; m: number; d: number; hourUT: number } {
   const [yRaw, m, d] = dateStr.split("-").map(Number);
-  const y = yRaw > 2300 ? yRaw - 543 : yRaw; // normalize พ.ศ. → ค.ศ. (ตรงกับ engine วันเกิดอื่น)
+  const y = yRaw > 2300 ? yRaw - 543 : yRaw; // normalize BE -> CE (matching the other birthday engines)
   const [hh, mm] = (timeStr || "12:00").split(":").map(Number);
   let hourUT = hh + (mm || 0) / 60 - tz;
   let day = d;
@@ -52,7 +52,7 @@ export function toUT(
   return { y: yr, m: mon, d: day, hourUT };
 }
 
-// คืนเลขเรือน 1..12 ของลองจิจูด lon โดย cusps[i] = ขอบเรือน i+1 (absolute 0..360)
+// Returns house number 1..12 for longitude lon, where cusps[i] = the cusp of house i+1 (absolute 0..360)
 export function houseOf(lon: number, cusps: number[]): number {
   const L = ((lon % 360) + 360) % 360;
   for (let i = 0; i < 12; i++) {
@@ -138,7 +138,7 @@ export const natalEngine: FeatureEngine = {
       };
     });
 
-    // สมดุลธาตุ: นับดาวพระเคราะห์ 7 ดวง + ลัคนา = 8 จุด แยกตาม 4 ธาตุ
+    // Elemental balance: count the 7 planets + the Ascendant = 8 points, grouped by the 4 elements
     const elementCount: Record<string, number> = { ไฟ: 0, ดิน: 0, ลม: 0, น้ำ: 0 };
     for (const p of PLANET_ORDER) elementCount[ELEMENT_OF_SIGN[pos[p as keyof typeof pos].sign]]++;
     elementCount[ELEMENT_OF_SIGN[asc.sign]]++;
@@ -153,7 +153,7 @@ export const natalEngine: FeatureEngine = {
       note: ELEMENT_TRAIT[e],
     }));
 
-    // ขอบเรือนทั้ง 12 (house cusps) — แสดงโครงสร้างเรือนชะตาทั้งดวง
+    // All 12 house cusps - showing the chart's full house structure
     const houseCards = cusps.map((c, i) => {
       const s = signFromLon(c);
       return {

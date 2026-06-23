@@ -1,4 +1,4 @@
-// ธาตุที่ส่งเสริมกัน (ตาม moodee-lib compatReport: elGood)
+// Elements that support each other (per moodee-lib compatReport: elGood)
 export const EL_HARMONY: Record<string, string> = {
   ไฟ: "ลม",
   ลม: "ไฟ",
@@ -19,8 +19,8 @@ export const PLANET_TH: Record<string, string> = {
   Mars: "อังคาร", Jupiter: "พฤหัสบดี", Saturn: "เสาร์",
 };
 
-// ความสัมพันธ์ระดับธาตุของคู่ — ครอบคลุมทุกการจับคู่ (same / harmony / challenge)
-// key เรียงตามตัวอักษรไทยของชื่อธาตุสองตัว เพื่อให้ค้นได้แบบไม่ขึ้นกับลำดับ
+// Element-level relationship of a pair - covers every pairing (same / harmony / challenge)
+// keys are sorted by the Thai spelling of the two element names so lookup is order-independent
 type ElPairKind = "same" | "harmony" | "challenge";
 const EL_PAIR_TEXT: Record<string, { kind: ElPairKind; th: string }> = {
   "ดิน|ดิน": { kind: "same", th: "ธาตุดินเหมือนกัน มั่นคงและจริงจังตรงกัน วางรากฐานชีวิตไปในทิศเดียว ข้อควรระวังคือยึดติดกับความเคยชินจนขาดการปรับเปลี่ยน" },
@@ -40,7 +40,7 @@ export function elementPair(a: string, b: string): { kind: ElPairKind; th: strin
   return EL_PAIR_TEXT[key] ?? { kind: "challenge", th: "ธาตุต่างกัน มองโลกคนละมุม หากเปิดใจรับฟังจะเติมเต็มกันได้" };
 }
 
-// แง่มุมความรัก/ความสัมพันธ์ของแต่ละราศี (ต่อยอดจากบุคลิกพื้นฐาน เน้นด้านการอยู่ร่วม)
+// Love/relationship aspect of each zodiac sign (building on the base personality, focused on living together)
 export const SIGN_LOVE_TH: Record<string, string> = {
   Aries: "รักแบบตรงไปตรงมาและกระตือรือร้น ชอบเป็นฝ่ายนำ ต้องการคู่ที่ตามจังหวะไหวและไม่จุกจิก",
   Taurus: "รักมั่นคงและซื่อสัตย์ ให้ความสำคัญกับความสบายใจและสัมผัส ต้องการความแน่นอนและไม่ชอบการเปลี่ยนแปลงกะทันหัน",

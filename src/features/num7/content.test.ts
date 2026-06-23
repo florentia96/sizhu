@@ -35,7 +35,7 @@ describe("num7 data layer", () => {
     expect(BASE_MEANINGS[1]).toContain("ฐานบน");
     expect(BASE_MEANINGS[2]).toContain("ฐานกลาง");
     expect(BASE_MEANINGS[3]).toContain("ฐานล่าง");
-    expect(BASE_MEANINGS[3]).toContain("นักษัตร"); // ฐานล่างมาจากปีนักษัตร
+    expect(BASE_MEANINGS[3]).toContain("นักษัตร"); // the lower base comes from the zodiac year
   });
   it("NUM_MEANING covers digits 1..7 mapped to ดาวพระเคราะห์", () => {
     const planets = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัส", "ศุกร์", "เสาร์"];
@@ -49,7 +49,7 @@ describe("num7 data layer", () => {
     expect(HOW_TO_READ.length).toBeGreaterThan(40);
   });
   it("no gendered/slang particles in content strings (polite-neutral)", () => {
-    // anchor to sentence-enders so words like "เจ้าชะตา"/"คะแนน" do not false-positive
+    // anchor to sentence-enders so words like "chao chata"/"khanaen" do not false-positive
     const PARTICLES = /(ครับ|ค่ะ|คะ|นะคะ|จ้า|จ้ะ|ฮะ|ฮ่ะ)(?=["'\s.,!?)]|$)/;
     const blob = JSON.stringify({ PHOP_MEANING, BASE_MEANINGS, NUM_MEANING, HOW_TO_READ, meta });
     expect(blob).not.toMatch(PARTICLES);

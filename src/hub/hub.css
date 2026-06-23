@@ -1,7 +1,7 @@
 /* ============================================================
-   MooDee hub — "ฟ้าอรุณ / Dawn Aurora"
-   signature: ตราอรุณ squircle ไล่สีแบรนด์ · การ์ดกระจกฝ้าลอยบนม่านพาสเทล
-   ทุกคลาส scope ใต้ .hub · สีทั้งหมดมาจาก token (สลับ light/dark ได้)
+   MooDee hub - "Fah Arun / Dawn Aurora"
+   signature: dawn-seal squircle with the brand gradient - frosted-glass cards floating on a pastel veil
+   all classes scoped under .hub - all colors come from tokens (light/dark switchable)
    ============================================================ */
 
 .hub {
@@ -45,7 +45,7 @@
   gap: 16px;
   margin-bottom: 18px;
 }
-/* ตราอรุณ — signature */
+/* dawn seal - signature */
 .hub-seal {
   flex: 0 0 auto;
   display: grid;
@@ -84,7 +84,7 @@
   max-width: 540px;
 }
 
-/* ราวห้าศาสตร์ */
+/* five-discipline rail */
 .hub-arts {
   display: flex;
   flex-wrap: wrap;
@@ -191,7 +191,7 @@
 }
 .hub-reg-grid {
   display: grid;
-  /* min(190px,100%) → ยุบเป็น 1 คอลัมน์เองบนจอแคบ กัน native date/time picker ล้นชนกัน */
+  /* min(190px,100%) -> collapses to 1 column on narrow screens, preventing the native date/time picker from overflowing/colliding */
   grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr));
   gap: 14px;
   margin-top: 18px;
@@ -199,7 +199,7 @@
 .hub-reg-field {
   display: flex;
   flex-direction: column;
-  min-width: 0; /* กัน native date/time input ดัน grid track ล้นขวาบน iOS */
+  min-width: 0; /* prevents native date/time input from pushing the grid track to overflow right on iOS */
 }
 .hub-reg-label {
   font-size: 0.8rem;
@@ -218,7 +218,7 @@
   padding: 11px 12px;
   color: var(--text);
   outline: none;
-  /* iOS Safari ไม่ยอม width:100% กับ native date/time ถ้าไม่ตัด appearance → ล้นขวา */
+  /* iOS Safari refuses width:100% on native date/time unless appearance is reset -> overflows right */
   -webkit-appearance: none;
   appearance: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
@@ -294,7 +294,7 @@
   color: var(--text-muted);
   line-height: 1.6;
 }
-/* สรุปเมื่อกรอกแล้ว */
+/* summary once filled in */
 .hub-reg-row {
   display: flex;
   align-items: flex-start;
@@ -424,7 +424,7 @@
   box-shadow: var(--shadow-sm);
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
-/* เส้นสีหมวดบนหัวการ์ด */
+/* category color line on the card header */
 .hub-card::before {
   content: "";
   position: absolute;
@@ -584,7 +584,7 @@
   font-style: italic;
 }
 
-/* color-mix fallback สำหรับ engine เก่า */
+/* color-mix fallback for old engines */
 @supports not (color: color-mix(in srgb, red, blue)) {
   .hub-glyph,
   .hub-card:hover,

@@ -1,7 +1,7 @@
 import type { FeatureEngine } from "../../app/feature";
 import type { Section } from "../../shared/sections/types";
 
-// bazi ใช้หน้าเต็ม (#/bazi) ไม่ผ่าน detail layout — engine นี้เป็น teaser กันคนหลุดมาเรียก build ตรง ๆ
+// bazi uses the full page (#/bazi), not the detail layout - this engine is a teaser guarding against direct build() calls
 export const baziEngine: FeatureEngine = {
   build(): Section[] {
     return [

@@ -12,7 +12,7 @@ import {
 import { FEATURES } from "../../app/registry";
 
 const P: Profile = {
-  birthDate: "2000-01-05", // วันพุธ
+  birthDate: "2000-01-05", // Wednesday
   birthTime: "10:30",
   city: "กรุงเทพมหานคร|13.75|100.5|7",
   gender: "ชาย",
@@ -54,7 +54,7 @@ describe("weekdayFromBirthDate", () => {
     expect(weekdayFromBirthDate("2000-01-05")).toBe("พุธ (กลางวัน)");
   });
   it("รองรับ พ.ศ. (>2300) เป็น fallback", () => {
-    expect(weekdayFromBirthDate("2543-01-01")).toBe("เสาร์"); // 2543 พ.ศ. = 2000 ค.ศ.
+    expect(weekdayFromBirthDate("2543-01-01")).toBe("เสาร์"); // BE 2543 = CE 2000
   });
 });
 
@@ -123,8 +123,8 @@ describe("extraFieldIndexes", () => {
   });
 });
 
-// กัน label drift: resolveCore จับคู่ด้วย substring ของ label ภาษาไทย (ยกเว้น field.partner) — ถ้าแก้ copy
-// ของ label ในไฟล์ fields.ts ใด autofill one-tap ของ field นั้นจะพังเงียบ ๆ เทสต์นี้กวาดทุก feature จริงใน registry
+// Guard against label drift: resolveCore matches by a substring of the Thai label (except field.partner) - if you change the copy
+// of a label in any fields.ts file, that field's one-tap autofill breaks silently; this test sweeps every real feature in the registry
 describe("registry sweep — core fields ต้อง resolve จาก profile เต็ม", () => {
   const P: Profile = {
     birthDate: "2000-01-05",

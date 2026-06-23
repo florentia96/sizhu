@@ -4,7 +4,7 @@ type FieldBase = {
   label: string;
   hint?: string;
   optional?: boolean;
-  // ข้อมูลของอีกฝ่าย (เช่น คู่ในดวงสมพงษ์) — ห้ามเติมค่าอัตโนมัติจากโปรไฟล์ผู้ใช้
+  // Data about the other person (e.g. the partner in a compatibility chart) - do not auto-fill from the user's profile
   partner?: boolean;
 };
 

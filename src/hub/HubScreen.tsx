@@ -42,10 +42,10 @@ function flatten(features: Record<string, FeatureDef>): FlatFeature[] {
   });
 }
 
-// ตั้งค่าตัวแปร CSS --c (สีประจำหมวด) ให้ลูกหลานในกล่องใช้ต่อ — กัน TS ด้วย cast
+// Set the CSS variable --c (category color) for descendants in the box to use - guarded in TS with a cast
 const cvar = (c: string): CSSProperties => ({ "--c": c }) as unknown as CSSProperties;
 
-// ป้ายสั้นของแต่ละหมวดสำหรับราวห้าศาสตร์ใน masthead
+// Short label for each category, for the five-discipline rail in the masthead
 const ART_SHORT: Record<GroupId, string> = {
   numbers: "เลข",
   names: "ชื่อ",
@@ -170,10 +170,10 @@ export function HubScreen({ query, onOpen, features = FEATURES }: HubProps) {
     {} as Record<GroupId, number>,
   );
 
-  // โปรไฟล์แกนแหล่งเดียว — ส่งลงทั้งการ์ดกรอกและการ์ดดวงวันนี้ให้ sync กันในเซสชันเดียว
+  // Single source-of-truth core profile - passed to both the input card and the today card so they stay in sync within one session
   const [profile, setProfile] = useState<Profile>(loadProfile);
 
-  // กดศาสตร์ก่อนกรอกวันเกิด → เด้งไปฟอร์มกรอก แล้วเปิดศาสตร์นั้นให้อัตโนมัติเมื่อบันทึก
+  // Tapping a discipline before entering a birth date -> bounce to the input form, then auto-open that discipline once saved
   const pendingId = useRef<string | null>(null);
   const profileCardRef = useRef<HTMLDivElement>(null);
   const handleOpen = useCallback(

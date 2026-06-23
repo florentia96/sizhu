@@ -5,9 +5,9 @@ interface Petal {
   rot: number; vr: number; size: number; op: number; deep: boolean;
 }
 
-// พื้นหลังกลีบดอกไม้ปลิว (เฉพาะหน้าผล) — โทน champagne gold (starlight) เข้าได้ทั้งสว่าง/มืด
-// canvas วาดด้วยค่าสีตรง (อ้าง var() ไม่ได้) — สีกลีบล้อโทน --gold champagne
-// ไม่ mount เมื่อผู้ใช้ขอลดการเคลื่อนไหว
+// Falling flower-petal background (result pages only) - champagne gold tone (starlight), works in both light/dark
+// Canvas draws with literal color values (cannot reference var()) - petal color echoes the --gold champagne tone
+// Not mounted when the user requests reduced motion
 export function PetalCanvas() {
   const ref = useRef<HTMLCanvasElement>(null);
 
@@ -18,7 +18,7 @@ export function PetalCanvas() {
     try {
       ctx = cv.getContext("2d");
     } catch {
-      return; // สภาพแวดล้อมที่ไม่รองรับ canvas (เช่น jsdom) — ข้ามเอฟเฟกต์
+      return; // Environments without canvas support (e.g. jsdom) - skip the effect
     }
     if (!ctx) return;
     const dpr = Math.min(2, window.devicePixelRatio || 1);

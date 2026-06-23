@@ -3,8 +3,8 @@ import { act, render, screen, fireEvent } from "@testing-library/react";
 import { App } from "./App";
 import { hrefFor, type Route } from "./routes";
 
-// Real FeatureFlow + BaziApp are rendered here (no mocks) — this is render-level
-// proof that the routing → form → casting → engine → SectionRenderer seam works end-to-end.
+// Real FeatureFlow + BaziApp are rendered here (no mocks) - this is render-level
+// proof that the routing -> form -> casting -> engine -> SectionRenderer seam works end-to-end.
 
 function go(route: Route): void {
   window.history.pushState(null, "", hrefFor(route));
@@ -48,12 +48,12 @@ describe("App integration — real screens", () => {
 
       fireEvent.click(screen.getByText("ดูผลทำนาย"));
 
-      // พิธีเปิดดวงคั่นก่อน → เลื่อนเวลาให้ถึงหน้าผล
+      // The casting ceremony plays first -> advance time to reach the result page
       act(() => {
         vi.advanceTimersByTime(1500);
       });
 
-      // VerdictCard for 0812345678 → score 78, grade A ("ดีมาก").
+      // VerdictCard for 0812345678 -> score 78, grade A (label "very good").
       expect(screen.getByText("ผลวิเคราะห์")).toBeInTheDocument();
       expect(screen.getAllByText(/ดีมาก/).length).toBeGreaterThan(0);
       expect(screen.getByText("78")).toBeInTheDocument();

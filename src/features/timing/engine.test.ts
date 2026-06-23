@@ -51,7 +51,7 @@ describe("timing engine — ฤกษ์ยาม", () => {
     expect(best).toBeTruthy();
     expect(best!.items.length).toBeGreaterThan(0);
     for (const it of best!.items) {
-      expect(dow(it.value)).toBe(5); // ธงชัย=อธิบดี=ศุกร์ ในปีนี้
+      expect(dow(it.value)).toBe(5); // thongchai=athibodi=Friday this year
     }
   });
 
@@ -61,8 +61,8 @@ describe("timing engine — ฤกษ์ยาม", () => {
       const c = cardsByTitle(out, title);
       if (!c) continue;
       for (const it of c.items) {
-        expect(dow(it.value)).not.toBe(4); // อุบาทว์
-        expect(dow(it.value)).not.toBe(0); // โลกาวินาศ
+        expect(dow(it.value)).not.toBe(4); // ubat (inauspicious)
+        expect(dow(it.value)).not.toBe(0); // lokawinat (catastrophe)
       }
     }
   });
@@ -78,22 +78,22 @@ describe("timing engine — ฤกษ์ยาม", () => {
   });
 
   it("ปรับตามประเภทงาน: ออกรถเลี่ยงวันเสาร์ → ไม่มีวันเสาร์ในวันแนะนำ", () => {
-    // ใช้เดือนที่กาลโยคดีอาจตรงเสาร์: ลองหลายเดือนแล้วยืนยันว่าวันแนะนำไม่เคยเป็นเสาร์
+    // a month whose good kala-yok day may fall on Saturday: try several months and confirm the recommended day is never Saturday
     for (const m of ["2024-01", "2024-06", "2025-03", "2026-09"]) {
       const out = engine.build(["ออกรถ", m]);
       for (const title of ["วันเด่นที่แนะนำ", "วันมงคลอื่นที่ใช้ได้"]) {
         const c = cardsByTitle(out, title);
         if (!c) continue;
         for (const it of c.items) {
-          expect(dow(it.value)).not.toBe(6); // เสาร์ = avoidDow ของออกรถ
+          expect(dow(it.value)).not.toBe(6); // Saturday = avoidDow for buying a car
         }
       }
     }
   });
 
   it("งานต่างลำดับวันนิยม → ผลต่างกันจริง (favorDow มีน้ำหนัก ไม่ใช่ set เฉย ๆ)", () => {
-    // แต่งงาน favorDow=[ศุกร์,พฤหัส,พุธ] vs ออกรถ favorDow=[พฤหัส,ศุกร์,พุธ] — set เท่ากันแต่ลำดับต่าง
-    // โค้ดเดิม (อ่านเป็น Set) ให้ผลเหมือนกันทุกเดือน; โค้ดใหม่ต้องต่างกันอย่างน้อยหนึ่งเดือน
+    // wedding favorDow=[Fri,Thu,Wed] vs car favorDow=[Thu,Fri,Wed] - same set but different order
+    // the old code (reading it as a Set) gave the same result every month; the new code must differ in at least one month
     const dayList = (activity: string, m: string): string =>
       ["วันเด่นที่แนะนำ", "วันมงคลอื่นที่ใช้ได้"]
         .map((tt) => cardsByTitle(engine.build([activity, m]), tt)?.items.map((i) => i.value).join(",") ?? "")
@@ -125,7 +125,7 @@ describe("timing engine — ฤกษ์ยาม", () => {
       if (s.kind === "verdict") texts.push(s.summary);
       if (s.kind === "prose") texts.push(...s.paras.map((p) => p.t));
       for (const t of texts) {
-        // นับจำนวนตัวคั่น ' · ' — ถ้ามากกว่า 1 แปลว่าต่อ 3 รายการขึ้นไป
+        // count the middle-dot (U+00B7) separators - more than 1 means 3+ items joined
         const count = t.split(" · ").length - 1;
         expect(count).toBeLessThanOrEqual(1);
       }

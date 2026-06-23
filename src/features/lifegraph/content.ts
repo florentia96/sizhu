@@ -1,9 +1,9 @@
 export const SCOPE_OPTIONS = ["ภาพรวมปีนี้", "เน้นการงาน", "เน้นความรัก", "เน้นการเงิน"];
 
-// PY_THEME ใช้ร่วมจาก _shared/thaiAstro เพื่อกัน drift ข้ามฟีเจอร์ (single source)
+// PY_THEME is shared from _shared/thaiAstro to prevent drift across features (single source)
 export { PY_THEME } from "../_shared/thaiAstro";
 
-// สิ่งที่ควรทำ (do) และสิ่งที่ควรระวัง (avoid) ของแต่ละปีส่วนตัว — ใช้ต่อยอด PY_THEME ให้เป็นคำแนะนำที่ลงมือได้จริง
+// Things to do and things to avoid for each personal year - extends PY_THEME into actionable advice
 export const PY_ACTION: Record<number, { do: string; avoid: string }> = {
   1: { do: "ริเริ่มโครงการใหม่ สมัครงาน/ตำแหน่ง วางแผนระยะยาว", avoid: "ลังเลจนพลาดจังหวะ หรือยึดติดของเดิมที่ควรปล่อย" },
   2: { do: "สานสัมพันธ์ หาพันธมิตร ทำงานเป็นทีม ค่อยเป็นค่อยไป", avoid: "เร่งรัดผลลัพธ์ หรือตัดสินใจใหญ่เพียงลำพัง" },
@@ -38,7 +38,7 @@ export const TRANSIT_NOTE: Record<string, { th: string; tone: "good" | "warn" | 
   opposition: { th: "ดาวจรเล็งตรงข้าม 180°", tone: "warn" },
 };
 
-// บทบาทของดาวแต่ละดวงในระบบทรานสิต ใช้ผูกความหมายของดาวจรกับเรื่องที่ผู้ใช้เลือกเน้น
+// The role of each planet in the transit system, used to tie a transit's meaning to the area the user emphasizes
 export const PLANET_ROLE: Record<string, string> = {
   Sun: "ตัวตน เป้าหมาย และพลังชีวิต",
   Moon: "อารมณ์ ความรู้สึก และจิตใจภายใน",
@@ -49,11 +49,11 @@ export const PLANET_ROLE: Record<string, string> = {
   Saturn: "วินัย ความรับผิดชอบ บททดสอบ และข้อจำกัด",
 };
 
-// ดาวเกื้อหนุน (benefic) เมื่อมาในมุมร่วม ให้ถือเป็นพลังเสริม ส่วนดาวหนัก (malefic) ให้ถือเป็นบททดสอบ
+// A benefic in conjunction counts as supportive energy, while a malefic counts as a test
 export const BENEFIC = ["Jupiter", "Venus", "Sun", "Mercury", "Moon"];
 export const MALEFIC = ["Saturn", "Mars"];
 
-// แนวทางปฏิบัติต่อด้านที่เลือกเน้น ใช้คู่กับดาวจรเพื่อสรุปเป็นคำแนะนำที่นำไปใช้ได้
+// Practical guidance for the emphasized area, paired with transits to form usable advice
 export const SCOPE_GUIDE: Record<string, { lead: string; tips: string[] }> = {
   "ภาพรวมปีนี้": {
     lead: "อ่านจังหวะรวมของช่วงนี้จากดาวจรทุกด้านประกอบกับธีมของปีส่วนตัว",

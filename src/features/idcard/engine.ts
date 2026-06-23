@@ -1,7 +1,7 @@
 import type { FeatureEngine, Section } from "../../app/feature";
 import { numberReport } from "../_shared/numerology";
 
-// ประเภทเลข → ป้ายผล + ความยาวบังคับ (บัตรประชาชนไทย = 13 หลัก)
+// Number type -> result label + required length (Thai national ID = 13 digits)
 const TYPE_META: Record<string, { label: string; len?: number }> = {
   "บัตรประชาชน": { label: "เลขบัตรประชาชน", len: 13 },
   "เลขที่บ้าน": { label: "เลขที่บ้าน" },

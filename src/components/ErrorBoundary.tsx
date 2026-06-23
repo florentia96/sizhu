@@ -7,7 +7,7 @@ interface State {
   error: Error | null;
 }
 
-// กันหน้าจอขาวเปล่าเมื่อเกิด error ที่ไม่คาดคิดระหว่าง render — แสดงข้อความไทยแทน
+// Guards against a blank white screen on an unexpected render error - shows a Thai message instead
 export class ErrorBoundary extends Component<Props, State> {
   state: State = { error: null };
 

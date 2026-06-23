@@ -81,9 +81,9 @@ const THAI: City[] = [
   { name: "Yasothon", lat: 15.79, lon: 104.15, tz: 7 },
 ];
 
-// Representative world-city subset (standard UTC offset; DST/historical-tz out of scope, spec §7.2).
+// Representative world-city subset (standard UTC offset; DST/historical-tz out of scope, spec sec 7.2).
 // EXECUTOR: complete to ~120 major world cities from GeoNames "cities15000"
-// (https://download.geonames.org/export/dump/) — take name, lat, lon, and the
+// (https://download.geonames.org/export/dump/) - take name, lat, lon, and the
 // standard (non-DST) UTC offset of each city's timezone; keep east-positive lon,
 // north-positive lat. Do NOT apply DST. Append below, keeping this representative
 // set intact.
@@ -113,8 +113,8 @@ const WORLD: City[] = [
 
 export const CITY: City[] = [...THAI, ...WORLD];
 
-// ชื่อไทย → ชื่อในตาราง (อังกฤษ) — ครบ 77 จังหวัด + ชื่อเรียกที่นิยม + เมืองโลกหลัก
-// แอปเป็นภาษาไทย ผู้ใช้พิมพ์ชื่อไทยต้องค้นเจอ (ไม่งั้นจะ fallback ผิดเมือง)
+// Thai name -> table name (English) - all 77 provinces + common aliases + major world cities
+// The app is in Thai; a Thai name the user types must be found (otherwise it falls back to the wrong city)
 const TH_ALIAS: Record<string, string> = {
   กรุงเทพมหานคร: "Bangkok", กรุงเทพ: "Bangkok", กทม: "Bangkok", บางกอก: "Bangkok",
   กระบี่: "Krabi", กาญจนบุรี: "Kanchanaburi", กาฬสินธุ์: "Kalasin", กำแพงเพชร: "Kamphaeng Phet",
@@ -155,8 +155,8 @@ function validLatLon(la: number, lo: number): boolean {
   return Number.isFinite(la) && Number.isFinite(lo) && la >= -90 && la <= 90 && lo >= -180 && lo <= 180;
 }
 
-// แปลงค่า city field → พิกัด · รับได้ทั้งรูปเข้ารหัส "name|lat|lon|tz", พิกัดดิบ "lat,lon" และชื่อเมือง
-// พิกัดนอกช่วงโลก (lat∉[-90,90] หรือ lon∉[-180,180]) → null เพื่อให้ engine คืน note แทนดวงที่เป็น NaN
+// Convert the city field -> coordinates - accepts the encoded form "name|lat|lon|tz", raw coords "lat,lon", and a city name
+// Out-of-range coords (lat not in [-90,90] or lon not in [-180,180]) -> null so the engine returns a note instead of a NaN chart
 export function parseCityValue(v: string): City | null {
   const raw = v.trim();
   if (!raw) return null;

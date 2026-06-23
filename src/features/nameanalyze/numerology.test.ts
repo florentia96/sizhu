@@ -48,13 +48,13 @@ describe("Thai name numerology (โหราเลขศาสตร์ table)",
       (s) => s.kind === "prose" && s.title === "ความหมายเลขศาสตร์ของชื่อ",
     ) as Extract<typeof secs[number], { kind: "prose" }>;
     expect(meaning).toBeDefined();
-    // ธนกฤต = 14 → 5; no surname → key digit is ค่าชื่อ = 5
+    // "Thanakrit" = 14 -> 5; no surname -> key digit is the name value = 5
     expect(meaning.paras[0].h).toContain("= 5");
     expect(meaning.paras.some((p) => p.t.length > 10)).toBe(true);
   });
 
   it("with surname, key indicator reads from the combined name+surname value", () => {
-    const secs = numerologySections("ก", "ก"); // combined กก = 2 → reduced 2
+    const secs = numerologySections("ก", "ก"); // combined "kok" = 2 -> reduced 2
     const meaning = secs.find(
       (s) => s.kind === "prose" && s.title === "ความหมายเลขศาสตร์ของชื่อ",
     ) as Extract<typeof secs[number], { kind: "prose" }>;

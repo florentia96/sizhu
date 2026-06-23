@@ -62,17 +62,17 @@ describe("kalakini engine", () => {
     expect(kala.chips).toEqual(["ศ", "ษ", "ส", "ห", "ฬ", "ฮ"]);
   });
 
-  // กาลกิณี per birthday — verified against ทักษาปกรณ์ wheel
-  // (กาลกิณี = the planet one step before the birth planet on the wheel)
+  // Kalakini per birthday - verified against the Taksapakorn wheel
+  // (Kalakini = the planet one step before the birth planet on the wheel)
   it.each([
-    ["อาทิตย์", ["ศ", "ษ", "ส", "ห", "ฬ", "ฮ"]], // ดาวศุกร์
-    ["จันทร์", ["อ", "า", "ิ", "ี", "ึ", "ื", "ุ", "ู", "เ", "แ", "โ", "ใ", "ไ"]], // ดาวอาทิตย์
-    ["อังคาร", ["ก", "ข", "ค", "ฆ", "ง"]], // ดาวจันทร์
-    ["พุธ (กลางวัน)", ["จ", "ฉ", "ช", "ซ", "ฌ", "ญ"]], // ดาวอังคาร
-    ["พุธ (กลางคืน)", ["บ", "ป", "ผ", "ฝ", "พ", "ฟ", "ภ", "ม"]], // ดาวพฤหัสบดี
-    ["พฤหัสบดี", ["ด", "ต", "ถ", "ท", "ธ", "น"]], // ดาวเสาร์
-    ["ศุกร์", ["ย", "ร", "ล", "ว"]], // ดาวราหู
-    ["เสาร์", ["ฎ", "ฏ", "ฐ", "ฑ", "ฒ", "ณ"]], // ดาวพุธ
+    ["อาทิตย์", ["ศ", "ษ", "ส", "ห", "ฬ", "ฮ"]], // Venus
+    ["จันทร์", ["อ", "า", "ิ", "ี", "ึ", "ื", "ุ", "ู", "เ", "แ", "โ", "ใ", "ไ"]], // Sun
+    ["อังคาร", ["ก", "ข", "ค", "ฆ", "ง"]], // Moon
+    ["พุธ (กลางวัน)", ["จ", "ฉ", "ช", "ซ", "ฌ", "ญ"]], // Mars
+    ["พุธ (กลางคืน)", ["บ", "ป", "ผ", "ฝ", "พ", "ฟ", "ภ", "ม"]], // Jupiter
+    ["พฤหัสบดี", ["ด", "ต", "ถ", "ท", "ธ", "น"]], // Saturn
+    ["ศุกร์", ["ย", "ร", "ล", "ว"]], // Rahu
+    ["เสาร์", ["ฎ", "ฏ", "ฐ", "ฑ", "ฒ", "ณ"]], // Mercury
   ])("กาลกิณี mapping for %s", (day, letters) => {
     const out = kalakiniEngine.build([day]);
     expect(kalaBlock(out).chips).toEqual(letters);
@@ -82,7 +82,7 @@ describe("kalakini engine", () => {
     const night = kalakiniEngine.build(["พุธ (กลางคืน)"]);
     const dayWed = kalakiniEngine.build(["พุธ (กลางวัน)"]);
     expect(kalaBlock(night).chips).not.toEqual(kalaBlock(dayWed).chips);
-    // night-born บริวาร starts on ราหู → กาลกิณี = พฤหัสบดี group
+    // night-born: borriwan starts on Rahu -> Kalakini = Jupiter group
     expect(kalaBlock(night).chips).toContain("บ");
   });
 
@@ -116,8 +116,8 @@ describe("kalakini engine", () => {
     const v = out.find((s) => s.kind === "verdict") as Verdict;
     expect(v).toBeTruthy();
     expect(v.summary).toContain("เสาร์");
-    expect(v.summary).toContain("พุธ"); // กาลกิณี planet for เสาร์-born
-    expect(v.summary).toContain("ฎ"); // a กาลกิณี letter
+    expect(v.summary).toContain("พุธ"); // Kalakini planet for Saturn-born
+    expect(v.summary).toContain("ฎ"); // a Kalakini letter
   });
 
   it("emits a full 8-ภูมิ grid", () => {
@@ -135,7 +135,7 @@ describe("kalakini engine", () => {
   });
 
   it("polite-neutral tone: no ครับ/ค่ะ/slang particles in any text", () => {
-    // particles คั่นด้วยช่องว่าง/จบสตริง เพื่อเลี่ยง false-positive เช่น "เจ้านาย" (มี จ้า)
+    // particles are delimited by whitespace/end-of-string to avoid false positives, e.g. the word for "boss" contains the particle "chaa"
     const PARTICLE = /(^|[\s"])(ครับ|ค่ะ|คะ|จ้า|จ้ะ|นะคะ|เนอะ|อ่ะ)([\s".,]|$)/;
     const opts = (kalakiniFields[0] as { options: string[] }).options;
     for (const d of opts) {

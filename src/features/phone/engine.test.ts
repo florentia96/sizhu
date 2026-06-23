@@ -4,9 +4,9 @@ import { analyzeNumber } from "../_shared/numerology";
 import { ReportSchema } from "../../shared/sections/types";
 
 describe("phone engine", () => {
-  // Hand-traced reference vector — overlapping (sliding-window) pairs against PAIRS:
+  // Hand-traced reference vector - overlapping (sliding-window) pairs against PAIRS:
   // 08(bad) 81(warn) 12(-) 23(good) 34(warn) 45(good) 56(good) 67(-) 78(-)
-  // good=3 warn=2 bad=1 · total=44 · SUM_GOOD[44] => sumQual good (+13)
+  // good=3 warn=2 bad=1 - total=44 - SUM_GOOD[44] => sumQual good (+13)
   // score = 62 + 3*6 - 1*9 - 2*3 + 13 = 78 -> grade A
   const REF = "0812345678";
 

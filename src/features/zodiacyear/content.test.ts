@@ -16,18 +16,18 @@ describe("zodiacyear content correctness", () => {
     ]);
   });
 
-  // นักษัตร + ธาตุ ตามรอบ 60 ปี (sexagenary) อ้างอิงปีหลักที่ทราบแน่ชัด
+  // Zodiac animal + element on the 60-year (sexagenary) cycle, referenced to known anchor years
   const vectors: { ce: number; th: string; el: string }[] = [
-    { ce: 1924, th: "ชวด", el: "ไม้" },   // 甲子
-    { ce: 1984, th: "ชวด", el: "ไม้" },   // 甲子
-    { ce: 1992, th: "วอก", el: "น้ำ" },   // 壬申
-    { ce: 2000, th: "มะโรง", el: "ทอง" }, // 庚辰
-    { ce: 2008, th: "ชวด", el: "ดิน" },   // 戊子
-    { ce: 2020, th: "ชวด", el: "ทอง" },   // 庚子
-    { ce: 2021, th: "ฉลู", el: "ทอง" },   // 辛丑
-    { ce: 2022, th: "ขาล", el: "น้ำ" },   // 壬寅
-    { ce: 2023, th: "เถาะ", el: "น้ำ" },  // 癸卯
-    { ce: 2024, th: "มะโรง", el: "ไม้" }, // 甲辰
+    { ce: 1924, th: "ชวด", el: "ไม้" },   // jiazi
+    { ce: 1984, th: "ชวด", el: "ไม้" },   // jiazi
+    { ce: 1992, th: "วอก", el: "น้ำ" },   // renshen
+    { ce: 2000, th: "มะโรง", el: "ทอง" }, // gengchen
+    { ce: 2008, th: "ชวด", el: "ดิน" },   // wuzi
+    { ce: 2020, th: "ชวด", el: "ทอง" },   // gengzi
+    { ce: 2021, th: "ฉลู", el: "ทอง" },   // xinchou
+    { ce: 2022, th: "ขาล", el: "น้ำ" },   // renyin
+    { ce: 2023, th: "เถาะ", el: "น้ำ" },  // guimao
+    { ce: 2024, th: "มะโรง", el: "ไม้" }, // jiachen
   ];
 
   it.each(vectors)("CE $ce -> ปี$th ธาตุ$el", ({ ce, th, el }) => {
@@ -37,7 +37,7 @@ describe("zodiacyear content correctness", () => {
   });
 
   it("yin/yang follows even/odd CE year (yang=even stem)", () => {
-    // 2024 = 甲 (yang) ; 2025 = 乙 (yin)
+    // 2024 = jia (yang) ; 2025 = yi (yin)
     const yang = head(engine.build(["2024"]));
     const yin = head(engine.build(["2025"]));
     expect(JSON.stringify(yang.paras)).toContain("หยาง");
@@ -123,7 +123,7 @@ describe("zodiacyear tone", () => {
   });
 
   it("does not stack 3+ list items with ' · ' separators", () => {
-    // grid values now use comma; ensure no ' · ' appears anywhere in output strings
+    // grid values now use comma; ensure no middle-dot (U+00B7) appears anywhere in output strings
     expect(text).not.toContain(" · ");
   });
 

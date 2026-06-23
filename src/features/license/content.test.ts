@@ -20,7 +20,7 @@ describe("license consonant table", () => {
     expect(LETTER_VALUE["ส"]).toBe(7);
     expect(LETTER_VALUE["พ"]).toBe(8);
     expect(LETTER_VALUE["ฐ"]).toBe(9);
-    // verified against ktc.co.th / insurverse.co.th — ฏ groups with ฐ (=9), ฑ with ต (=3)
+    // verified against ktc.co.th / insurverse.co.th - "to patak" groups with "tho than" (=9), "tho montho" with "to tao" (=3)
     expect(LETTER_VALUE["ฏ"]).toBe(9);
     expect(LETTER_VALUE["ฑ"]).toBe(3);
   });

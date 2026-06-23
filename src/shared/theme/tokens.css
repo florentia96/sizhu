@@ -1,62 +1,62 @@
-/* ฟอนต์โหลดจาก <link> ใน index.html (preconnect + ครอบหน้า prerender) — ไม่ใช้ @import ที่นี่ */
+/* Fonts load from the <link> in index.html (preconnect + covers prerendered pages) - no @import here */
 
 /* ============================================================
-   MooDee design tokens — "Starlight ↔ Midnight × Garnet"
-   light = "Starlight" (champagne อลูมิเนียมอุ่น · ค่าเริ่มต้น) · dark = "Midnight" (ดำอุ่น ไม่มีน้ำเงิน)
-   base เครื่อง (starlight/midnight) นำ · garnet = accent/ตรา/ปุ่ม · sheen ทองแชมเปญ = ขอบ+ประกาย
-   brand mark = ตัวทอง กรอบแดง (option A) · ทุก token นิยามที่นี่ที่เดียว → component อ้าง var() สลับธีมอัตโนมัติ
+   MooDee design tokens - "Starlight <-> Midnight x Garnet"
+   light = "Starlight" (warm aluminium champagne, the default) - dark = "Midnight" (warm black, no blue)
+   the machine base (starlight/midnight) leads - garnet = accent/seal/button - champagne-gold sheen = borders + glints
+   brand mark = gold glyph, red rim (option A) - every token is defined here only -> components reference var() and switch theme automatically
    ============================================================ */
 :root,
 :root[data-theme="light"] {
   color-scheme: light;
 
-  /* Starlight — champagne อลูมิเนียมอุ่น */
+  /* Starlight - warm aluminium champagne */
   --bg: #efe8d6;
   --bg-grad-top: #f5f0e4;
   --aurora-1: rgba(184, 150, 86, 0.20);  /* champagne sheen */
   --aurora-2: rgba(140, 30, 44, 0.13);   /* garnet */
   --aurora-3: rgba(206, 188, 150, 0.18); /* amber */
-  --star-dot: rgba(150, 122, 60, 0.20);  /* ละอองทอง */
+  --star-dot: rgba(150, 122, 60, 0.20);  /* gold dust */
 
-  /* พื้นผิว (กระจกฝ้า) — ขาวอุ่นบน champagne */
+  /* surfaces (frosted glass) - warm white over champagne */
   --surface: rgba(253, 250, 244, 0.78);
   --surface-solid: #fdfaf4;
   --surface-inset: rgba(249, 244, 234, 0.62);
   --surface-sink: rgba(120, 90, 40, 0.05);
 
-  /* เส้นขอบ — ประกายอลูมิเนียมแชมเปญ (active/focus เป็น garnet ผ่าน --primary) */
+  /* borders - champagne-aluminium glint (active/focus is garnet via --primary) */
   --border-gold: rgba(150, 120, 64, 0.32);
   --gold-line: rgba(150, 120, 64, 0.32);
 
-  /* accent แบรนด์ — deep garnet (ใช้เป็น text/ปุ่ม/focus) */
+  /* brand accent - deep garnet (used for text/button/focus) */
   --primary: #9a2533;
   --primary-bright: #b8424f;
   --primary-shadow: #6e1a25;
-  --on-primary: #fff4f1;   /* ตัวอักษรบน garnet ตัน (เช่น checkbox) */
-  /* garnet พอให้: ขาวบนปุ่ม garnet ผ่าน AA · --primary เป็น text เล็กบน champagne ผ่าน AA (6.4) */
-  --on-grad: #7c1f2b;      /* ตัวอักษร/glyph บนตราทอง (brand tile) */
-  --grad-brand: linear-gradient(100deg, #e9dfc6 0%, #dbcca7 100%); /* ตัวทอง (A: เข้มกว่า bg นิดเดียว) */
-  --gold-hi: #f4eddb;      /* ประกายเมทัลลิกบนตรา/ปุ่ม */
-  --brand-rim: #9a2533;    /* กรอบแดง garnet รอบตรา/ปุ่ม */
-  --brand-glow: #cdaf6a;   /* เรืองทองรอบตรา/ปุ่ม */
-  /* brand mark composite (นิยามที่เดียว · nested var resolve ตามโหมด) — ตรา=seal · ปุ่ม=pill */
+  --on-primary: #fff4f1;   /* text on solid garnet (e.g. checkbox) */
+  /* garnet contrast: white on a garnet button passes AA - --primary as small text on champagne passes AA (6.4) */
+  --on-grad: #7c1f2b;      /* text/glyph on the gold seal (brand tile) */
+  --grad-brand: linear-gradient(100deg, #e9dfc6 0%, #dbcca7 100%); /* gold glyph (A: slightly darker than bg) */
+  --gold-hi: #f4eddb;      /* metallic glint on the seal/button */
+  --brand-rim: #9a2533;    /* garnet red rim around the seal/button */
+  --brand-glow: #cdaf6a;   /* gold glow around the seal/button */
+  /* brand mark composite (defined once - nested var resolves per mode) - seal=seal - button=pill */
   --brand-seal-bg: radial-gradient(130% 130% at 28% 18%, color-mix(in srgb, var(--gold-hi) 70%, transparent), transparent 58%), var(--grad-brand);
   --brand-seal-shadow: inset 0 0 0 1.8px var(--brand-rim), inset 0 0 0 3px color-mix(in srgb, var(--gold-hi) 50%, transparent), inset 0 2px 1px rgba(255, 250, 235, 0.5), 0 10px 24px -10px rgba(60, 40, 8, 0.5), 0 0 24px -8px color-mix(in srgb, var(--brand-glow) 58%, transparent);
   --brand-pill-bg: radial-gradient(150% 220% at 16% -12%, color-mix(in srgb, var(--gold-hi) 60%, transparent), transparent 58%), var(--grad-brand);
   --brand-pill-shadow: inset 0 0 0 1.6px var(--brand-rim), inset 0 1px 0 rgba(255, 250, 235, 0.4), 0 14px 26px -12px rgba(60, 40, 8, 0.5), 0 0 22px -10px color-mix(in srgb, var(--brand-glow) 48%, transparent);
   --brand-pill-shadow-hover: inset 0 0 0 1.6px var(--brand-rim), inset 0 1px 0 rgba(255, 250, 235, 0.45), 0 18px 32px -12px rgba(60, 40, 8, 0.55), 0 0 30px -8px color-mix(in srgb, var(--brand-glow) 60%, transparent);
 
-  /* 5 ศาสตร์ + accent (แยก hue ชัด · ไม่มีน้ำเงิน · 星=amethyst 卦=garnet) */
-  --jade: #4f9d80;   /* 數 เขียวหยก */
-  --gold: #9c7a30;   /* 名 / sheen แชมเปญ (token เมทัลลิก) */
-  --label-ink: #9a2533; /* garnet รอง สำหรับ eyebrow/label text — ผ่าน AA (7.17) */
-  --star: #7d5bc0;   /* 星 amethyst */
-  --ember: #d27a68;  /* 緣 ปะการัง */
-  --ame: #9a2533;    /* 卦 garnet */
+  /* 5 disciplines + accent (distinct hues - no blue - star=amethyst, gua=garnet) */
+  --jade: #4f9d80;   /* shu (numbers) jade green */
+  --gold: #9c7a30;   /* ming (names) / champagne sheen (metallic token) */
+  --label-ink: #9a2533; /* secondary garnet for eyebrow/label text - passes AA (7.17) */
+  --star: #7d5bc0;   /* xing (star) amethyst */
+  --ember: #d27a68;  /* yuan (affinity) coral */
+  --ame: #9a2533;    /* gua (hexagram) garnet */
   --gold-soft: rgba(156, 122, 48, 0.14);
   --ember-soft: rgba(210, 122, 104, 0.14);
 
-  /* ตัวอักษร (เทาอุ่น ไม่มี cast น้ำเงิน) */
+  /* text (warm gray, no blue cast) */
   --ink: #2f2a22;
   --ink-soft: #4f493e;
   --ink-faint: #756d5e;
@@ -66,11 +66,11 @@
   --text-dim: #8b8273;
   --text-faint: #a89f8c;
 
-  /* การ์ดกระดาษสว่าง (ResultHero/aux) */
+  /* light paper card (ResultHero/aux) */
   --paper: #fdfaf4;
   --panel: #ffffff;
 
-  /* alias โลกหน้าผล (BaZi) — light = สว่าง */
+  /* result-world alias (BaZi) - light = bright */
   --dark-bg: #efe8d6;
   --dark-panel: rgba(253, 250, 244, 0.78);
   --dark-text: #2f2a22;
@@ -81,7 +81,7 @@
   --shadow-sm: 0 8px 22px -14px rgba(80, 50, 20, 0.26);
   --shadow-glow: 0 18px 44px -20px rgba(200, 166, 75, 0.45);
 
-  /* มุมโค้งมน */
+  /* rounded corners */
   --radius-card: 22px;
   --radius-input: 14px;
   --radius: 18px;
@@ -100,7 +100,7 @@
   --font-body: "Anuphan", system-ui, sans-serif;
 }
 
-/* ---------- Midnight (Apple finish: navy เกือบดำ) + garnet/gold เรืองแสง ---------- */
+/* ---------- Midnight (Apple finish: near-black navy) + glowing garnet/gold ---------- */
 :root[data-theme="dark"] {
   color-scheme: dark;
 
@@ -108,30 +108,30 @@
   --bg-grad-top: #232b3b;
   --aurora-1: rgba(214, 178, 92, 0.18);  /* gold glint */
   --aurora-2: rgba(176, 52, 64, 0.24);   /* garnet */
-  --aurora-3: rgba(96, 116, 156, 0.12);  /* midnight sheen (เย็นจาง) */
-  --star-dot: rgba(232, 238, 250, 0.6);  /* ดาวขาวเย็น */
+  --aurora-3: rgba(96, 116, 156, 0.12);  /* midnight sheen (faint cool) */
+  --star-dot: rgba(232, 238, 250, 0.6);  /* cool white stars */
 
   --surface: rgba(40, 49, 66, 0.55);
   --surface-solid: #222a3a;
   --surface-inset: rgba(255, 255, 255, 0.05);
   --surface-sink: rgba(0, 0, 0, 0.26);
 
-  --border-gold: rgba(190, 202, 226, 0.20); /* ขอบอลูมิเนียมเย็น (midnight edge) */
+  --border-gold: rgba(190, 202, 226, 0.20); /* cool aluminium border (midnight edge) */
   --gold-line: rgba(190, 202, 226, 0.20);
 
   --primary: #ec8a93;
   --primary-bright: #f2a6ac;
   --primary-shadow: #7a1f2b;
-  --on-primary: #2a1418;   /* ตัวอักษรบน garnet ตัน */
-  --on-grad: #ecd79a;      /* glyph ทองบนตรา (brand tile) */
-  --grad-brand: linear-gradient(100deg, #2a2218 0%, #38301f 100%); /* tile ทองอุ่น ตัด bg เย็น */
+  --on-primary: #2a1418;   /* text on solid garnet */
+  --on-grad: #ecd79a;      /* gold glyph on the seal (brand tile) */
+  --grad-brand: linear-gradient(100deg, #2a2218 0%, #38301f 100%); /* warm gold tile against the cool bg */
   --gold-hi: #ecd79a;
-  --brand-rim: #c23a4a;    /* กรอบแดง */
+  --brand-rim: #c23a4a;    /* red rim */
   --brand-glow: #b88a3a;
 
   --jade: #82c9a8;
   --gold: #dcc089;
-  --label-ink: #ef9aa2; /* garnet รอง สว่างพอเป็น text บนพื้นมืด */
+  --label-ink: #ef9aa2; /* secondary garnet, bright enough for text on a dark background */
   --star: #b39ae6;
   --ember: #ef9a86;
   --ame: #ef9aa2;
@@ -161,7 +161,7 @@
   --shadow-glow: 0 18px 44px -20px rgba(214, 178, 92, 0.4);
 }
 
-/* ---------- reset + ฐาน ---------- */
+/* ---------- reset + base ---------- */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -180,7 +180,7 @@ body {
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.4s ease, color 0.3s ease;
 }
-/* ม่านฟ้าอรุณ — โคมแสงพาสเทลเบลอ อยู่หลังเนื้อหา ติดจอ ไม่กินคลิก */
+/* dawn-sky veil - blurred pastel light pools, behind the content, fixed to the screen, does not capture clicks */
 body::before {
   content: "";
   position: fixed;
@@ -211,7 +211,7 @@ button {
   font-family: inherit;
 }
 
-/* แตะแล้วตอบสนองทันที (กัน tap-delay 300ms) + ฟีดแบ็กตอนกด */
+/* respond instantly to taps (avoids the 300ms tap delay) + press feedback */
 button,
 [role="button"],
 select,
@@ -234,14 +234,14 @@ select option {
   color: var(--text);
 }
 
-/* focus เห็นชัดทุก control (a11y) */
+/* visible focus on every control (a11y) */
 :focus-visible {
   outline: 3px solid var(--primary);
   outline-offset: 2px;
   border-radius: 6px;
 }
 
-/* ละออง/ดาว — สีปรับตามธีมผ่าน --star-dot */
+/* dust/stars - color adapts per theme via --star-dot */
 .starfield {
   position: fixed;
   inset: 0;

@@ -29,7 +29,7 @@ describe("ascendant engine", () => {
     const r = ascEngine.build(VALS);
     const grid = r.find((s) => s.kind === "grid");
     if (grid && grid.kind === "grid") {
-      // 1990-01-15 14:30 Bangkok → tropical Asc = เมถุน (Gemini), ruled by พุธ
+      // 1990-01-15 14:30 Bangkok -> tropical Asc = Gemini, ruled by Mercury (Thai: Phut)
       const ascCell = grid.cells.find((c) => c.name.includes("แบบสากล"));
       expect(ascCell?.value).toContain("เมถุน");
       expect(ascCell?.note).toContain("พุธ");
@@ -37,7 +37,7 @@ describe("ascendant engine", () => {
   });
 
   it("whole-sign houses for Sun and Moon are correct for the reference vector", () => {
-    // Asc เมถุน(2) · Sun มังกร(9) → house 8 · Moon กันย์(5) → house 4
+    // Asc Gemini(2) - Sun Capricorn(9) -> house 8 - Moon Virgo(5) -> house 4
     const r = ascEngine.build(VALS);
     const grid = r.find((s) => s.kind === "grid");
     if (grid && grid.kind === "grid") {
@@ -122,7 +122,7 @@ describe("ascendant engine", () => {
     const cm = ascEngine.build(["1990-01-15", "14:30", "เชียงใหม่"]);
     expect(() => ReportSchema.parse(cm)).not.toThrow();
     expect(cm[0].kind).not.toBe("note");
-    // different latitude → Thai lagna differs from the Bangkok chart
+    // different latitude -> Thai lagna differs from the Bangkok chart
     expect(JSON.stringify(cm)).not.toBe(JSON.stringify(ascEngine.build(VALS)));
   });
 });

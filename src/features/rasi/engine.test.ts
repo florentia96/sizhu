@@ -23,7 +23,7 @@ describe("rasi engine", () => {
     const blocks = ref().find((s) => s.kind === "blocks");
     if (!blocks || blocks.kind !== "blocks") throw new Error("blocks missing");
     expect(blocks.items.length).toBe(3);
-    // for ราศีพฤษภ (ดิน): same=ดิน, compat=น้ำ, clash=ลม
+    // for Taurus (earth): same=earth, compat=water, clash=air
     expect(blocks.items[0].tag).toBe("ธาตุดิน");
     expect(blocks.items[1].tag).toBe("ธาตุน้ำ");
     expect(blocks.items[2].tag).toBe("ธาตุลม");
@@ -32,7 +32,7 @@ describe("rasi engine", () => {
     expect(blocks.items[0].chips.length).toBe(2);
     expect(blocks.items[1].chips.length).toBe(3);
     expect(blocks.items[2].chips.length).toBe(3);
-    // every chip is a real "ราศี…" label, no placeholder dash
+    // every chip is a real "rasi ..." label, no placeholder dash
     blocks.items.forEach((it) =>
       it.chips.forEach((c) => {
         expect(c.startsWith("ราศี")).toBe(true);

@@ -3,7 +3,7 @@ import { signFromLon } from "./ephemeris";
 const DEG = Math.PI / 180;
 const norm360 = (x: number): number => ((x % 360) + 360) % 360;
 
-// Greenwich Mean Sidereal Time (degrees) — Meeus single-JD form.
+// Greenwich Mean Sidereal Time (degrees) - Meeus single-JD form.
 export function gmst(jdUT: number): number {
   const d = jdUT - 2451545.0;
   const T = d / 36525.0;
@@ -15,7 +15,7 @@ export function gmst(jdUT: number): number {
   return norm360(theta);
 }
 
-// Mean obliquity of the ecliptic (degrees) — Meeus.
+// Mean obliquity of the ecliptic (degrees) - Meeus.
 export function obliquity(jdUT: number): number {
   const T = (jdUT - 2451545.0) / 36525.0;
   return (
@@ -39,7 +39,7 @@ export function ascendant(input: {
   const ramc = lstDeg(input.jdUT, input.lon) * DEG;
   const eps = obliquity(input.jdUT) * DEG;
   const phi = input.lat * DEG;
-  // Asc = atan2( cos RAMC, -(sin RAMC·cos ε + tan φ·sin ε) )
+  // Asc = atan2( cos RAMC, -(sin RAMC*cos eps + tan phi*sin eps) )
   const y = Math.cos(ramc);
   const x = -(Math.sin(ramc) * Math.cos(eps) + Math.tan(phi) * Math.sin(eps));
   const deg = norm360(Math.atan2(y, x) / DEG);
@@ -54,9 +54,9 @@ export function midheaven(input: {
   const ramcDeg = lstDeg(input.jdUT, input.lon);
   const ramc = ramcDeg * DEG;
   const eps = obliquity(input.jdUT) * DEG;
-  // MC = atan2( tan RAMC, cos ε ), placed in same hemisphere as RAMC.
+  // MC = atan2( tan RAMC, cos eps ), placed in same hemisphere as RAMC.
   let mc = norm360(Math.atan2(Math.tan(ramc), Math.cos(eps)) / DEG);
-  // Keep MC within ±90° of RAMC longitude (same culminating hemisphere).
+  // Keep MC within +-90 deg of RAMC longitude (same culminating hemisphere).
   const diff = norm360(mc - ramcDeg);
   if (diff > 90 && diff < 270) mc = norm360(mc + 180);
   return { deg: mc, sign: signFromLon(mc).sign };
@@ -65,8 +65,8 @@ export function midheaven(input: {
 // --- Placidus house cusps ---
 
 // Convert a right ascension (deg) on the ecliptic back to ecliptic longitude (deg).
-// Inverse of the standard λ→RA map (RA = atan2(sin λ·cos ε, cos λ)):
-//   λ = atan2(sin RA, cos RA · cos ε).
+// Inverse of the standard lambda->RA map (RA = atan2(sin lambda*cos eps, cos lambda)):
+//   lambda = atan2(sin RA, cos RA * cos eps).
 function eclipticFromRa(raDeg: number, epsRad: number): number {
   const ra = raDeg * DEG;
   const lon = Math.atan2(Math.sin(ra), Math.cos(ra) * Math.cos(epsRad));
@@ -88,7 +88,7 @@ function placidusIntermediate(
     // ecliptic longitude at this RA, then its declination
     const lonDeg = eclipticFromRa(ra, epsRad);
     const lon = lonDeg * DEG;
-    const dec = Math.asin(Math.sin(epsRad) * Math.sin(lon)); // δ
+    const dec = Math.asin(Math.sin(epsRad) * Math.sin(lon)); // delta
     // ascensional difference contribution
     const ad = Math.asin(Math.tan(latRad) * Math.tan(dec)); // radians
     const next = norm360(targetRa + f * (ad / DEG));
@@ -137,7 +137,7 @@ export function placidusCusps(input: {
 
 // --- Lahiri ayanamsa + Thai sidereal lagna ---
 
-// Lahiri ayanamsa (degrees). Base 23.853° at J2000.0, precessing 50.2388475″/yr.
+// Lahiri ayanamsa (degrees). Base 23.853 deg at J2000.0, precessing 50.2388475 arcsec/yr.
 export function lahiriAyanamsa(jdUT: number): number {
   const yearsFromJ2000 = (jdUT - 2451545.0) / 365.25;
   return 23.853 + (50.2388475 / 3600) * yearsFromJ2000;

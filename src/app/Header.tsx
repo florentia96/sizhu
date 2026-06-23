@@ -115,7 +115,7 @@ function MoonIcon() {
 export function Header({ query, onQueryChange, onLogo }: HeaderProps) {
   const [theme, setTheme] = useState<Theme>(currentTheme);
 
-  // sync ค่าเริ่มต้นกับที่ anti-flash script ตั้งไว้ (เผื่อ hydrate ไม่ตรง)
+  // Sync the initial value with what the anti-flash script set (in case hydration mismatches)
   useEffect(() => {
     setTheme(currentTheme());
   }, []);
@@ -127,7 +127,7 @@ export function Header({ query, onQueryChange, onLogo }: HeaderProps) {
     try {
       localStorage.setItem("moodee-theme", next);
     } catch {
-      /* โหมดไม่ให้เก็บ storage ก็ข้ามไป */
+      /* Skip if the mode disallows storage */
     }
   };
 

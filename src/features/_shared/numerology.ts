@@ -1,4 +1,4 @@
-// PAIRS / SUM_GOOD / SUM_BAD — canonical popular-number table from the MooDee reference library
+// PAIRS / SUM_GOOD / SUM_BAD - canonical popular-number table from the MooDee reference library
 
 import type { Section } from "../../shared/sections/types";
 import { TONE_HEX } from "../../shared/sections/types";
@@ -27,7 +27,7 @@ interface PairDef {
   k: PairTone;
 }
 
-// คู่เลข 2 หลัก: t=หัวข้อ, m=ความหมาย, k=โทน — ตารางเลขศาสตร์เบอร์มงคลที่นิยม (canonical, verbatim)
+// 2-digit pairs: t=title, m=meaning, k=tone - the popular lucky-number numerology table (canonical, verbatim)
 const PAIRS: Record<string, PairDef> = {
   "14": { t: "เมตตามหานิยม", m: "ค้าขายดี เจรจาคล่อง เป็นที่รักของผู้คน", k: "good" },
   "41": { t: "เมตตามหานิยม", m: "ค้าขายดี มีคนอุปถัมภ์ เหมาะงานบริการ/ขาย", k: "good" },
@@ -93,7 +93,7 @@ const PAIRS: Record<string, PairDef> = {
   "72": { t: "วิตกกังวล", m: "คิดมาก นอนไม่หลับ ควรดูแลใจ", k: "warn" },
 };
 
-// ผลรวม (เลขรวมทั้งเบอร์) — กลุ่มมงคลที่นิยมอ้างถึง
+// Totals (the whole number's sum) - the auspicious groups commonly cited
 const SUM_GOOD: Record<number, string> = {
   14: "เมตตามหานิยม ค้าขายรุ่งเรือง",
   15: "มีเสน่ห์ โชคลาภดี",
@@ -140,7 +140,7 @@ const SUM_BAD: Record<number, string> = {
   57: "เครียด",
   58: "การเงินสะดุด",
 };
-// legacy ใส่ 44:'' แล้ว delete — 44 จึงเป็นมงคลล้วน (อยู่ใน SUM_GOOD เท่านั้น)
+// legacy set 44:'' then deleted it - so 44 is purely auspicious (only in SUM_GOOD)
 
 export interface PairHit {
   n: string;
@@ -212,7 +212,7 @@ export function numberReport(raw: string, label = "ชุดเลข", glyph = 
   const gr = gradeOf(a.score);
   const accent = a.score >= 70 ? JADE : a.score >= 52 ? GOLD : RED;
 
-  // จัดลำดับ: เสีย > เตือน > ดี (เห็นจุดที่ต้องระวังก่อน) แล้ว dedup ตามคู่เลข (เก็บอันแรกที่พบ)
+  // Order: bad > warn > good (see the cautions first), then dedup by pair (keep the first found)
   const order: Record<PairTone, number> = { bad: 0, warn: 1, good: 2 };
   const pairsShown = a.pairs.slice().sort((x, y) => order[x.tone] - order[y.tone]);
   const seen: Record<string, boolean> = {};
@@ -328,7 +328,7 @@ export interface WeightedAnalysis extends NumberAnalysis {
   weightedScore: number;
 }
 
-// Thai convention: the LAST adjacent pair is the "ปลายทาง" (endpoint) and weighs heaviest.
+// Thai convention: the LAST adjacent pair is the "endpoint" (plai thang) and weighs heaviest.
 // Linear ramp w(i) = 1 + i/(P-1), 1.0 (first) -> 2.0 (last); P==1 -> w=2.
 export function analyzeNumberWeighted(raw: string): WeightedAnalysis {
   const base = analyzeNumber(raw);

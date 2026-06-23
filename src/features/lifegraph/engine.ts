@@ -27,19 +27,19 @@ const PLANET_TH: Record<string, string> = {
 };
 const PLANETS = ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"];
 
-// ดาวจรที่นิยาม"ช่วงชีวิต" (period) ได้จริง — เคลื่อนช้าพอที่มุมจะคงอยู่หลายวันถึงหลายเดือน
-// จันทร์ถูกแยกออก เพราะเคลื่อน ~13°/วัน มุมจรจึงอยู่เพียงไม่กี่ชั่วโมง ใช้บอกบรรยากาศใจรายวันแทน
+// Transiting planets that genuinely define a "life period" - slow enough that the aspect holds for days to months
+// The Moon is excluded because it moves ~13 deg/day, so its transit aspect lasts only a few hours; used for daily mood instead
 const SLOW_TRANSITERS = ["Sun", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"];
 
-// แต่ละด้าน → ดาวที่เกี่ยวข้องตามหลักโหราศาสตร์ (ใช้กรองดาวจรให้ตรงเรื่องที่ผู้ใช้เน้น)
+// Each life area -> its related planets per astrology (used to filter transits to the area the user emphasizes)
 const SCOPE_PLANETS: Record<string, string[]> = {
   "เน้นการงาน": ["Sun", "Saturn", "Mars", "Jupiter"],
   "เน้นการเงิน": ["Jupiter", "Venus", "Saturn"],
   "เน้นความรัก": ["Venus", "Moon", "Mars"],
 };
 
-// โทนของมุม "ร่วม" (conjunction) ขึ้นกับธรรมชาติของดาวที่จรเข้ามา ไม่ใช่กลาง ๆ เสมอ
-// ดาวเกื้อหนุนจรมาร่วม = พลังเสริม · ดาวหนักจรมาร่วม = บททดสอบ/กดดัน
+// The tone of a "conjunction" depends on the nature of the transiting planet, not always neutral
+// A benefic transiting in = supportive energy - a malefic transiting in = a test/pressure
 function conjunctionTone(transiter: string): "good" | "warn" {
   return BENEFIC.includes(transiter) ? "good" : "warn";
 }
@@ -54,9 +54,9 @@ function toneAdvice(tone: "good" | "warn" | "info"): string {
   return "เป็นช่วงที่พลังด้านนี้เข้มข้น เหมาะใช้เป็นจุดเริ่มต้น";
 }
 
-// ปีส่วนตัวแบบอิงรอบวันเกิด (birthday-to-birthday) — ก่อนวันเกิดของปีนั้นให้นับเป็นปีก่อนหน้า
-// personalYear ใน _shared อิงปีปฏิทิน (เปลี่ยนเลขวันที่ 1 ม.ค.) จึงปรับ effective year ที่ชั้นนี้แทน
-// โดยไม่แตะ _shared ทำให้ "ณ วันที่" ก่อน/หลังวันเกิดให้เลขปีส่วนตัวที่ต่างกันอย่างถูกต้อง
+// Personal year based on the birthday cycle (birthday-to-birthday) - before that year's birthday, count it as the previous year
+// personalYear in _shared uses the calendar year (rolls over on Jan 1), so we adjust the effective year at this layer instead
+// without touching _shared, so an "as of date" before/after the birthday gives correctly different personal-year numbers
 function personalYearAsOf(
   by: number, bm: number, bd: number,
   ny: number, nm: number, nd: number,
@@ -100,13 +100,13 @@ export const lifeEngine: FeatureEngine = {
       transitLon[p] = transit[p as keyof typeof transit].lon;
     }
 
-    // ดาวจรช้า (นิยาม "ช่วง" ได้) เทียบดวงเดิม — จันทร์จรแยกไปอีกชั้นด้านล่าง
+    // Slow transits (which define a "period") compared to the natal chart - the Moon transit is handled separately below
     const slowLon: Record<string, number> = {};
     for (const p of SLOW_TRANSITERS) slowLon[p] = transitLon[p];
 
     const focus = SCOPE_PLANETS[scope];
     const ranked = aspectsBetween(slowLon, natalLon).sort((x, y) => x.orb - y.orb);
-    // เมื่อเลือกด้าน: ให้ดาวจร (a) อยู่ในกลุ่มของด้านนั้น เพื่อให้ "ดาวที่กำลังเคลื่อน" ตรงเรื่อง
+    // When an area is selected: keep transiting planet (a) within that area's group so the "moving planet" stays on topic
     const asps = (
       focus ? ranked.filter((a) => focus.includes(a.a) || focus.includes(a.b)) : ranked
     ).slice(0, 6);
@@ -127,7 +127,7 @@ export const lifeEngine: FeatureEngine = {
       };
     });
 
-    // จันทร์จร — บรรยากาศใจระยะสั้น (รายวัน) ไม่ใช่ทิศทางของช่วง
+    // Moon transit - short-term mood (daily), not the direction of the period
     const moonAsps = aspectsBetween({ Moon: transitLon.Moon }, natalLon)
       .sort((x, y) => x.orb - y.orb)
       .slice(0, 1);
@@ -184,7 +184,7 @@ export const lifeEngine: FeatureEngine = {
         text: `ช่วงนี้ยังไม่มีดาวจรเด่นที่เกี่ยวกับ "${scope}" โดยตรง ลองดูแบบ "ภาพรวมปีนี้" เพื่อเห็นดาวจรทุกด้าน`,
       });
 
-    // จุดเน้น + แนวทางปฏิบัติของด้านที่เลือก ผูกธีมปีส่วนตัวเข้ากับดาวจร
+    // Focus + practical guidance for the selected area, tying the personal-year theme to the transits
     const focusPlanetTh = focus ? focus.map((p) => PLANET_TH[p]).join(" ") : "";
     secs.push({
       kind: "prose",

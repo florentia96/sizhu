@@ -47,7 +47,7 @@ export const ASPECT_TH: Record<string, { th: string; tone: "good" | "warn" | "in
   opposition: { th: "เล็งตรงข้าม 180°", tone: "warn" },
 };
 
-// ความหมายเชิงโหราศาสตร์ของดาวแต่ละดวง (สำหรับอธิบาย "ดาวนี้แทนเรื่องอะไร")
+// Astrological meaning of each planet (to explain "what this planet represents")
 export const PLANET_MEANING: Record<string, string> = {
   Sun: "แก่นตัวตน เจตจำนง และพลังชีวิต",
   Moon: "อารมณ์ ความรู้สึกภายใน และความต้องการพื้นฐานทางใจ",
@@ -58,7 +58,7 @@ export const PLANET_MEANING: Record<string, string> = {
   Saturn: "ความรับผิดชอบ วินัย และบทเรียนที่ต้องฝึกฝน",
 };
 
-// 4 ธาตุของจักรราศีตะวันตก ใช้สรุปสมดุลธาตุในดวง
+// The 4 elements of the Western zodiac, used to summarize the chart's elemental balance
 export const ELEMENT_OF_SIGN: Record<string, "ไฟ" | "ดิน" | "ลม" | "น้ำ"> = {
   Aries: "ไฟ", Leo: "ไฟ", Sagittarius: "ไฟ",
   Taurus: "ดิน", Virgo: "ดิน", Capricorn: "ดิน",
@@ -73,7 +73,7 @@ export const ELEMENT_TRAIT: Record<string, string> = {
   น้ำ: "อารมณ์ ความรู้สึก และสัญชาตญาณ",
 };
 
-// คำอธิบายจุดเด่น/จุดควรระวังเมื่อธาตุใดธาตุหนึ่งเด่นหรือขาด (ใช้ในส่วนคำแนะนำ)
+// Notes on strengths/cautions when an element is dominant or lacking (used in the advice section)
 export const ELEMENT_GUIDANCE: Record<string, { strong: string; weak: string }> = {
   ไฟ: {
     strong: "มีพลังผลักดันและกล้าเริ่มต้น เหมาะกับงานที่ต้องริเริ่ม ข้อควรระวังคือใจร้อนและหมดไฟเร็ว",
@@ -93,7 +93,7 @@ export const ELEMENT_GUIDANCE: Record<string, { strong: string; weak: string }> 
   },
 };
 
-// จุดมุมหลักของดวง (angles) นอกเหนือจากลัคนา
+// The chart's main angles, besides the Ascendant
 export const ANGLE_MEANING: Record<string, string> = {
   asc: "ราศีที่ขึ้นขอบฟ้าตะวันออกตอนเกิด แทนภาพลักษณ์ภายนอกและวิธีเริ่มต้นสิ่งต่าง ๆ",
   mc: "จุดสูงสุดกลางฟ้า (Midheaven) แทนหน้าที่การงาน ชื่อเสียง และเป้าหมายในสายตาสังคม",

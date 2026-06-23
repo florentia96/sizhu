@@ -4,13 +4,13 @@ export const RASI_TH: Record<string, string> = {
   Sagittarius: "ธนู", Capricorn: "มังกร", Aquarius: "กุมภ์", Pisces: "มีน",
 };
 
-// ลำดับราศี 0..11 (ใช้คำนวณเรือนแบบ Whole-sign จากราศีลัคนา)
+// Zodiac sign order 0..11 (used to compute Whole-sign houses from the Ascendant sign)
 export const RASI_ORDER: string[] = [
   "เมษ", "พฤษภ", "เมถุน", "กรกฎ", "สิงห์", "กันย์",
   "ตุล", "พิจิก", "ธนู", "มังกร", "กุมภ์", "มีน",
 ];
 
-// ราศีไทย → ดาวเจ้าเรือน (โหราศาสตร์คลาสสิก/ระบบดาวดั้งเดิม 7 ดวง)
+// Thai sign -> ruling planet (classical astrology / traditional 7-planet system)
 export const RASI_RULER: Record<string, string> = {
   เมษ: "อังคาร", พฤษภ: "ศุกร์", เมถุน: "พุธ", กรกฎ: "จันทร์",
   สิงห์: "อาทิตย์", กันย์: "พุธ", ตุล: "ศุกร์", พิจิก: "อังคาร",
@@ -39,7 +39,7 @@ export const RASI_TRAIT: Record<string, string> = {
   มีน: "อ่อนไหว เมตตา จินตนาการดี เข้าอกเข้าใจผู้อื่น",
 };
 
-// ลัคนาราศี = ภาพลักษณ์/ท่าทีที่คนอื่นเห็นในครั้งแรก และวิธีเริ่มต้นเข้าหาสิ่งใหม่
+// Ascendant sign = the image/manner others see at first, and how one approaches new things
 export const RASI_RISING: Record<string, string> = {
   เมษ: "ให้ภาพคนกระฉับกระเฉง มั่นใจ พูดตรง ลงมือก่อนคิดเยอะ ดูมีพลังและพร้อมนำ",
   พฤษภ: "ให้ภาพคนสุขุม ใจเย็น น่าไว้วางใจ ท่าทีมั่นคงไม่รีบร้อน มีรสนิยมเรียบหรู",
@@ -55,7 +55,7 @@ export const RASI_RISING: Record<string, string> = {
   มีน: "ให้ภาพคนอ่อนโยน เข้าใจคนง่าย ดูนุ่มนวลและมีโลกในจินตนาการเป็นของตัวเอง",
 };
 
-// ราศีจันทร์ = โลกภายใน อารมณ์ และสิ่งที่ทำให้รู้สึกปลอดภัย/สบายใจ
+// Moon sign = the inner world, emotions, and what makes one feel safe/at ease
 export const RASI_MOON: Record<string, string> = {
   เมษ: "อารมณ์มาไว ไปไว ระบายออกตรง ๆ รู้สึกดีเมื่อได้ลงมือทำและเป็นฝ่ายริเริ่ม",
   พฤษภ: "อารมณ์นิ่ง มั่นคง สบายใจกับความคุ้นเคยและความสะดวก ไม่ชอบการเปลี่ยนกะทันหัน",
@@ -78,7 +78,7 @@ export const EL_NOTE: Record<string, string> = {
   น้ำ: "ธาตุน้ำ — อ่อนไหว ลึกซึ้ง เข้าใจความรู้สึก",
 };
 
-// คำแนะนำเชิงปฏิบัติตามธาตุของลัคนา (จุดแข็งที่ควรใช้ + สิ่งที่ควรระวัง)
+// Practical advice by the Ascendant's element (strengths to use + things to watch)
 export const EL_GUIDE: Record<string, string> = {
   ไฟ: "จุดแข็งคือความกล้าและพลังเริ่มต้น ใช้ลงมือทำสิ่งใหม่ได้ดี ควรระวังความใจร้อนและการตัดสินใจเร็วเกินไป ฝึกฟังให้จบก่อนลงมือ",
   ดิน: "จุดแข็งคือความมั่นคงและลงมือทำจริง เหมาะกับงานที่ต้องสะสมระยะยาว ควรระวังการยึดติดความคุ้นเคยจนพลาดโอกาส ลองเปิดรับสิ่งใหม่บ้าง",
@@ -86,7 +86,7 @@ export const EL_GUIDE: Record<string, string> = {
   น้ำ: "จุดแข็งคือความเข้าใจคนและสัญชาตญาณ เหมาะกับงานที่ต้องดูแลและประสานความรู้สึก ควรระวังการเก็บอารมณ์ไว้คนเดียว หาคนที่ไว้ใจระบายบ้าง",
 };
 
-// ความหมายเรือนชะตา 1..12 (สำหรับการอ่านแบบ Whole-sign จากราศีลัคนา)
+// Meaning of houses 1..12 (for the Whole-sign reading from the Ascendant sign)
 export const HOUSE_MEANING: string[] = [
   "ตัวตน บุคลิก ภาพลักษณ์ที่แสดงออก",
   "ทรัพย์สิน รายได้ คุณค่าที่ยึดถือ",

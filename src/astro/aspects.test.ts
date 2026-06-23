@@ -8,14 +8,14 @@ describe("F4.6 aspectsBetween — detection & orb", () => {
   });
 
   it("detects a trine within orb and reports the orb", () => {
-    const r = aspectsBetween({ Sun: 10 }, { Jupiter: 133 }); // 123° apart, trine=120, orb 3
+    const r = aspectsBetween({ Sun: 10 }, { Jupiter: 133 }); // 123 deg apart, trine=120, orb 3
     expect(r.length).toBe(1);
     expect(r[0].type).toBe("trine");
     expect(r[0].orb).toBeCloseTo(3, 6);
   });
 
   it("detects opposition across the 0/360 wrap", () => {
-    const r = aspectsBetween({ Moon: 350 }, { Saturn: 170 }); // 180° apart
+    const r = aspectsBetween({ Moon: 350 }, { Saturn: 170 }); // 180 deg apart
     expect(r.length).toBe(1);
     expect(r[0].type).toBe("opposition");
     expect(r[0].orb).toBeCloseTo(0, 6);
@@ -27,12 +27,12 @@ describe("F4.6 aspectsBetween — detection & orb", () => {
   });
 
   it("ignores separations outside the default ±6° orb", () => {
-    const r = aspectsBetween({ Sun: 0 }, { Pluto: 50 }); // 50° from any aspect
+    const r = aspectsBetween({ Sun: 0 }, { Pluto: 50 }); // 50 deg from any aspect
     expect(r).toEqual([]);
   });
 
   it("respects a custom orb", () => {
-    const tight = aspectsBetween({ Sun: 0 }, { Mars: 8 }, 3); // 8° from conjunction
+    const tight = aspectsBetween({ Sun: 0 }, { Mars: 8 }, 3); // 8 deg from conjunction
     expect(tight).toEqual([]);
     const wide = aspectsBetween({ Sun: 0 }, { Mars: 8 }, 10);
     expect(wide[0].type).toBe("conjunction");

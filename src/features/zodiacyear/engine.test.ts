@@ -10,7 +10,7 @@ describe("zodiacyear engine", () => {
     expect(toCE("abc")).toBeNull();
   });
   it("1984 is Year of the Rat (reference vector)", () => {
-    expect(zodiacYearForCE(1984)).toBe(0); // ชวด
+    expect(zodiacYearForCE(1984)).toBe(0); // Rat
   });
   it("1992 is Year of the Monkey, element น้ำ", () => {
     const out = engine.build(["2535"]);

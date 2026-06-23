@@ -21,7 +21,7 @@ describe("zodiacIndexFromCE", () => {
     expect(ZODIAC[8].th).toBe("วอก");
   });
   it("wraps for years before epoch without negative index", () => {
-    expect(zodiacIndexFromCE(2003)).toBe(7); // มะแม (2003 = Year of the Goat): (2003-4)%12 = 1999%12 = 7
+    expect(zodiacIndexFromCE(2003)).toBe(7); // Goat (2003 = Year of the Goat): (2003-4)%12 = 1999%12 = 7
     const idx = zodiacIndexFromCE(2003);
     expect(idx).toBeGreaterThanOrEqual(0);
     expect(idx).toBeLessThan(12);

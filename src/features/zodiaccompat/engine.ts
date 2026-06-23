@@ -3,11 +3,11 @@ import type { FeatureEngine } from "../../app/feature";
 import { ZODIAC, SANHE, LIUHE, HARM, clashOf, isXing } from "../_shared/sixtyCycle";
 import { JADE, GOLD, RED, STAR } from "../zodiacyear/content";
 
-// ธาตุประจำก้านดินของแต่ละนักษัตร (สะท้อน BRANCH_EL ใน src/engine/constants.ts)
+// Element of each zodiac animal's earthly branch (mirrors BRANCH_EL in src/engine/constants.ts)
 const BRANCH_EL: readonly string[] = [
   "น้ำ", "ดิน", "ไม้", "ไม้", "ดิน", "ไฟ", "ไฟ", "ดิน", "ทอง", "ทอง", "ดิน", "น้ำ",
 ];
-// วัฏจักรห้าธาตุ (สะท้อน GEN/CTRL ใน src/engine/constants.ts)
+// Five-element cycle (mirrors GEN/CTRL in src/engine/constants.ts)
 const GEN: Record<string, string> = { "ไม้": "ไฟ", "ไฟ": "ดิน", "ดิน": "ทอง", "ทอง": "น้ำ", "น้ำ": "ไม้" };
 const CTRL: Record<string, string> = { "ไม้": "ดิน", "ดิน": "น้ำ", "น้ำ": "ไฟ", "ไฟ": "ทอง", "ทอง": "ไม้" };
 
@@ -74,8 +74,8 @@ export function zodiacCompatReport(aTh: string, bTh: string): Section[] {
     score = 42; label = "คู่ชง (ชง 沖) — ต้องปรับเข้าหากัน"; accent = RED;
     points.push({ title: "พลังปะทะ", meaning: "นักษัตรตรงข้ามกันในวงจร ความเห็นและจังหวะมักสวนทาง ถ้าเปิดใจรับความต่างได้ จะกลายเป็นแรงผลักดันที่เติมเต็มกัน", fg: RED });
   } else if (xing) {
-    // 刑 (โทษทัณฑ์) มาก่อน 害 (เบียน): 刑 หนักกว่าตามตำรา — คู่ที่เป็นทั้ง 刑+害 จึงนับเป็น 刑 (50)
-    // ไม่ให้คู่ 三刑 ได้คะแนนสูงกว่าคู่ 互刑 (severity inversion เดิม)
+    // xing (punishment) before hai (harm): xing is heavier per the texts - a pair that is both xing+hai counts as xing (50)
+    // so a sanxing (three-punishment) pair is not scored higher than a huxing (mutual-punishment) pair (the old severity inversion)
     score = 50; label = "คู่โทษ (สิง 刑) — ต้องระวังกระทบใจ"; accent = GOLD;
     points.push({ title: "โทษทัณฑ์ซึ่งกันและกัน", meaning: "เป็นคู่ที่บั่นทอนกันแบบลึก มักกระทบจิตใจมากกว่าภายนอก ต้องอาศัยความอดทนและให้เกียรติกันเป็นพิเศษ", fg: GOLD });
   } else if (HARM[ai] === bi) {
@@ -86,7 +86,7 @@ export function zodiacCompatReport(aTh: string, bTh: string): Section[] {
     points.push({ title: "ความสัมพันธ์เป็นกลาง", meaning: "ไม่ส่งเสริมหรือขัดแย้งกันชัดเจน ความราบรื่นขึ้นกับการปรับตัวและความตั้งใจของทั้งคู่เป็นหลัก", fg: STAR });
   }
 
-  // 相刑 ที่ซ้อนกับความสัมพันธ์อื่น (เช่น เสือ-ลิง เป็นทั้งชงและโทษ) — เพิ่มเป็นข้อเตือนแยก
+  // xiangxing (mutual punishment) overlapping another relation (e.g. tiger-monkey is both chong/clash and punishment) - added as a separate warning
   if (xing && score !== 50) {
     if (ai === bi)
       points.push({ title: "โทษตัวเอง (จื้อสิง 自刑)", meaning: "นักษัตรนี้เมื่ออยู่คู่กันเองมีพลังโทษตัวเองแฝง ควรเตือนกันให้พอดี อย่าซ้ำเติมจุดอ่อนของกัน", fg: GOLD });

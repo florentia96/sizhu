@@ -32,7 +32,7 @@ export function App() {
   const { route, navigate } = usePathRoute();
   const [query, setQuery] = useState("");
 
-  // title/description ต่อ route — ช่วย browser tab และบริบทตอนคัดลอกลิงก์ไปแชร์
+  // title/description per route - helps the browser tab and the context when copying a link to share
   useEffect(() => {
     const id = activeFeatureId(route);
     const meta = id ? FEATURES[id]?.meta : undefined;
@@ -57,8 +57,8 @@ export function App() {
     if (q.trim() && route.name !== "hub") navigate({ name: "hub" });
   };
 
-  // ปาจื้อใช้เลย์เอาต์เต็ม แต่ยังคงแถบบน (ชื่อเว็บ + กดกลับหน้าแรก) เหมือนทุกหน้า
-  // เปิดจากหน้าแรก (มีโปรไฟล์แกน) → autocast ข้ามฟอร์ม; ลิงก์ ?bd= ใช้ค่าจาก URL; ไม่มีทั้งคู่ → ฟอร์มปาจื้อเดิม
+  // BaZi uses the full layout but keeps the top bar (site name + back-to-home) like every page
+  // Opened from home (has a core profile) -> autocast skips the form; a ?bd= link uses values from the URL; neither -> the original BaZi form
   if (route.name === "bazi") {
     const q = route.params ? new URLSearchParams(route.params).toString() : "";
     const urlPrefill = parseBaziParams(q);
