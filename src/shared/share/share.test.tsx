@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import type { Section } from "../sections/types";
 import { summarize, buildShareText } from "./buildShareText";
 import { ShareBar } from "./ShareBar";
@@ -46,6 +46,6 @@ describe("ShareBar", () => {
     Object.defineProperty(navigator, "clipboard", { value: { writeText }, configurable: true });
     render(<ShareBar featureName="เบอร์มงคล" sections={secs} url="https://x/#/f/phone" />);
     fireEvent.click(screen.getByRole("button", { name: /คัดลอกลิงก์/ }));
-    expect(writeText).toHaveBeenCalledWith("https://x/#/f/phone");
+    await waitFor(() => expect(writeText).toHaveBeenCalledWith("https://x/#/f/phone"));
   });
 });

@@ -1,7 +1,7 @@
 import type { FeatureEngine } from "../../app/feature";
 import type { Section } from "../../shared/sections/types";
 import { julianDay } from "../../engine/astro";
-import { parseCityValue } from "../../shared/forms/CityField";
+import { parseCityValue } from "../../astro/cities";
 import { bodyPositions } from "../../astro/ephemeris";
 import { aspectsBetween } from "../../astro/aspects";
 import { lifePathFromDate, personalYear } from "../_shared/thaiAstro";

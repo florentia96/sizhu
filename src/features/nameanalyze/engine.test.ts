@@ -48,6 +48,18 @@ describe("nameanalyze engine — taksa core", () => {
     expect(verdict.gradeLabel).not.toBe("มีอักษรกาลกิณี");
   });
 
+  it("regression: Monday-born flags vowel กาลกิณี (อาทิตย์ group ิ ี ึ ื ุ ู must not be stripped)", () => {
+    // คนเกิดจันทร์ → หมู่สระ (อาทิตย์) ตกกาลกิณี · 'ภูริ' มี ู และ ิ ซึ่งเป็นกาลกิณี
+    const out = nameanalyzeEngine.build(["ภูริ", "", "จันทร์"]);
+    const verdict = out.find((s) => s.kind === "verdict") as Extract<typeof out[number], { kind: "verdict" }>;
+    expect(verdict.gradeLabel).toBe("มีอักษรกาลกิณี");
+    const blocks = out.filter((s) => s.kind === "blocks") as Extract<typeof out[number], { kind: "blocks" }>[];
+    const kalaBlock = blocks.find((b) => b.items[0].tag === "กาลกิณี");
+    expect(kalaBlock).toBeDefined();
+    expect(kalaBlock!.items[0].chips).toContain("ู");
+    expect(kalaBlock!.items[0].chips).toContain("ิ");
+  });
+
   it("per-letter breakdown lists every mapped letter with its ภูมิ", () => {
     // 'สม' for Sunday: ส=กาลกิณี (ศุกร์ group), ม∈พฤหัสบดี=WHEEL[5]→BHUMI[5]=อุตสาหะ (good)
     const out = nameanalyzeEngine.build(["สม", "", "อาทิตย์"]);

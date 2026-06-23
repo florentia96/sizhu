@@ -1,12 +1,14 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 
-vi.mock("../../astro/cities", () => {
+vi.mock("../../astro/cities", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../../astro/cities")>();
   const CITY = [
     { name: "Bangkok", lat: 13.75, lon: 100.5, tz: 7 },
     { name: "Chiang Mai", lat: 18.79, lon: 98.98, tz: 7 },
   ];
   return {
+    ...actual, // คง parseCityValue จริง (ฟังก์ชันที่กำลังทดสอบ)
     CITY,
     findCity: (name: string) =>
       CITY.find((c) => c.name.toLowerCase() === name.trim().toLowerCase()) ??
@@ -14,7 +16,8 @@ vi.mock("../../astro/cities", () => {
   };
 });
 
-import { CityField, parseCityValue } from "./CityField";
+import { CityField } from "./CityField";
+import { parseCityValue } from "../../astro/cities";
 
 const noopRefFor = () => () => {};
 

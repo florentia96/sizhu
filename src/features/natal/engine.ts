@@ -1,7 +1,7 @@
 import type { FeatureEngine } from "../../app/feature";
 import type { Section } from "../../shared/sections/types";
 import { julianDay } from "../../engine/astro";
-import { parseCityValue } from "../../shared/forms/CityField";
+import { parseCityValue } from "../../astro/cities";
 import { bodyPositions, signFromLon } from "../../astro/ephemeris";
 import { ascendant, midheaven, placidusCusps } from "../../astro/houses";
 import { aspectsBetween } from "../../astro/aspects";
@@ -29,7 +29,8 @@ export function toUT(
   timeStr: string,
   tz: number,
 ): { y: number; m: number; d: number; hourUT: number } {
-  const [y, m, d] = dateStr.split("-").map(Number);
+  const [yRaw, m, d] = dateStr.split("-").map(Number);
+  const y = yRaw > 2300 ? yRaw - 543 : yRaw; // normalize พ.ศ. → ค.ศ. (ตรงกับ engine วันเกิดอื่น)
   const [hh, mm] = (timeStr || "12:00").split(":").map(Number);
   let hourUT = hh + (mm || 0) / 60 - tz;
   let day = d;

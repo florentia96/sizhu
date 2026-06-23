@@ -5,8 +5,6 @@ import { gradeOf } from "../../features/_shared/numerology";
 import { TONE } from "./content";
 import { numerologySections } from "./numerology";
 
-const STRIP_RE = /[\sัิ-ฺ็-๎]/g; // วรรณยุกต์ + สระบน-ล่าง → เหลือพยัญชนะ + สระเด่น
-
 const BHUMI_ORDER = [
   "เดช",
   "ศรี",
@@ -32,7 +30,9 @@ export function analyzeNameTaksa(first: string, last: string, dayLabel: string):
   if (!first) return [{ kind: "note", text: "กรุณากรอกชื่อจริงเพื่อวิเคราะห์" }];
   const day = dayLabel || "อาทิตย์";
   const map = letterBucketMap(day);
-  const full = (first + (last || "")).replace(STRIP_RE, "");
+  // ไม่ strip สระ — สระบน-ล่าง (ิ ี ึ ื ุ ู) อยู่ในวงล้อกลุ่มอาทิตย์ ต้องนับ (คนเกิดจันทร์ = กาลกิณีหมู่สระ)
+  // วรรณยุกต์/พินทุที่ไม่อยู่ในวงล้อจะถูกข้ามด้วย map lookup (if !info) อยู่แล้ว
+  const full = first + (last || "");
 
   const counts: Record<string, number> = {
     เดช: 0,

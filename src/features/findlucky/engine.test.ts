@@ -56,6 +56,20 @@ describe("findlucky engine", () => {
     ranked.forEach((r) => expect(r.raw).toMatch(/^\d{4}$/));
   });
 
+  it("unreachable wanted digit returns a specific note, not a misleading empty result", () => {
+    // 7 ไม่อยู่ใน GOOD_PAIRS เลย → ประกอบไม่ได้ทั้งเบอร์และทะเบียน
+    const phone7 = findluckyEngine.build(["เบอร์โทรศัพท์", "7", "มาตรฐาน", "0"]);
+    expect(phone7).toHaveLength(1);
+    expect(phone7[0].kind).toBe("note");
+    expect(phone7[0].kind === "note" ? phone7[0].text : "").toContain("7");
+    // 0 ใช้กับทะเบียนไม่ได้ (ไม่มี prefix 06)
+    const plate0 = findluckyEngine.build(["ทะเบียนรถ", "0", "มาตรฐาน", "0"]);
+    expect(plate0[0].kind).toBe("note");
+    // 0 ใช้กับเบอร์ได้ (prefix 06) → ต้องได้การ์ดผลลัพธ์ตามปกติ ไม่ใช่ note
+    const phone0 = findluckyEngine.build(["เบอร์โทรศัพท์", "0", "มาตรฐาน", "0"]);
+    expect(phone0.find((s) => s.kind === "cards")).toBeDefined();
+  });
+
   it("phone raws are 10 digits with 3-3-4 display (regression: was 9-digit)", () => {
     const ranked = rankLucky("เบอร์โทรศัพท์", "", "มาตรฐาน");
     expect(ranked.length).toBeGreaterThan(0);

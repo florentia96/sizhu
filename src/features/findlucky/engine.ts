@@ -77,12 +77,31 @@ export function rankLucky(type: string, want: string, level: string): LuckyItem[
   return out;
 }
 
+// เลขที่ระบบประกอบได้จริง = หลักที่ปรากฏใน GOOD_PAIRS · เบอร์เพิ่ม 0,6 จาก prefix "06"
+const PAIR_DIGITS = new Set(GOOD_PAIRS.join("").split(""));
+
 export const findluckyEngine: FeatureEngine = {
   build(vals: string[]): Section[] {
     const type = vals[0] || "เบอร์โทรศัพท์";
     const want = vals[1] || "";
     const level = vals[2] || "มาตรฐาน";
     const offset = Math.max(0, Number(vals[3]) || 0);
+
+    const isPlate = type === "ทะเบียนรถ";
+    const reachable = isPlate ? PAIR_DIGITS : new Set([...PAIR_DIGITS, "0", "6"]);
+    const wantDigits = (want || "").replace(/[^0-9]/g, "");
+    const unreachable = [...new Set(wantDigits.split(""))].filter((dgt) => !reachable.has(dgt));
+    if (unreachable.length) {
+      return [
+        {
+          kind: "note",
+          text:
+            "เลข " +
+            unreachable.join(", ") +
+            " ไม่อยู่ในชุดคู่เลขมงคลตามตำรา จึงประกอบเป็นชุดให้ไม่ได้ ลองเอาเลขนี้ออกแล้วค้นใหม่",
+        },
+      ];
+    }
 
     const ranked = rankLucky(type, want, level);
     const page = ranked.slice(offset, offset + PAGE_SIZE);

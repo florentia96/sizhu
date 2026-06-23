@@ -153,7 +153,8 @@ export const engine: FeatureEngine = {
     let effectiveCE = ce;
     const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr);
     if (m) {
-      effectiveCE = lichunCE(parseInt(m[1], 10), parseInt(m[2], 10), parseInt(m[3], 10));
+      const dY = parseInt(m[1], 10);
+      effectiveCE = lichunCE(dY > 2300 ? dY - 543 : dY, parseInt(m[2], 10), parseInt(m[3], 10)); // normalize พ.ศ. → ค.ศ. ให้ตรงกับ field ปี
     }
     return zodiacYearReport(effectiveCE);
   },

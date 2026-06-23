@@ -65,6 +65,22 @@ describe("dream engine", () => {
     expect(secs[secs.length - 1].kind).toBe("note");
   });
 
+  it("fallback (no Intl.Segmenter): short kw matches whole word only — no false positive", () => {
+    const intl = Intl as unknown as { Segmenter?: unknown };
+    const orig = intl.Segmenter;
+    intl.Segmenter = undefined;
+    try {
+      // คำสั้นที่พิมพ์ลำพังยังจับได้
+      expect(dreamReport("งู").find((s) => s.kind === "cards")).toBeDefined();
+      // 'มด' ต้องไม่ชนใน 'หมด' แม้ไม่มี Segmenter
+      const secs = dreamReport("ฝันว่าของหมด");
+      expect(secs.find((s) => s.kind === "cards")).toBeUndefined();
+      expect(secs[secs.length - 1].kind).toBe("note");
+    } finally {
+      intl.Segmenter = orig;
+    }
+  });
+
   it("is deterministic + satisfies ReportSchema", () => {
     const a = dreamReport("ฝันเห็นช้างและทอง");
     const b = dreamReport("ฝันเห็นช้างและทอง");

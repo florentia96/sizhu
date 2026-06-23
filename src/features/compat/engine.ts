@@ -2,7 +2,7 @@ import type { FeatureEngine } from "../../app/feature";
 import type { Section } from "../../shared/sections/types";
 import { dayFromDate, rasiFromDate, lifePathFromDate, DAY_LORD, LIFEPATH } from "../_shared/thaiAstro";
 import { julianDay } from "../../engine/astro";
-import { parseCityValue } from "../../shared/forms/CityField";
+import { parseCityValue } from "../../astro/cities";
 import { bodyPositions } from "../../astro/ephemeris";
 import { aspectsBetween } from "../../astro/aspects";
 import { toUT } from "../natal/engine";
@@ -41,7 +41,8 @@ export function scoreDeterministic(
 }
 
 function dparts(s: string): { y: number; m: number; d: number } {
-  const [y, m, d] = (s || "").split("-").map(Number);
+  const [yRaw, m, d] = (s || "").split("-").map(Number);
+  const y = yRaw > 2300 ? yRaw - 543 : yRaw; // normalize พ.ศ. → ค.ศ.
   return { y, m, d };
 }
 

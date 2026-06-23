@@ -150,3 +150,32 @@ export function findCity(name: string): City | null {
   }
   return null;
 }
+
+function validLatLon(la: number, lo: number): boolean {
+  return Number.isFinite(la) && Number.isFinite(lo) && la >= -90 && la <= 90 && lo >= -180 && lo <= 180;
+}
+
+// แปลงค่า city field → พิกัด · รับได้ทั้งรูปเข้ารหัส "name|lat|lon|tz", พิกัดดิบ "lat,lon" และชื่อเมือง
+// พิกัดนอกช่วงโลก (lat∉[-90,90] หรือ lon∉[-180,180]) → null เพื่อให้ engine คืน note แทนดวงที่เป็น NaN
+export function parseCityValue(v: string): City | null {
+  const raw = v.trim();
+  if (!raw) return null;
+  if (raw.includes("|")) {
+    const [name, lat, lon, tz] = raw.split("|");
+    const la = Number(lat);
+    const lo = Number(lon);
+    const t = Number(tz);
+    if (!validLatLon(la, lo)) return null;
+    return { name, lat: la, lon: lo, tz: Number.isNaN(t) ? 7 : t };
+  }
+  const m = raw.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
+  if (m) {
+    const la = Number(m[1]);
+    const lo = Number(m[2]);
+    if (!validLatLon(la, lo)) return null;
+    return { name: raw, lat: la, lon: lo, tz: 7 };
+  }
+  const hit = findCity(raw);
+  if (hit) return hit;
+  return null;
+}

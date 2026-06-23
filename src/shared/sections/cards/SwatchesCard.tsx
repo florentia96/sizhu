@@ -54,8 +54,8 @@ export function SwatchesCard({ section, accent }: { section: Swatches; accent: s
                 height: 56,
                 borderRadius: "50%",
                 background: sw.hex,
-                border: "2px solid rgba(255,255,255,.18)",
-                boxShadow: "0 5px 16px rgba(0,0,0,.45)",
+                border: "2px solid var(--border-gold)",
+                boxShadow: "var(--shadow-sm)",
               }}
             />
             <span style={{ fontSize: ".82rem", color: "var(--text)", fontWeight: 500 }}>{sw.name}</span>
