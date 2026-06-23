@@ -31,6 +31,14 @@ describe("compat engine — deterministic score (port of moodee-lib 871-902)", (
     expect(res.score).toBeGreaterThanOrEqual(83);
   });
 
+  it("reference vector C: clashing elements (น้ำ×ไฟ) + far life-path → below 60 (ต้องปรับเข้าหากัน)", () => {
+    const a = { y: 1990, m: 7, d: 20 }; // กรกฎ = น้ำ
+    const b = { y: 1990, m: 4, d: 20 }; // เมษ = ไฟ
+    const res = scoreDeterministic(a, b);
+    expect(res.score).toBeLessThan(60);
+    expect(res.label).toBe("ต้องปรับเข้าหากัน");
+  });
+
   it("score is clamped to [40,96]", () => {
     const res = scoreDeterministic({ y: 1990, m: 4, d: 20 }, { y: 1990, m: 6, d: 18 });
     expect(res.score).toBeLessThanOrEqual(96);

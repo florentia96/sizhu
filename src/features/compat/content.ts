@@ -16,7 +16,7 @@ export const SYNASTRY_NOTE: Record<string, { th: string; tone: "good" | "warn" |
 
 export const PLANET_TH: Record<string, string> = {
   Sun: "อาทิตย์", Moon: "จันทร์", Mercury: "พุธ", Venus: "ศุกร์",
-  Mars: "อังคาร", Jupiter: "พฤหัส", Saturn: "เสาร์",
+  Mars: "อังคาร", Jupiter: "พฤหัสบดี", Saturn: "เสาร์",
 };
 
 // ความสัมพันธ์ระดับธาตุของคู่ — ครอบคลุมทุกการจับคู่ (same / harmony / challenge)

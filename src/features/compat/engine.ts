@@ -19,7 +19,9 @@ export function reduceSingle(n: number): number {
   return x;
 }
 
-// คะแนน deterministic — port ตรงจาก moodee-lib compatReport (บรรทัด 879-883)
+// คะแนน deterministic — ต่อยอดจาก moodee-lib compatReport
+// เพิ่มการหักคะแนนเมื่อธาตุปะทะ (challenge) และเมื่อแนวทางชีวิตต่างกันมาก
+// เดิมมีแต่การบวก ทำให้คะแนนต่ำสุดคือ 65 (คู่ธาตุปะทะได้เท่าคู่กลาง) ระดับ "ต้องปรับเข้าหากัน" จึงไม่เคยปรากฏ
 export function scoreDeterministic(
   a: { y: number; m: number; d: number },
   b: { y: number; m: number; d: number },
@@ -32,8 +34,12 @@ export function scoreDeterministic(
   const lpb = lifePathFromDate(b.y, b.m, b.d);
   let score = 65;
   if (elSame) score += 12;
-  if (elHarmony) score += 18;
-  if (Math.abs(reduceSingle(lpa) - reduceSingle(lpb)) <= 1) score += 6;
+  else if (elHarmony) score += 18;
+  else score -= 14; // ธาตุปะทะ (challenge — ไม่เหมือนและไม่เกื้อหนุน)
+  const lpDiff = Math.abs(reduceSingle(lpa) - reduceSingle(lpb));
+  if (lpDiff <= 1) score += 6;
+  else if (lpDiff >= 4) score -= 6; // แนวทางชีวิตต่างกันมาก
+  // กันเหนียว: บีบให้อยู่ [40,96] เผื่อปรับน้ำหนักคะแนนในอนาคต (ช่วงจริงปัจจุบันคือ 45–89 จึงยังไม่ถึงขอบ)
   score = Math.max(40, Math.min(96, score));
   const label =
     score >= 85 ? "เข้ากันดีมาก" : score >= 72 ? "เข้ากันดี" : score >= 60 ? "พอเข้ากันได้" : "ต้องปรับเข้าหากัน";

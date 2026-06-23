@@ -23,7 +23,7 @@ const INFO = "#7da6d8";
 
 const PLANET_TH: Record<string, string> = {
   Sun: "อาทิตย์", Moon: "จันทร์", Mercury: "พุธ", Venus: "ศุกร์",
-  Mars: "อังคาร", Jupiter: "พฤหัส", Saturn: "เสาร์",
+  Mars: "อังคาร", Jupiter: "พฤหัสบดี", Saturn: "เสาร์",
 };
 const PLANETS = ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"];
 

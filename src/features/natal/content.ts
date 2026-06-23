@@ -21,7 +21,7 @@ export const SIGN_TRAITS: Record<string, { el: string; tr: string }> = {
 
 export const PLANET_TH: Record<string, string> = {
   Sun: "อาทิตย์", Moon: "จันทร์", Mercury: "พุธ", Venus: "ศุกร์",
-  Mars: "อังคาร", Jupiter: "พฤหัส", Saturn: "เสาร์",
+  Mars: "อังคาร", Jupiter: "พฤหัสบดี", Saturn: "เสาร์",
 };
 
 export const HOUSE_MEANING: string[] = [

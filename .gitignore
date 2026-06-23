@@ -38,3 +38,6 @@ dist/
 
 # ── Archive ───────────────────────────────────────────────
 .archive/
+
+# ── Audit reports (working artifact, ไม่ deploy) ──────────
+.audit/
