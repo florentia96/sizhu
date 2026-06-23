@@ -25,23 +25,24 @@
   --surface-sink: rgba(31, 42, 82, 0.05);
 
   /* เส้นขอบ — rose gold ตัด เห็นชัดบนพื้นนวล (rose gold อ่อนกว่า navy ต้อง opacity สูงกว่าจึงเด่นเท่ากัน) */
-  --border-gold: rgba(183, 110, 121, 0.55);
-  --gold-line: rgba(183, 110, 121, 0.55);
+  /* เส้นขอบ — navy ตัด (สีรอง) บนพื้นนวล */
+  --border-gold: rgba(31, 42, 82, 0.32);
+  --gold-line: rgba(31, 42, 82, 0.32);
 
-  /* แบรนด์ — deep navy (navy นำ) */
-  --primary: #1f2a52;
-  --primary-bright: #2f3f73;
-  --primary-shadow: #141c3a;
-  --on-primary: #f7f4ee;
-  /* ตัวอักษรบนปุ่ม gradient — gradient navy เข้มพอให้ขาวผ่าน AA 4.5:1 ทั้งแถบ
-     ตราประทับ (decorative/aria-hidden) ยังใช้ --on-primary ได้ */
+  /* แบรนด์ — deep rose gold (rose gold นำ) */
+  --primary: #9d5763;
+  --primary-bright: #b87481;
+  --primary-shadow: #6e3d47;
+  --on-primary: #fff3ef;
+  /* deep rose พอให้: ขาวบนปุ่ม gradient ผ่าน AA (#9d5763=5.28, #8c4f5a=6.21)
+     และ --primary เป็น text เล็กบนพื้นนวลผ่าน AA (4.81) · ตราประทับ decorative ใช้ --on-primary */
   --on-grad: #ffffff;
-  --grad-brand: linear-gradient(95deg, #2f3f73, #1f2a52);
+  --grad-brand: linear-gradient(95deg, #9d5763, #8c4f5a);
 
   /* 5 ศาสตร์ + heritage accent (สีประจำหมวด — แยก hue กันชัด · 名=rose gold 卦=navy) */
   --jade: #4f9d80;   /* 數 เขียว */
   --gold: #b76e79;   /* 名 rose gold (token เมทัลลิกหลัก) */
-  --rose-ink: #9d5763; /* rose gold เข้มสำหรับ text เล็ก — ผ่าน AA 4.5:1 บนพื้นนวล (--gold เองได้แค่ 3.47) */
+  --label-ink: #2f3f73; /* navy รอง สำหรับ eyebrow/label text — ผ่าน AA บนพื้นนวล */
   --star: #2f93a8;   /* 星 ฟ้าน้ำทะเล (teal) */
   --ember: #d27a68;  /* 緣 ปะการัง */
   --ame: #34467f;    /* 卦 navy */
@@ -108,18 +109,18 @@
   --surface-inset: rgba(255, 255, 255, 0.05);
   --surface-sink: rgba(0, 0, 0, 0.22);
 
-  --border-gold: rgba(217, 154, 163, 0.42);
-  --gold-line: rgba(217, 154, 163, 0.42);
+  --border-gold: rgba(147, 172, 242, 0.32);
+  --gold-line: rgba(147, 172, 242, 0.32);
 
-  --primary: #93acf2;
-  --primary-bright: #acc0f8;
-  --primary-shadow: #2a3a6b;
-  --on-primary: #0e1226;
-  --grad-brand: linear-gradient(95deg, #3a4d8f, #2a3a6b);
+  --primary: #e0a4ad;
+  --primary-bright: #ecbcc3;
+  --primary-shadow: #8c5560;
+  --on-primary: #2a1418;
+  --grad-brand: linear-gradient(95deg, #a85a66, #8c4f5a);
 
   --jade: #82c9a8;
   --gold: #d99aa3;
-  --rose-ink: #d99aa3; /* dark: gold สว่างพอเป็น text แล้ว (7.44:1) */
+  --label-ink: #93acf2; /* dark: navy รอง สว่างพอเป็น text (7.70:1) */
   --star: #6ec3d6;
   --ember: #ef9a86;
   --ame: #8294d0;

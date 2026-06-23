@@ -65,7 +65,7 @@
   font-size: 0.74rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--rose-ink);
+  color: var(--label-ink);
   font-weight: 600;
   margin-bottom: 7px;
 }
@@ -132,8 +132,8 @@
   transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
 }
 .hub-pill:hover {
-  border-color: var(--gold);
-  background: color-mix(in srgb, var(--gold) 12%, var(--surface));
+  border-color: var(--ame);
+  background: color-mix(in srgb, var(--ame) 12%, var(--surface));
   transform: translateY(-1px);
 }
 .hub-pill-cn {
@@ -166,7 +166,7 @@
   font-size: 0.72rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--rose-ink);
+  color: var(--label-ink);
   font-weight: 600;
 }
 .hub-reg-title {
@@ -333,8 +333,8 @@
   cursor: pointer;
   font-family: inherit;
   font-size: 0.88rem;
-  border: 1.5px solid color-mix(in srgb, var(--gold) 55%, transparent);
-  background: var(--gold-soft);
+  border: 1.5px solid color-mix(in srgb, var(--ame) 38%, var(--border-gold));
+  background: var(--surface-inset);
   color: var(--text);
   border-radius: var(--radius-pill);
   padding: 9px 18px;
